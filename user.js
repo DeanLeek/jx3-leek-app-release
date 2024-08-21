@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.2
+// @version      1.0.3
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -21725,7 +21725,8 @@
                 const formRef = ref(null), formModel = reactive(leekItemFormData), formInfo = reactive([]), dataRef = ref([]), dataMap = {}, open2 = ref(!1), onClose = () => {
                     open2.value = !1;
                 }, onOpen = () => {
-                    window.location.href.includes("t=skin") || window.location.href.includes("localhost") ? open2.value = !0 : api$1.error('只能在"买外观"页面使用');
+                    window.location.href.includes("t=skin") || window.location.href.includes("localhost") ? (check(), 
+                    open2.value = !0) : api$1.error('只能在"买外观"页面使用');
                 };
                 fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
                     method: "POST"
@@ -21762,7 +21763,7 @@
                     var _a, _b;
                     open2.value = !1, null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
                 };
-                return watch(formModel, (() => {
+                function check() {
                     var _a, _b, _c;
                     setLocal("leek-item-form", formModel);
                     const values = [];
@@ -21773,6 +21774,9 @@
                     })), remainingMaxCountRef.value = MaxSelectCount - values.length, (null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _a.selectedList) && (sandboxWindow.buyerFilter.selectedList = values.map((name => ({
                         name: name
                     })))), null == (_c = null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _b.roleFilterStore) || _c.setCurrentAppearance(values, !1);
+                }
+                return watch(formModel, (() => {
+                    check();
                 }), {
                     immediate: !0,
                     deep: !0
