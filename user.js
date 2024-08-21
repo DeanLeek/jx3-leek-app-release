@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.3
+// @version      1.0.4
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -21725,7 +21725,7 @@
                 const formRef = ref(null), formModel = reactive(leekItemFormData), formInfo = reactive([]), dataRef = ref([]), dataMap = {}, open2 = ref(!1), onClose = () => {
                     open2.value = !1;
                 }, onOpen = () => {
-                    window.location.href.includes("t=skin") || window.location.href.includes("localhost") ? (check(), 
+                    window.location.href.includes("buyer?t=skin") || window.location.href.includes("localhost") ? (check(), 
                     open2.value = !0) : api$1.error('只能在"买外观"页面使用');
                 };
                 fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
@@ -21757,8 +21757,9 @@
                     isArray$1(options) && options.length > calculateMaxCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
                     formModel[name] = formModel[name].slice(0, calculateMaxCount));
                 }, onReset = () => {
-                    var _a;
-                    null == (_a = formRef.value) || _a.resetFields();
+                    Object.keys(formModel).map((key2 => {
+                        formModel[key2] = [];
+                    }));
                 }, onSearch = () => {
                     var _a, _b;
                     open2.value = !1, null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
