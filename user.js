@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.7
+// @version      1.0.9
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -18,7 +18,6 @@
   async function patchScript(scriptNode) {
     try {
       scriptNode.remove();
-
       const replacements = [
         {
           pattern: /=new (\w{1,2})\.default\(\{viewStore/,
@@ -42,23 +41,23 @@
       }
 
       let scriptCode = await response.text();
-      let modifiedCount = 0; // 用于计数成功替换的次数
-      let expectedModifications = replacements.length; // 期望的替换次数
+      let modifiedCount = 0;
+      let expectedModifications = replacements.length;
 
       for (const { pattern, inject } of replacements) {
         const matches = scriptCode.match(pattern); // 检查是否有匹配的项
         if (matches) {
           scriptCode = scriptCode.replace(pattern, inject);
-          modifiedCount += 1; // 根据匹配的项增加计数
+          modifiedCount += 1;
         }
       }
 
-      // 检查是否所有预期的替换操作都成功完成
       if (modifiedCount < expectedModifications) {
         console.error('脚本注入失败，万宝楼可能更新拉！');
         return;
       }else{
-        console.log('脚本注入成功')
+        console.log('脚本注入成功');
+        startLeekApp();
       }
 
       const newScriptNode = document.createElement('script');
@@ -81,18 +80,25 @@
     });
   }).observe(document, { childList: true, subtree: true });
 
-  GM_addElement(document.body, 'div', {
-    id: 'leek-app',
-  });
+  function startLeekApp(){
 
-  GM_addElement(document.head, 'style', {
-    textContent: `
-    .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0)}.leek-btn-start svg{width:80px;height:80px;transition:all .3s ease-in;transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .5s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .8s ease forwards}
+    GM_addElement(document.body, 'div', {
+      id: 'leek-app',
+    });
 
-   `,
-  });
+    GM_addElement(document.head, 'style', {
+      textContent: `
+      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}
 
-    var __getOwnPropNames = Object.getOwnPropertyNames, require_index = ((cb, mod) => function __require() {
+     `,
+    });
+
+    var __defProp = Object.defineProperty, __getOwnPropNames = Object.getOwnPropertyNames, __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, {
+    enumerable: !0,
+    configurable: !0,
+    writable: !0,
+    value: value
+}) : obj[key] = value, __publicField = (obj, key, value) => __defNormalProp(obj, "symbol" != typeof key ? key + "" : key, value), require_index = ((cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = {
         exports: {}
     }).exports, mod), mod.exports;
@@ -4267,7 +4273,7 @@
             var i2 = toPrimitive(t2, "string");
             return "symbol" == _typeof$1(i2) ? i2 : i2 + "";
         }
-        function _defineProperty$k(e2, r2, t2) {
+        function _defineProperty$l(e2, r2, t2) {
             return (r2 = toPropertyKey(r2)) in e2 ? Object.defineProperty(e2, r2, {
                 value: t2,
                 enumerable: !0,
@@ -4289,7 +4295,7 @@
             for (var r2 = 1; r2 < arguments.length; r2++) {
                 var t2 = null != arguments[r2] ? arguments[r2] : {};
                 r2 % 2 ? ownKeys$1(Object(t2), !0).forEach((function(r3) {
-                    _defineProperty$k(e2, r3, t2[r3]);
+                    _defineProperty$l(e2, r3, t2[r3]);
                 })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(t2)) : ownKeys$1(Object(t2)).forEach((function(r3) {
                     Object.defineProperty(e2, r3, Object.getOwnPropertyDescriptor(t2, r3));
                 }));
@@ -8517,7 +8523,7 @@
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? arguments[i2] : {};
                 i2 % 2 ? ownKeys(Object(source), !0).forEach((function(key2) {
-                    _defineProperty$j(target, key2, source[key2]);
+                    _defineProperty$k(target, key2, source[key2]);
                 })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach((function(key2) {
                     Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
                 }));
@@ -8531,7 +8537,7 @@
                 return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
             })(obj);
         }
-        function _defineProperty$j(obj, key2, value) {
+        function _defineProperty$k(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13060,18 +13066,18 @@
             var newNode = injectCSS(css2, option);
             return newNode.setAttribute(getMark(option), key2), newNode;
         }
-        function _objectSpread$i(target) {
+        function _objectSpread$j(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$i(target, key2, source[key2]);
+                    _defineProperty$j(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$i(obj, key2, value) {
+        function _defineProperty$j(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13084,9 +13090,9 @@
             return "object" == typeof target && "string" == typeof target.name && "string" == typeof target.theme && ("object" == typeof target.icon || "function" == typeof target.icon);
         }
         function generate(node2, key2, rootProps) {
-            return h$1(node2.tag, rootProps ? _objectSpread$i({
+            return h$1(node2.tag, rootProps ? _objectSpread$j({
                 key: key2
-            }, rootProps, node2.attrs) : _objectSpread$i({
+            }, rootProps, node2.attrs) : _objectSpread$j({
                 key: key2
             }, node2.attrs), (node2.children || []).map((function(child, index2) {
                 return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
@@ -13137,18 +13143,18 @@
             for (i2 = 0; i2 < sourceKeys.length; i2++) key2 = sourceKeys[i2], excluded.indexOf(key2) >= 0 || (target[key2] = source[key2]);
             return target;
         }
-        function _objectSpread$h(target) {
+        function _objectSpread$i(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$h(target, key2, source[key2]);
+                    _defineProperty$i(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$h(obj, key2, value) {
+        function _defineProperty$i(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13167,18 +13173,18 @@
             twoToneColorPalette.calculated = !!secondaryColor;
         }
         function getTwoToneColors() {
-            return _objectSpread$h({}, twoToneColorPalette);
+            return _objectSpread$i({}, twoToneColorPalette);
         }
         var IconBase = function IconBase2(props2, context) {
-            var _props$context$attrs = _objectSpread$h({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1), colors = twoToneColorPalette;
+            var _props$context$attrs = _objectSpread$i({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1), colors = twoToneColorPalette;
             if (primaryColor && (colors = {
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor || getSecondaryColor(primaryColor)
             }), warning$1(isIconDefinition(icon)), !isIconDefinition(icon)) return null;
             var target = icon;
-            return target && "function" == typeof target.icon && (target = _objectSpread$h({}, target, {
+            return target && "function" == typeof target.icon && (target = _objectSpread$i({}, target, {
                 icon: target.icon(colors.primaryColor, colors.secondaryColor)
-            })), generate(target.icon, "svg-".concat(target.name), _objectSpread$h({}, restProps, {
+            })), generate(target.icon, "svg-".concat(target.name), _objectSpread$i({}, restProps, {
                 "data-icon": target.name,
                 width: "1em",
                 height: "1em",
@@ -13290,18 +13296,18 @@
         function _arrayWithHoles(arr) {
             if (Array.isArray(arr)) return arr;
         }
-        function _objectSpread$g(target) {
+        function _objectSpread$h(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$g(target, key2, source[key2]);
+                    _defineProperty$h(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$g(obj, key2, value) {
+        function _defineProperty$h(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13326,16 +13332,16 @@
         }
         setTwoToneColor(blue.primary);
         var Icon = function Icon2(props2, context) {
-            var _classObj, _props$context$attrs = _objectSpread$g({}, props2, context.attrs), cls = _props$context$attrs.class, icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded), _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName, classObj = (_defineProperty$g(_classObj = {}, rootClassName.value, !!rootClassName.value), 
-            _defineProperty$g(_classObj, prefixCls.value, !0), _defineProperty$g(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), 
-            _defineProperty$g(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || "loading" === icon.name), 
+            var _classObj, _props$context$attrs = _objectSpread$h({}, props2, context.attrs), cls = _props$context$attrs.class, icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded), _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName, classObj = (_defineProperty$h(_classObj = {}, rootClassName.value, !!rootClassName.value), 
+            _defineProperty$h(_classObj, prefixCls.value, !0), _defineProperty$h(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), 
+            _defineProperty$h(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || "loading" === icon.name), 
             _classObj), iconTabIndex = tabindex;
             void 0 === iconTabIndex && onClick && (iconTabIndex = -1);
             var svgStyle = rotate ? {
                 msTransform: "rotate(".concat(rotate, "deg)"),
                 transform: "rotate(".concat(rotate, "deg)")
             } : void 0, _normalizeTwoToneColo2 = _slicedToArray(normalizeTwoToneColors(twoToneColor), 2), primaryColor = _normalizeTwoToneColo2[0], secondaryColor = _normalizeTwoToneColo2[1];
-            return createVNode("span", _objectSpread$g({
+            return createVNode("span", _objectSpread$h({
                 role: "img",
                 "aria-label": icon.name
             }, restProps, {
@@ -13349,18 +13355,18 @@
                 style: svgStyle
             }, null), createVNode(InsertStyles, null, null) ]);
         };
-        function _objectSpread$f(target) {
+        function _objectSpread$g(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$f(target, key2, source[key2]);
+                    _defineProperty$g(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$f(obj, key2, value) {
+        function _defineProperty$g(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13376,8 +13382,8 @@
         }, Icon.displayName = "AntdIcon", Icon.inheritAttrs = !1, Icon.getTwoToneColor = getTwoToneColor, 
         Icon.setTwoToneColor = setTwoToneColor;
         var DownOutlined = function DownOutlined2(props2, context) {
-            var p2 = _objectSpread$f({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$f({}, p2, {
+            var p2 = _objectSpread$g({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$g({}, p2, {
                 icon: DownOutlined$1
             }), null);
         };
@@ -13399,18 +13405,18 @@
             name: "loading",
             theme: "outlined"
         };
-        function _objectSpread$e(target) {
+        function _objectSpread$f(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$e(target, key2, source[key2]);
+                    _defineProperty$f(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$e(obj, key2, value) {
+        function _defineProperty$f(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13419,8 +13425,8 @@
             }) : obj[key2] = value, obj;
         }
         var LoadingOutlined = function LoadingOutlined2(props2, context) {
-            var p2 = _objectSpread$e({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$e({}, p2, {
+            var p2 = _objectSpread$f({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$f({}, p2, {
                 icon: LoadingOutlined$1
             }), null);
         };
@@ -13442,18 +13448,18 @@
             name: "check",
             theme: "outlined"
         };
-        function _objectSpread$d(target) {
+        function _objectSpread$e(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$d(target, key2, source[key2]);
+                    _defineProperty$e(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$d(obj, key2, value) {
+        function _defineProperty$e(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13462,8 +13468,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckOutlined = function CheckOutlined2(props2, context) {
-            var p2 = _objectSpread$d({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$d({}, p2, {
+            var p2 = _objectSpread$e({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$e({}, p2, {
                 icon: CheckOutlined$1
             }), null);
         };
@@ -13486,18 +13492,18 @@
             name: "close",
             theme: "outlined"
         };
-        function _objectSpread$c(target) {
+        function _objectSpread$d(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$c(target, key2, source[key2]);
+                    _defineProperty$d(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$c(obj, key2, value) {
+        function _defineProperty$d(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13506,8 +13512,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseOutlined = function CloseOutlined2(props2, context) {
-            var p2 = _objectSpread$c({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$c({}, p2, {
+            var p2 = _objectSpread$d({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$d({}, p2, {
                 icon: CloseOutlined$1
             }), null);
         };
@@ -13530,18 +13536,18 @@
             name: "close-circle",
             theme: "filled"
         };
-        function _objectSpread$b(target) {
+        function _objectSpread$c(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$b(target, key2, source[key2]);
+                    _defineProperty$c(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$b(obj, key2, value) {
+        function _defineProperty$c(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13550,8 +13556,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
-            var p2 = _objectSpread$b({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$b({}, p2, {
+            var p2 = _objectSpread$c({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$c({}, p2, {
                 icon: CloseCircleFilled$1
             }), null);
         };
@@ -13573,18 +13579,18 @@
             name: "search",
             theme: "outlined"
         };
-        function _objectSpread$a(target) {
+        function _objectSpread$b(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$a(target, key2, source[key2]);
+                    _defineProperty$b(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$a(obj, key2, value) {
+        function _defineProperty$b(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13593,8 +13599,8 @@
             }) : obj[key2] = value, obj;
         }
         var SearchOutlined = function SearchOutlined2(props2, context) {
-            var p2 = _objectSpread$a({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$a({}, p2, {
+            var p2 = _objectSpread$b({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$b({}, p2, {
                 icon: SearchOutlined$1
             }), null);
         };
@@ -15001,18 +15007,18 @@
             name: "check-circle",
             theme: "outlined"
         };
-        function _objectSpread$9(target) {
+        function _objectSpread$a(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$9(target, key2, source[key2]);
+                    _defineProperty$a(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$9(obj, key2, value) {
+        function _defineProperty$a(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15021,8 +15027,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$9({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$9({}, p2, {
+            var p2 = _objectSpread$a({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$a({}, p2, {
                 icon: CheckCircleOutlined$1
             }), null);
         };
@@ -15049,18 +15055,18 @@
             name: "exclamation-circle",
             theme: "outlined"
         };
-        function _objectSpread$8(target) {
+        function _objectSpread$9(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$8(target, key2, source[key2]);
+                    _defineProperty$9(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$8(obj, key2, value) {
+        function _defineProperty$9(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15069,8 +15075,8 @@
             }) : obj[key2] = value, obj;
         }
         var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$8({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$8({}, p2, {
+            var p2 = _objectSpread$9({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$9({}, p2, {
                 icon: ExclamationCircleOutlined$1
             }), null);
         };
@@ -15097,18 +15103,18 @@
             name: "info-circle",
             theme: "outlined"
         };
-        function _objectSpread$7(target) {
+        function _objectSpread$8(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$7(target, key2, source[key2]);
+                    _defineProperty$8(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$7(obj, key2, value) {
+        function _defineProperty$8(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15117,8 +15123,8 @@
             }) : obj[key2] = value, obj;
         }
         var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$7({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$7({}, p2, {
+            var p2 = _objectSpread$8({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$8({}, p2, {
                 icon: InfoCircleOutlined$1
             }), null);
         };
@@ -15141,18 +15147,18 @@
             name: "close-circle",
             theme: "outlined"
         };
-        function _objectSpread$6(target) {
+        function _objectSpread$7(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$6(target, key2, source[key2]);
+                    _defineProperty$7(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$6(obj, key2, value) {
+        function _defineProperty$7(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15161,8 +15167,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$6({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$6({}, p2, {
+            var p2 = _objectSpread$7({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$7({}, p2, {
                 icon: CloseCircleOutlined$1
             }), null);
         };
@@ -15184,18 +15190,18 @@
             name: "check-circle",
             theme: "filled"
         };
-        function _objectSpread$5(target) {
+        function _objectSpread$6(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$5(target, key2, source[key2]);
+                    _defineProperty$6(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$5(obj, key2, value) {
+        function _defineProperty$6(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15204,8 +15210,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
-            var p2 = _objectSpread$5({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$5({}, p2, {
+            var p2 = _objectSpread$6({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$6({}, p2, {
                 icon: CheckCircleFilled$1
             }), null);
         };
@@ -15227,18 +15233,18 @@
             name: "exclamation-circle",
             theme: "filled"
         };
-        function _objectSpread$4(target) {
+        function _objectSpread$5(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$4(target, key2, source[key2]);
+                    _defineProperty$5(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$4(obj, key2, value) {
+        function _defineProperty$5(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15247,8 +15253,8 @@
             }) : obj[key2] = value, obj;
         }
         var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
-            var p2 = _objectSpread$4({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$4({}, p2, {
+            var p2 = _objectSpread$5({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$5({}, p2, {
                 icon: ExclamationCircleFilled$1
             }), null);
         };
@@ -15270,18 +15276,18 @@
             name: "info-circle",
             theme: "filled"
         };
-        function _objectSpread$3(target) {
+        function _objectSpread$4(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$3(target, key2, source[key2]);
+                    _defineProperty$4(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$3(obj, key2, value) {
+        function _defineProperty$4(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15290,8 +15296,8 @@
             }) : obj[key2] = value, obj;
         }
         var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
-            var p2 = _objectSpread$3({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$3({}, p2, {
+            var p2 = _objectSpread$4({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$4({}, p2, {
                 icon: InfoCircleFilled$1
             }), null);
         };
@@ -18674,18 +18680,18 @@
             name: "question-circle",
             theme: "outlined"
         };
-        function _objectSpread$2(target) {
+        function _objectSpread$3(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$2(target, key2, source[key2]);
+                    _defineProperty$3(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$2(obj, key2, value) {
+        function _defineProperty$3(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -18694,8 +18700,8 @@
             }) : obj[key2] = value, obj;
         }
         var QuestionCircleOutlined = function QuestionCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$2({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$2({}, p2, {
+            var p2 = _objectSpread$3({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$3({}, p2, {
                 icon: QuestionCircleOutlined$1
             }), null);
         };
@@ -22490,6 +22496,49 @@
         Space.Compact = Compact, Space.install = function(app) {
             return app.component(Space.name, Space), app.component(Compact.name, Compact), app;
         };
+        var DeleteOutlined$1 = {
+            icon: {
+                tag: "svg",
+                attrs: {
+                    viewBox: "64 64 896 896",
+                    focusable: "false"
+                },
+                children: [ {
+                    tag: "path",
+                    attrs: {
+                        d: "M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z"
+                    }
+                } ]
+            },
+            name: "delete",
+            theme: "outlined"
+        };
+        function _objectSpread$2(target) {
+            for (var i2 = 1; i2 < arguments.length; i2++) {
+                var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
+                "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
+                    return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+                })))), ownKeys2.forEach((function(key2) {
+                    _defineProperty$2(target, key2, source[key2]);
+                }));
+            }
+            return target;
+        }
+        function _defineProperty$2(obj, key2, value) {
+            return key2 in obj ? Object.defineProperty(obj, key2, {
+                value: value,
+                enumerable: !0,
+                configurable: !0,
+                writable: !0
+            }) : obj[key2] = value, obj;
+        }
+        var DeleteOutlined = function DeleteOutlined2(props2, context) {
+            var p2 = _objectSpread$2({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$2({}, p2, {
+                icon: DeleteOutlined$1
+            }), null);
+        };
+        DeleteOutlined.displayName = "DeleteOutlined", DeleteOutlined.inheritAttrs = !1;
         var ArrowDownOutlined$1 = {
             icon: {
                 tag: "svg",
@@ -22652,17 +22701,58 @@
         function _sfc_render(_ctx, _cache) {
             return openBlock(), createElementBlock("svg", _hoisted_1$1, _hoisted_16);
         }
-        const IconLeek = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render ] ]), _hoisted_1 = {
+        const IconLeek = _export_sfc(_sfc_main$1, [ [ "render", _sfc_render ] ]);
+        class LimitedSet {
+            constructor(value, maxSize = 20) {
+                __publicField(this, "maxSize"), __publicField(this, "set"), this.maxSize = maxSize, 
+                this.set = new Set(value);
+            }
+            add(...values) {
+                for (values.forEach((value => this.set.add(value))); this.set.size > this.maxSize; ) {
+                    const firstValue = this.set.values().next().value;
+                    this.set.delete(firstValue);
+                }
+            }
+            has(value) {
+                return this.set.has(value);
+            }
+            delete(value) {
+                return this.set.delete(value);
+            }
+            clear() {
+                this.set.clear();
+            }
+            size() {
+                return this.set.size;
+            }
+            values() {
+                return this.set.values();
+            }
+            toArray() {
+                return Array.from(this.set);
+            }
+        }
+        const _hoisted_1 = {
             class: "leek-count"
         }, _hoisted_2 = {
             class: "leek-search"
         }, _hoisted_3 = {
-            class: "leek-select-item"
+            class: "leek-search-sticky"
         }, _hoisted_4 = {
-            class: "leek-select-item-label"
-        }, _hoisted_5 = {
             class: "leek-select-item"
+        }, _hoisted_5 = {
+            class: "leek-select-item-label"
         }, _hoisted_6 = {
+            class: "leek-search-history"
+        }, _hoisted_7 = {
+            class: "leek-search-history-title"
+        }, _hoisted_8 = createBaseVNode("h4", null, "历史搜索", -1), _hoisted_9 = {
+            class: "leek-search-history-clear"
+        }, _hoisted_10 = {
+            class: "leek-search-history-content"
+        }, _hoisted_11 = {
+            class: "leek-select-item"
+        }, _hoisted_12 = {
             class: "leek-select-item-label"
         }, MaxSelectCount = 5, allItemsInfoLabel = "所有外观";
         createApp(defineComponent({
@@ -22671,52 +22761,58 @@
                 ConfigProvider.config({
                     prefixCls: "antVue"
                 });
-                const sandboxWindow = "undefined" != typeof unsafeWindow ? unsafeWindow : window, leekItemFormString = sessionStorage.getItem("leek-form-items");
-                let leekItemFormData = {};
-                try {
-                    leekItemFormData = JSON.parse(leekItemFormString) || {};
-                } catch (error) {}
-                function setLocal(key2, json) {
-                    leekItemFormData[key2] = json, sessionStorage.setItem("leek-form-items", JSON.stringify(leekItemFormData));
+                const sandboxWindow = "undefined" != typeof unsafeWindow ? unsafeWindow : window, leekCachesString = sessionStorage.getItem("leekCaches") || "{}";
+                function getLocal() {
+                    try {
+                        return JSON.parse(leekCachesString);
+                    } catch (error) {
+                        return {};
+                    }
                 }
-                const isInitRef = ref(!1), remainingMaxCountRef = ref(MaxSelectCount), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), orderRef = ref("price-1"), allItemsInfo = ref({
+                function setLocal(key2, json) {
+                    isEqual(leekCaches[key2], json) || (leekCaches[key2] = json, sessionStorage.setItem("leekCaches", JSON.stringify(leekCaches)));
+                }
+                let leekCaches = getLocal();
+                const isInitRef = ref(!1), historyItemsRef = ref(new LimitedSet(leekCaches.historyItems || [], 10)), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), orderRef = ref("price-1"), allItemsInfo = ref({
                     label: allItemsInfoLabel,
                     options: []
-                }), dataMap = {}, open2 = ref(!1), onClose = () => {
-                    open2.value = !1;
+                }), dataMap = {}, openRef = ref(!1), onClose = () => {
+                    openRef.value = !1;
                 }, onOpen = () => {
-                    window.location.href.includes("buyer?t=skin") || window.location.href.includes("localhost") ? (check(), 
-                    open2.value = !0) : api$1.error('只能在"买外观"页面使用');
+                    /(\/buyer.*t=skin)|localhost/.test(window.location.href) ? (check(), openRef.value = !0) : api$1.error('只能在"买外观"页面使用');
                 };
-                fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
-                    method: "POST"
-                }).then((response => {
-                    if (!response.ok) throw new Error("Network response was not ok " + response.statusText);
-                    return response.json();
-                })).then((data => {
-                    isInitRef.value = !0;
-                    const itemCategory = data.data;
-                    let info = [];
-                    itemCategory.map((item => {
-                        formModel[item.typeName] || (formModel[item.typeName] = []);
-                        const options = item.dataModels.map((i2 => {
-                            dataMap[i2.showName] = i2;
-                            const {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = i2;
-                            return {
-                                label: `${name}(${showName})`,
-                                value: showName,
-                                typeName: typeName,
-                                searchDescType: searchDescType,
-                                searchId: searchId
-                            };
-                        }));
-                        info.push({
-                            label: item.typeName,
-                            options: options
-                        }), allItemsInfo.value.options.push(...options);
-                    })), formInfo.push(...info), sandboxSelect([]), allItems.value = leekItemFormData.allItems || [], 
-                    orderRef.value = leekItemFormData.order || "price-1";
-                })).catch((error => {}));
+                function init() {
+                    fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
+                        method: "POST"
+                    }).then((response => {
+                        if (!response.ok) throw new Error("Network response was not ok " + response.statusText);
+                        return response.json();
+                    })).then((data => {
+                        isInitRef.value = !0;
+                        const itemCategory = data.data;
+                        let info = [];
+                        itemCategory.map((item => {
+                            formModel[item.typeName] || (formModel[item.typeName] = []);
+                            const options = item.dataModels.map((i2 => {
+                                dataMap[i2.showName] = i2;
+                                const {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = i2;
+                                return {
+                                    label: `${name}(${showName})`,
+                                    value: showName,
+                                    typeName: typeName,
+                                    searchDescType: searchDescType,
+                                    searchId: searchId
+                                };
+                            }));
+                            info.push({
+                                label: item.typeName,
+                                options: options
+                            }), allItemsInfo.value.options.push(...options);
+                        })), formInfo.push(...info), sandboxSelect([]), allItems.value = leekCaches.selectedItems || [], 
+                        orderRef.value = leekCaches.order || "price-1";
+                    })).catch((error => {}));
+                }
+                init();
                 const allItems = computed({
                     get: () => {
                         const _all = [];
@@ -22734,7 +22830,7 @@
                         }));
                     }
                 }), onChange = name => (value, _options) => {
-                    allItems.value.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
+                    historyTagsAdd(value), allItems.value.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
                     name !== allItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : allItems.value = value.slice(0, value.length - 1));
                 }, onReset = () => {
                     orderRef.value = "price-1", Object.keys(formModel).map((key2 => {
@@ -22742,50 +22838,65 @@
                     }));
                 }, onSearch = () => {
                     var _a, _b;
-                    open2.value = !1, null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
+                    openRef.value = !1, null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
                 };
                 function check() {
-                    setLocal("allItems", allItems.value), remainingMaxCountRef.value = MaxSelectCount - allItems.value.length, 
-                    sandboxSelect(allItems.value);
+                    setLocal("selectedItems", allItems.value), syncSort(), sandboxSelect(allItems.value);
                 }
+                watch(formModel, (() => {
+                    check();
+                }), {
+                    deep: !0
+                });
+                const remainingMaxCount = computed((() => MaxSelectCount - allItems.value.length));
                 function sandboxSelect(values) {
                     var _a, _b, _c;
                     (null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _a.selectedList) && (sandboxWindow.buyerFilter.selectedList = values.map((name => ({
                         name: name
                     })))), null == (_c = null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _b.roleFilterStore) || _c.setCurrentAppearance(values, !1);
                 }
-                function itemFilter(inputValue, option) {
+                function selectFilter(inputValue, option) {
                     return option.search = inputValue, option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
                 }
-                function itemSearch() {}
-                return watch(formModel, (() => {
-                    check();
-                }), {
-                    deep: !0
-                }), watch((() => orderRef.value), (() => {
+                function syncSort() {
                     var _a, _b;
                     const [sortType, sortOrder] = orderRef.value.split("-");
                     null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _a.setSortType(sortType), 
                     null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _b.setSortOrder(sortOrder), 
                     setLocal("order", orderRef.value);
+                }
+                function historyTagsAdd(value) {
+                    historyItemsRef.value.add(...value), setLocal("historyItems", historyItemsRef.value.toArray());
+                }
+                function historyTagsClose(text) {
+                    historyItemsRef.value.delete(text), setLocal("historyItems", historyItemsRef.value.toArray());
+                }
+                function historyTagsClick(text) {
+                    if (allItems.value.includes(text)) api$1.error(`${text} 已存在`); else if (allItems.value.length >= MaxSelectCount) api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`); else {
+                        const items = [ ...allItems.value ];
+                        items.push(text), allItems.value = items;
+                    }
+                }
+                function historyTagsClear() {
+                    historyItemsRef.value.clear(), setLocal("historyItems", historyItemsRef.value.toArray());
+                }
+                return watch((() => orderRef.value), (() => {
+                    syncSort();
                 }), {}), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
                 createBlock(Teleport, {
                     to: "body"
                 }, [ createBaseVNode("div", {
                     class: normalizeClass([ "leek-btn-start", {
-                        "leek-fly-out": open2.value
+                        "leek-fly-out": openRef.value,
+                        "leek-growing": !openRef.value
                     } ]),
                     onClick: onOpen
-                }, [ createVNode(IconLeek, {
-                    class: normalizeClass({
-                        "leek-growing": !open2.value
-                    })
-                }, null, 8, [ "class" ]) ], 2) ])), createVNode(unref(Drawer$1), {
+                }, [ createVNode(IconLeek) ], 2) ])), createVNode(unref(Drawer$1), {
                     width: 480,
-                    open: open2.value,
+                    open: openRef.value,
                     onClose: onClose
                 }, {
-                    title: withCtx((() => [ createTextVNode(" 外观可选数量 "), createBaseVNode("span", _hoisted_1, "(" + toDisplayString(remainingMaxCountRef.value) + ")", 1) ])),
+                    title: withCtx((() => [ createTextVNode(" 外观可选数量 "), createBaseVNode("span", _hoisted_1, "(" + toDisplayString(remainingMaxCount.value) + ")", 1) ])),
                     extra: withCtx((() => [ createVNode(unref(Space), null, {
                         default: withCtx((() => [ createVNode(unref(Button), {
                             onClick: onReset
@@ -22806,7 +22917,7 @@
                         ref: formRef,
                         model: formModel
                     }, {
-                        default: withCtx((() => [ (openBlock(), createBlock(unref(FormItem), {
+                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ (openBlock(), createBlock(unref(FormItem), {
                             key: "排序方式",
                             label: "排序方式",
                             name: "order"
@@ -22852,14 +22963,13 @@
                                 options: allItemsInfo.value.options,
                                 mode: "multiple",
                                 "show-search": "",
-                                onSearch: itemSearch,
                                 "allow-clear": "",
-                                "filter-option": itemFilter,
+                                "filter-option": selectFilter,
                                 value: allItems.value,
                                 "onUpdate:value": _cache[2] || (_cache[2] = $event => allItems.value = $event),
                                 "max-tag-count": 0
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_3, [ createBaseVNode("span", _hoisted_4, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -22869,8 +22979,27 @@
                                 _: 1
                             }, 8, [ "options", "value" ]) ])),
                             _: 1
-                        }, 8, [ "label" ])), (openBlock(!0), createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), 
-                        createBlock(unref(FormItem), {
+                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_6, [ createBaseVNode("div", _hoisted_7, [ _hoisted_8, createBaseVNode("div", _hoisted_9, [ createVNode(unref(DeleteOutlined), {
+                            onClick: historyTagsClear
+                        }) ]) ]), createBaseVNode("div", _hoisted_10, [ createVNode(unref(Space), {
+                            size: [ 0, "small" ],
+                            wrap: ""
+                        }, {
+                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(historyItemsRef.value.values(), (tag => (openBlock(), 
+                            createBlock(unref(Tag), {
+                                class: "leek-search-history-tag",
+                                key: tag,
+                                bordered: !1,
+                                closable: "",
+                                onClick: $event => historyTagsClick(tag),
+                                onClose: $event => historyTagsClose(tag)
+                            }, {
+                                default: withCtx((() => [ createTextVNode(toDisplayString(tag), 1) ])),
+                                _: 2
+                            }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
+                            _: 1
+                        }) ]) ], 512), [ [ vShow, historyItemsRef.value.size() ] ]) ]), (openBlock(!0), 
+                        createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), createBlock(unref(FormItem), {
                             key: item.label,
                             label: item.label,
                             name: item.label
@@ -22882,13 +23011,12 @@
                                 options: item.options,
                                 mode: "multiple",
                                 "show-search": "",
-                                onSearch: itemSearch,
                                 "allow-clear": "",
-                                "filter-option": itemFilter,
+                                "filter-option": selectFilter,
                                 value: formModel[item.label],
                                 "onUpdate:value": $event => formModel[item.label] = $event
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_5, [ createBaseVNode("span", _hoisted_6, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_11, [ createBaseVNode("span", _hoisted_12, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -22909,6 +23037,10 @@
 });
 
  require_index();
+
+
+  }
+
 
 
 })();
