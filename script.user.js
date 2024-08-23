@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.9
+// @version      1.0.10
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -22773,7 +22773,7 @@
                     isEqual(leekCaches[key2], json) || (leekCaches[key2] = json, sessionStorage.setItem("leekCaches", JSON.stringify(leekCaches)));
                 }
                 let leekCaches = getLocal();
-                const isInitRef = ref(!1), historyItemsRef = ref(new LimitedSet(leekCaches.historyItems || [], 10)), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), orderRef = ref("price-1"), allItemsInfo = ref({
+                const isInitRef = ref(!1), historyItemsRef = ref(new LimitedSet([], 10)), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), orderRef = ref("price-1"), allItemsInfo = ref({
                     label: allItemsInfoLabel,
                     options: []
                 }), dataMap = {}, openRef = ref(!1), onClose = () => {
@@ -22809,7 +22809,7 @@
                                 options: options
                             }), allItemsInfo.value.options.push(...options);
                         })), formInfo.push(...info), sandboxSelect([]), allItems.value = leekCaches.selectedItems || [], 
-                        orderRef.value = leekCaches.order || "price-1";
+                        orderRef.value = leekCaches.order || "price-1", historyTagsAdd(leekCaches.historyItems || []);
                     })).catch((error => {}));
                 }
                 init();
@@ -22830,7 +22830,7 @@
                         }));
                     }
                 }), onChange = name => (value, _options) => {
-                    historyTagsAdd(value), allItems.value.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
+                    allItems.value.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
                     name !== allItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : allItems.value = value.slice(0, value.length - 1));
                 }, onReset = () => {
                     orderRef.value = "price-1", Object.keys(formModel).map((key2 => {
@@ -22858,6 +22858,9 @@
                 function selectFilter(inputValue, option) {
                     return option.search = inputValue, option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
                 }
+                function selectSelect(value) {
+                    historyTagsAdd(value);
+                }
                 function syncSort() {
                     var _a, _b;
                     const [sortType, sortOrder] = orderRef.value.split("-");
@@ -22866,7 +22869,7 @@
                     setLocal("order", orderRef.value);
                 }
                 function historyTagsAdd(value) {
-                    historyItemsRef.value.add(...value), setLocal("historyItems", historyItemsRef.value.toArray());
+                    historyItemsRef.value.add(...[].concat(value)), setLocal("historyItems", historyItemsRef.value.toArray());
                 }
                 function historyTagsClose(text) {
                     historyItemsRef.value.delete(text), setLocal("historyItems", historyItemsRef.value.toArray());
@@ -22879,6 +22882,10 @@
                 }
                 function historyTagsClear() {
                     historyItemsRef.value.clear(), setLocal("historyItems", historyItemsRef.value.toArray());
+                }
+                function historyTagTransform(tag) {
+                    const {name: name, showName: showName} = dataMap[tag];
+                    return `${name}(${showName})`;
                 }
                 return watch((() => orderRef.value), (() => {
                     syncSort();
@@ -22960,6 +22967,7 @@
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
                                 onChange: _cache[1] || (_cache[1] = (value, options) => onChange(allItemsInfo.value.label)(value, options)),
+                                onSelect: selectSelect,
                                 options: allItemsInfo.value.options,
                                 mode: "multiple",
                                 "show-search": "",
@@ -22985,7 +22993,7 @@
                             size: [ 0, "small" ],
                             wrap: ""
                         }, {
-                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(historyItemsRef.value.values(), (tag => (openBlock(), 
+                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(historyItemsRef.value.toArray(), (tag => (openBlock(), 
                             createBlock(unref(Tag), {
                                 class: "leek-search-history-tag",
                                 key: tag,
@@ -22994,7 +23002,7 @@
                                 onClick: $event => historyTagsClick(tag),
                                 onClose: $event => historyTagsClose(tag)
                             }, {
-                                default: withCtx((() => [ createTextVNode(toDisplayString(tag), 1) ])),
+                                default: withCtx((() => [ createTextVNode(toDisplayString(historyTagTransform(tag)), 1) ])),
                                 _: 2
                             }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
                             _: 1
@@ -23008,6 +23016,7 @@
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
                                 onChange: (value, options) => onChange(item.label)(value, options),
+                                onSelect: selectSelect,
                                 options: item.options,
                                 mode: "multiple",
                                 "show-search": "",
