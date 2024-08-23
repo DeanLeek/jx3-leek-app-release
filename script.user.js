@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.10
+// @version      1.0.11
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -88,7 +88,7 @@
 
     GM_addElement(document.head, 'style', {
       textContent: `
-      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}
+      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}
 
      `,
     });
@@ -22735,24 +22735,26 @@
         const _hoisted_1 = {
             class: "leek-count"
         }, _hoisted_2 = {
-            class: "leek-search"
+            class: "leek-drawer-footer"
         }, _hoisted_3 = {
-            class: "leek-search-sticky"
+            class: "leek-search"
         }, _hoisted_4 = {
-            class: "leek-select-item"
+            class: "leek-search-sticky"
         }, _hoisted_5 = {
-            class: "leek-select-item-label"
-        }, _hoisted_6 = {
-            class: "leek-search-history"
-        }, _hoisted_7 = {
-            class: "leek-search-history-title"
-        }, _hoisted_8 = createBaseVNode("h4", null, "历史搜索", -1), _hoisted_9 = {
-            class: "leek-search-history-clear"
-        }, _hoisted_10 = {
-            class: "leek-search-history-content"
-        }, _hoisted_11 = {
             class: "leek-select-item"
+        }, _hoisted_6 = {
+            class: "leek-select-item-label"
+        }, _hoisted_7 = {
+            class: "leek-search-history"
+        }, _hoisted_8 = {
+            class: "leek-search-history-title"
+        }, _hoisted_9 = createBaseVNode("h4", null, "历史搜索", -1), _hoisted_10 = {
+            class: "leek-search-history-clear"
+        }, _hoisted_11 = {
+            class: "leek-search-history-content"
         }, _hoisted_12 = {
+            class: "leek-select-item"
+        }, _hoisted_13 = {
             class: "leek-select-item-label"
         }, MaxSelectCount = 5, allItemsInfoLabel = "所有外观";
         createApp(defineComponent({
@@ -22887,9 +22889,11 @@
                     const {name: name, showName: showName} = dataMap[tag];
                     return `${name}(${showName})`;
                 }
-                return watch((() => orderRef.value), (() => {
+                watch((() => orderRef.value), (() => {
                     syncSort();
-                }), {}), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
+                }), {});
+                const appVersion = "1.0.11";
+                return (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
                 createBlock(Teleport, {
                     to: "body"
                 }, [ createBaseVNode("div", {
@@ -22904,6 +22908,7 @@
                     onClose: onClose
                 }, {
                     title: withCtx((() => [ createTextVNode(" 外观可选数量 "), createBaseVNode("span", _hoisted_1, "(" + toDisplayString(remainingMaxCount.value) + ")", 1) ])),
+                    footer: withCtx((() => [ createBaseVNode("div", _hoisted_2, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
                     extra: withCtx((() => [ createVNode(unref(Space), null, {
                         default: withCtx((() => [ createVNode(unref(Button), {
                             onClick: onReset
@@ -22919,12 +22924,12 @@
                         }) ])),
                         _: 1
                     }) ])),
-                    default: withCtx((() => [ createBaseVNode("section", _hoisted_2, [ createVNode(unref(Form), {
+                    default: withCtx((() => [ createBaseVNode("section", _hoisted_3, [ createVNode(unref(Form), {
                         ref_key: "formRef",
                         ref: formRef,
                         model: formModel
                     }, {
-                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ (openBlock(), createBlock(unref(FormItem), {
+                        default: withCtx((() => [ createBaseVNode("div", _hoisted_4, [ (openBlock(), createBlock(unref(FormItem), {
                             key: "排序方式",
                             label: "排序方式",
                             name: "order"
@@ -22977,7 +22982,7 @@
                                 "onUpdate:value": _cache[2] || (_cache[2] = $event => allItems.value = $event),
                                 "max-tag-count": 0
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_5, [ createBaseVNode("span", _hoisted_6, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -22987,9 +22992,9 @@
                                 _: 1
                             }, 8, [ "options", "value" ]) ])),
                             _: 1
-                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_6, [ createBaseVNode("div", _hoisted_7, [ _hoisted_8, createBaseVNode("div", _hoisted_9, [ createVNode(unref(DeleteOutlined), {
+                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_7, [ createBaseVNode("div", _hoisted_8, [ _hoisted_9, createBaseVNode("div", _hoisted_10, [ createVNode(unref(DeleteOutlined), {
                             onClick: historyTagsClear
-                        }) ]) ]), createBaseVNode("div", _hoisted_10, [ createVNode(unref(Space), {
+                        }) ]) ]), createBaseVNode("div", _hoisted_11, [ createVNode(unref(Space), {
                             size: [ 0, "small" ],
                             wrap: ""
                         }, {
@@ -23025,7 +23030,7 @@
                                 value: formModel[item.label],
                                 "onUpdate:value": $event => formModel[item.label] = $event
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_11, [ createBaseVNode("span", _hoisted_12, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_12, [ createBaseVNode("span", _hoisted_13, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
