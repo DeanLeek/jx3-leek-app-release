@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.11
+// @version      1.0.12
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -71,7 +71,7 @@
   new MutationObserver((mutationsList, obs) => {
     mutationsList.forEach((mutationRecord) => {
       for (const node of mutationRecord.addedNodes) {
-        if (node.src?.includes('/chunk/buyer/index')) {
+        if (node.nodeName === 'SCRIPT' && node.src?.includes('/chunk/buyer/index')) {
           obs.disconnect();
           patchScript(node);
           break;
@@ -88,7 +88,7 @@
 
     GM_addElement(document.head, 'style', {
       textContent: `
-      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}
+      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}.leek-drawer .ant-drawer-body{padding:18px}
 
      `,
     });
@@ -3675,6 +3675,11 @@
             for (var result = Array(length2); ++index2 < length2; ) result[index2] = array[index2 + start];
             return result;
         }
+        function castArray() {
+            if (!arguments.length) return [];
+            var value = arguments[0];
+            return isArray$1(value) ? value : [ value ];
+        }
         function stackClear() {
             this.__data__ = new ListCache, this.size = 0;
         }
@@ -4273,7 +4278,7 @@
             var i2 = toPrimitive(t2, "string");
             return "symbol" == _typeof$1(i2) ? i2 : i2 + "";
         }
-        function _defineProperty$l(e2, r2, t2) {
+        function _defineProperty$o(e2, r2, t2) {
             return (r2 = toPropertyKey(r2)) in e2 ? Object.defineProperty(e2, r2, {
                 value: t2,
                 enumerable: !0,
@@ -4295,7 +4300,7 @@
             for (var r2 = 1; r2 < arguments.length; r2++) {
                 var t2 = null != arguments[r2] ? arguments[r2] : {};
                 r2 % 2 ? ownKeys$1(Object(t2), !0).forEach((function(r3) {
-                    _defineProperty$l(e2, r3, t2[r3]);
+                    _defineProperty$o(e2, r3, t2[r3]);
                 })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(t2)) : ownKeys$1(Object(t2)).forEach((function(r3) {
                     Object.defineProperty(e2, r3, Object.getOwnPropertyDescriptor(t2, r3));
                 }));
@@ -7452,7 +7457,7 @@
                     }
                 }
             };
-        }, useStyle$b = genComponentStyleHook("Empty", (token2 => {
+        }, useStyle$c = genComponentStyleHook("Empty", (token2 => {
             const {componentCls: componentCls, controlHeightLG: controlHeightLG} = token2, emptyToken = merge(token2, {
                 emptyImgCls: `${componentCls}-img`,
                 emptyImgHeight: 2.5 * controlHeightLG,
@@ -7484,7 +7489,7 @@
             }))(),
             setup(props2, _ref) {
                 let {slots: slots = {}, attrs: attrs} = _ref;
-                const {direction: direction, prefixCls: prefixClsRef} = useConfigInject("empty", props2), [wrapSSR, hashId] = useStyle$b(prefixClsRef);
+                const {direction: direction, prefixCls: prefixClsRef} = useConfigInject("empty", props2), [wrapSSR, hashId] = useStyle$c(prefixClsRef);
                 return () => {
                     var _a, _b;
                     const prefixCls = prefixClsRef.value, _c = _extends$1(_extends$1({}, props2), attrs), {image: image = (null === (_a = slots.image) || void 0 === _a ? void 0 : _a.call(slots)) || defaultEmptyImg, description: description = (null === (_b = slots.description) || void 0 === _b ? void 0 : _b.call(slots)) || void 0, imageStyle: imageStyle, class: className = ""} = _c, restProps = __rest$l(_c, [ "image", "description", "imageStyle", "class" ]);
@@ -8523,7 +8528,7 @@
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? arguments[i2] : {};
                 i2 % 2 ? ownKeys(Object(source), !0).forEach((function(key2) {
-                    _defineProperty$k(target, key2, source[key2]);
+                    _defineProperty$n(target, key2, source[key2]);
                 })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach((function(key2) {
                     Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
                 }));
@@ -8537,7 +8542,7 @@
                 return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
             })(obj);
         }
-        function _defineProperty$k(obj, key2, value) {
+        function _defineProperty$n(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13066,18 +13071,18 @@
             var newNode = injectCSS(css2, option);
             return newNode.setAttribute(getMark(option), key2), newNode;
         }
-        function _objectSpread$j(target) {
+        function _objectSpread$m(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$j(target, key2, source[key2]);
+                    _defineProperty$m(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$j(obj, key2, value) {
+        function _defineProperty$m(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13090,9 +13095,9 @@
             return "object" == typeof target && "string" == typeof target.name && "string" == typeof target.theme && ("object" == typeof target.icon || "function" == typeof target.icon);
         }
         function generate(node2, key2, rootProps) {
-            return h$1(node2.tag, rootProps ? _objectSpread$j({
+            return h$1(node2.tag, rootProps ? _objectSpread$m({
                 key: key2
-            }, rootProps, node2.attrs) : _objectSpread$j({
+            }, rootProps, node2.attrs) : _objectSpread$m({
                 key: key2
             }, node2.attrs), (node2.children || []).map((function(child, index2) {
                 return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
@@ -13143,18 +13148,18 @@
             for (i2 = 0; i2 < sourceKeys.length; i2++) key2 = sourceKeys[i2], excluded.indexOf(key2) >= 0 || (target[key2] = source[key2]);
             return target;
         }
-        function _objectSpread$i(target) {
+        function _objectSpread$l(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$i(target, key2, source[key2]);
+                    _defineProperty$l(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$i(obj, key2, value) {
+        function _defineProperty$l(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13173,18 +13178,18 @@
             twoToneColorPalette.calculated = !!secondaryColor;
         }
         function getTwoToneColors() {
-            return _objectSpread$i({}, twoToneColorPalette);
+            return _objectSpread$l({}, twoToneColorPalette);
         }
         var IconBase = function IconBase2(props2, context) {
-            var _props$context$attrs = _objectSpread$i({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1), colors = twoToneColorPalette;
+            var _props$context$attrs = _objectSpread$l({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1), colors = twoToneColorPalette;
             if (primaryColor && (colors = {
                 primaryColor: primaryColor,
                 secondaryColor: secondaryColor || getSecondaryColor(primaryColor)
             }), warning$1(isIconDefinition(icon)), !isIconDefinition(icon)) return null;
             var target = icon;
-            return target && "function" == typeof target.icon && (target = _objectSpread$i({}, target, {
+            return target && "function" == typeof target.icon && (target = _objectSpread$l({}, target, {
                 icon: target.icon(colors.primaryColor, colors.secondaryColor)
-            })), generate(target.icon, "svg-".concat(target.name), _objectSpread$i({}, restProps, {
+            })), generate(target.icon, "svg-".concat(target.name), _objectSpread$l({}, restProps, {
                 "data-icon": target.name,
                 width: "1em",
                 height: "1em",
@@ -13296,18 +13301,18 @@
         function _arrayWithHoles(arr) {
             if (Array.isArray(arr)) return arr;
         }
-        function _objectSpread$h(target) {
+        function _objectSpread$k(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$h(target, key2, source[key2]);
+                    _defineProperty$k(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$h(obj, key2, value) {
+        function _defineProperty$k(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13332,16 +13337,16 @@
         }
         setTwoToneColor(blue.primary);
         var Icon = function Icon2(props2, context) {
-            var _classObj, _props$context$attrs = _objectSpread$h({}, props2, context.attrs), cls = _props$context$attrs.class, icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded), _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName, classObj = (_defineProperty$h(_classObj = {}, rootClassName.value, !!rootClassName.value), 
-            _defineProperty$h(_classObj, prefixCls.value, !0), _defineProperty$h(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), 
-            _defineProperty$h(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || "loading" === icon.name), 
+            var _classObj, _props$context$attrs = _objectSpread$k({}, props2, context.attrs), cls = _props$context$attrs.class, icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded), _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName, classObj = (_defineProperty$k(_classObj = {}, rootClassName.value, !!rootClassName.value), 
+            _defineProperty$k(_classObj, prefixCls.value, !0), _defineProperty$k(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), 
+            _defineProperty$k(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || "loading" === icon.name), 
             _classObj), iconTabIndex = tabindex;
             void 0 === iconTabIndex && onClick && (iconTabIndex = -1);
             var svgStyle = rotate ? {
                 msTransform: "rotate(".concat(rotate, "deg)"),
                 transform: "rotate(".concat(rotate, "deg)")
             } : void 0, _normalizeTwoToneColo2 = _slicedToArray(normalizeTwoToneColors(twoToneColor), 2), primaryColor = _normalizeTwoToneColo2[0], secondaryColor = _normalizeTwoToneColo2[1];
-            return createVNode("span", _objectSpread$h({
+            return createVNode("span", _objectSpread$k({
                 role: "img",
                 "aria-label": icon.name
             }, restProps, {
@@ -13355,18 +13360,18 @@
                 style: svgStyle
             }, null), createVNode(InsertStyles, null, null) ]);
         };
-        function _objectSpread$g(target) {
+        function _objectSpread$j(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$g(target, key2, source[key2]);
+                    _defineProperty$j(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$g(obj, key2, value) {
+        function _defineProperty$j(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13382,8 +13387,8 @@
         }, Icon.displayName = "AntdIcon", Icon.inheritAttrs = !1, Icon.getTwoToneColor = getTwoToneColor, 
         Icon.setTwoToneColor = setTwoToneColor;
         var DownOutlined = function DownOutlined2(props2, context) {
-            var p2 = _objectSpread$g({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$g({}, p2, {
+            var p2 = _objectSpread$j({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$j({}, p2, {
                 icon: DownOutlined$1
             }), null);
         };
@@ -13405,18 +13410,18 @@
             name: "loading",
             theme: "outlined"
         };
-        function _objectSpread$f(target) {
+        function _objectSpread$i(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$f(target, key2, source[key2]);
+                    _defineProperty$i(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$f(obj, key2, value) {
+        function _defineProperty$i(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13425,8 +13430,8 @@
             }) : obj[key2] = value, obj;
         }
         var LoadingOutlined = function LoadingOutlined2(props2, context) {
-            var p2 = _objectSpread$f({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$f({}, p2, {
+            var p2 = _objectSpread$i({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$i({}, p2, {
                 icon: LoadingOutlined$1
             }), null);
         };
@@ -13448,18 +13453,18 @@
             name: "check",
             theme: "outlined"
         };
-        function _objectSpread$e(target) {
+        function _objectSpread$h(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$e(target, key2, source[key2]);
+                    _defineProperty$h(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$e(obj, key2, value) {
+        function _defineProperty$h(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13468,8 +13473,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckOutlined = function CheckOutlined2(props2, context) {
-            var p2 = _objectSpread$e({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$e({}, p2, {
+            var p2 = _objectSpread$h({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$h({}, p2, {
                 icon: CheckOutlined$1
             }), null);
         };
@@ -13492,18 +13497,18 @@
             name: "close",
             theme: "outlined"
         };
-        function _objectSpread$d(target) {
+        function _objectSpread$g(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$d(target, key2, source[key2]);
+                    _defineProperty$g(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$d(obj, key2, value) {
+        function _defineProperty$g(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13512,8 +13517,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseOutlined = function CloseOutlined2(props2, context) {
-            var p2 = _objectSpread$d({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$d({}, p2, {
+            var p2 = _objectSpread$g({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$g({}, p2, {
                 icon: CloseOutlined$1
             }), null);
         };
@@ -13536,18 +13541,18 @@
             name: "close-circle",
             theme: "filled"
         };
-        function _objectSpread$c(target) {
+        function _objectSpread$f(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$c(target, key2, source[key2]);
+                    _defineProperty$f(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$c(obj, key2, value) {
+        function _defineProperty$f(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13556,8 +13561,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
-            var p2 = _objectSpread$c({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$c({}, p2, {
+            var p2 = _objectSpread$f({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$f({}, p2, {
                 icon: CloseCircleFilled$1
             }), null);
         };
@@ -13579,18 +13584,18 @@
             name: "search",
             theme: "outlined"
         };
-        function _objectSpread$b(target) {
+        function _objectSpread$e(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$b(target, key2, source[key2]);
+                    _defineProperty$e(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$b(obj, key2, value) {
+        function _defineProperty$e(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -13599,8 +13604,8 @@
             }) : obj[key2] = value, obj;
         }
         var SearchOutlined = function SearchOutlined2(props2, context) {
-            var p2 = _objectSpread$b({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$b({}, p2, {
+            var p2 = _objectSpread$e({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$e({}, p2, {
                 icon: SearchOutlined$1
             }), null);
         };
@@ -13739,7 +13744,7 @@
                     }
                 }
             };
-        }, useStyle$a = genComponentStyleHook("Space", (token2 => [ genSpaceStyle(token2), genSpaceCompactStyle(token2) ])), spaceCompactItemProps = () => ({
+        }, useStyle$b = genComponentStyleHook("Space", (token2 => [ genSpaceStyle(token2), genSpaceCompactStyle(token2) ])), spaceCompactItemProps = () => ({
             compactSize: String,
             compactDirection: PropTypes.oneOf(tuple("horizontal", "vertical")).def("horizontal"),
             isFirstItem: booleanType(),
@@ -13796,7 +13801,7 @@
             props: spaceCompactProps(),
             setup(props2, _ref3) {
                 let {attrs: attrs, slots: slots} = _ref3;
-                const {prefixCls: prefixCls, direction: directionConfig} = useConfigInject("space-compact", props2), compactItemContext = SpaceCompactItemContext.useInject(), [wrapSSR, hashId] = useStyle$a(prefixCls), clx = computed((() => classNames(prefixCls.value, hashId.value, {
+                const {prefixCls: prefixCls, direction: directionConfig} = useConfigInject("space-compact", props2), compactItemContext = SpaceCompactItemContext.useInject(), [wrapSSR, hashId] = useStyle$b(prefixCls), clx = computed((() => classNames(prefixCls.value, hashId.value, {
                     [`${prefixCls.value}-rtl`]: "rtl" === directionConfig.value,
                     [`${prefixCls.value}-block`]: props2.block,
                     [`${prefixCls.value}-vertical`]: "vertical" === props2.direction
@@ -14736,7 +14741,7 @@
                     }
                 }
             };
-        }, genBaseStyle$1 = token2 => {
+        }, genBaseStyle$2 = token2 => {
             const {componentCls: componentCls, inputPaddingHorizontalBase: inputPaddingHorizontalBase, iconCls: iconCls} = token2;
             return {
                 [componentCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
@@ -14837,7 +14842,7 @@
                         width: "100%"
                     }
                 }
-            }, genBaseStyle$1(token2), genSingleStyle(token2), genMultipleStyle(token2), genSingleStyle$1(token2), {
+            }, genBaseStyle$2(token2), genSingleStyle(token2), genMultipleStyle(token2), genSingleStyle$1(token2), {
                 [`${componentCls}-rtl`]: {
                     direction: "rtl"
                 }
@@ -15007,18 +15012,18 @@
             name: "check-circle",
             theme: "outlined"
         };
-        function _objectSpread$a(target) {
+        function _objectSpread$d(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$a(target, key2, source[key2]);
+                    _defineProperty$d(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$a(obj, key2, value) {
+        function _defineProperty$d(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15027,8 +15032,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$a({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$a({}, p2, {
+            var p2 = _objectSpread$d({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$d({}, p2, {
                 icon: CheckCircleOutlined$1
             }), null);
         };
@@ -15055,18 +15060,18 @@
             name: "exclamation-circle",
             theme: "outlined"
         };
-        function _objectSpread$9(target) {
+        function _objectSpread$c(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$9(target, key2, source[key2]);
+                    _defineProperty$c(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$9(obj, key2, value) {
+        function _defineProperty$c(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15075,8 +15080,8 @@
             }) : obj[key2] = value, obj;
         }
         var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$9({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$9({}, p2, {
+            var p2 = _objectSpread$c({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$c({}, p2, {
                 icon: ExclamationCircleOutlined$1
             }), null);
         };
@@ -15103,18 +15108,18 @@
             name: "info-circle",
             theme: "outlined"
         };
-        function _objectSpread$8(target) {
+        function _objectSpread$b(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$8(target, key2, source[key2]);
+                    _defineProperty$b(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$8(obj, key2, value) {
+        function _defineProperty$b(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15123,8 +15128,8 @@
             }) : obj[key2] = value, obj;
         }
         var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$8({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$8({}, p2, {
+            var p2 = _objectSpread$b({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$b({}, p2, {
                 icon: InfoCircleOutlined$1
             }), null);
         };
@@ -15147,18 +15152,18 @@
             name: "close-circle",
             theme: "outlined"
         };
-        function _objectSpread$7(target) {
+        function _objectSpread$a(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$7(target, key2, source[key2]);
+                    _defineProperty$a(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$7(obj, key2, value) {
+        function _defineProperty$a(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15167,8 +15172,8 @@
             }) : obj[key2] = value, obj;
         }
         var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$7({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$7({}, p2, {
+            var p2 = _objectSpread$a({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$a({}, p2, {
                 icon: CloseCircleOutlined$1
             }), null);
         };
@@ -15190,18 +15195,18 @@
             name: "check-circle",
             theme: "filled"
         };
-        function _objectSpread$6(target) {
+        function _objectSpread$9(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$6(target, key2, source[key2]);
+                    _defineProperty$9(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$6(obj, key2, value) {
+        function _defineProperty$9(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15210,8 +15215,8 @@
             }) : obj[key2] = value, obj;
         }
         var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
-            var p2 = _objectSpread$6({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$6({}, p2, {
+            var p2 = _objectSpread$9({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$9({}, p2, {
                 icon: CheckCircleFilled$1
             }), null);
         };
@@ -15233,18 +15238,18 @@
             name: "exclamation-circle",
             theme: "filled"
         };
-        function _objectSpread$5(target) {
+        function _objectSpread$8(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$5(target, key2, source[key2]);
+                    _defineProperty$8(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$5(obj, key2, value) {
+        function _defineProperty$8(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15253,8 +15258,8 @@
             }) : obj[key2] = value, obj;
         }
         var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
-            var p2 = _objectSpread$5({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$5({}, p2, {
+            var p2 = _objectSpread$8({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$8({}, p2, {
                 icon: ExclamationCircleFilled$1
             }), null);
         };
@@ -15276,18 +15281,18 @@
             name: "info-circle",
             theme: "filled"
         };
-        function _objectSpread$4(target) {
+        function _objectSpread$7(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$4(target, key2, source[key2]);
+                    _defineProperty$7(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$4(obj, key2, value) {
+        function _defineProperty$7(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -15296,13 +15301,259 @@
             }) : obj[key2] = value, obj;
         }
         var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
-            var p2 = _objectSpread$4({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$4({}, p2, {
+            var p2 = _objectSpread$7({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$7({}, p2, {
                 icon: InfoCircleFilled$1
             }), null);
         };
         InfoCircleFilled.displayName = "InfoCircleFilled", InfoCircleFilled.inheritAttrs = !1;
-        const responsiveArray = [ "xxxl", "xxl", "xl", "lg", "md", "sm", "xs" ], getResponsiveMap = token2 => ({
+        const genAlertTypeStyle = (bgColor, borderColor, iconColor, token2, alertCls) => ({
+            backgroundColor: bgColor,
+            border: `${token2.lineWidth}px ${token2.lineType} ${borderColor}`,
+            [`${alertCls}-icon`]: {
+                color: iconColor
+            }
+        }), genBaseStyle$1 = token2 => {
+            const {componentCls: componentCls, motionDurationSlow: duration, marginXS: marginXS, marginSM: marginSM, fontSize: fontSize, fontSizeLG: fontSizeLG, lineHeight: lineHeight, borderRadiusLG: borderRadius, motionEaseInOutCirc: motionEaseInOutCirc, alertIconSizeLG: alertIconSizeLG, colorText: colorText, paddingContentVerticalSM: paddingContentVerticalSM, alertPaddingHorizontal: alertPaddingHorizontal, paddingMD: paddingMD, paddingContentHorizontalLG: paddingContentHorizontalLG} = token2;
+            return {
+                [componentCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: `${paddingContentVerticalSM}px ${alertPaddingHorizontal}px`,
+                    wordWrap: "break-word",
+                    borderRadius: borderRadius,
+                    [`&${componentCls}-rtl`]: {
+                        direction: "rtl"
+                    },
+                    [`${componentCls}-content`]: {
+                        flex: 1,
+                        minWidth: 0
+                    },
+                    [`${componentCls}-icon`]: {
+                        marginInlineEnd: marginXS,
+                        lineHeight: 0
+                    },
+                    "&-description": {
+                        display: "none",
+                        fontSize: fontSize,
+                        lineHeight: lineHeight
+                    },
+                    "&-message": {
+                        color: colorText
+                    },
+                    [`&${componentCls}-motion-leave`]: {
+                        overflow: "hidden",
+                        opacity: 1,
+                        transition: `max-height ${duration} ${motionEaseInOutCirc}, opacity ${duration} ${motionEaseInOutCirc},\n        padding-top ${duration} ${motionEaseInOutCirc}, padding-bottom ${duration} ${motionEaseInOutCirc},\n        margin-bottom ${duration} ${motionEaseInOutCirc}`
+                    },
+                    [`&${componentCls}-motion-leave-active`]: {
+                        maxHeight: 0,
+                        marginBottom: "0 !important",
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        opacity: 0
+                    }
+                }),
+                [`${componentCls}-with-description`]: {
+                    alignItems: "flex-start",
+                    paddingInline: paddingContentHorizontalLG,
+                    paddingBlock: paddingMD,
+                    [`${componentCls}-icon`]: {
+                        marginInlineEnd: marginSM,
+                        fontSize: alertIconSizeLG,
+                        lineHeight: 0
+                    },
+                    [`${componentCls}-message`]: {
+                        display: "block",
+                        marginBottom: marginXS,
+                        color: colorText,
+                        fontSize: fontSizeLG
+                    },
+                    [`${componentCls}-description`]: {
+                        display: "block"
+                    }
+                },
+                [`${componentCls}-banner`]: {
+                    marginBottom: 0,
+                    border: "0 !important",
+                    borderRadius: 0
+                }
+            };
+        }, genTypeStyle = token2 => {
+            const {componentCls: componentCls, colorSuccess: colorSuccess, colorSuccessBorder: colorSuccessBorder, colorSuccessBg: colorSuccessBg, colorWarning: colorWarning, colorWarningBorder: colorWarningBorder, colorWarningBg: colorWarningBg, colorError: colorError, colorErrorBorder: colorErrorBorder, colorErrorBg: colorErrorBg, colorInfo: colorInfo, colorInfoBorder: colorInfoBorder, colorInfoBg: colorInfoBg} = token2;
+            return {
+                [componentCls]: {
+                    "&-success": genAlertTypeStyle(colorSuccessBg, colorSuccessBorder, colorSuccess, token2, componentCls),
+                    "&-info": genAlertTypeStyle(colorInfoBg, colorInfoBorder, colorInfo, token2, componentCls),
+                    "&-warning": genAlertTypeStyle(colorWarningBg, colorWarningBorder, colorWarning, token2, componentCls),
+                    "&-error": _extends$1(_extends$1({}, genAlertTypeStyle(colorErrorBg, colorErrorBorder, colorError, token2, componentCls)), {
+                        [`${componentCls}-description > pre`]: {
+                            margin: 0,
+                            padding: 0
+                        }
+                    })
+                }
+            };
+        }, genActionStyle = token2 => {
+            const {componentCls: componentCls, iconCls: iconCls, motionDurationMid: motionDurationMid, marginXS: marginXS, fontSizeIcon: fontSizeIcon, colorIcon: colorIcon, colorIconHover: colorIconHover} = token2;
+            return {
+                [componentCls]: {
+                    "&-action": {
+                        marginInlineStart: marginXS
+                    },
+                    [`${componentCls}-close-icon`]: {
+                        marginInlineStart: marginXS,
+                        padding: 0,
+                        overflow: "hidden",
+                        fontSize: fontSizeIcon,
+                        lineHeight: `${fontSizeIcon}px`,
+                        backgroundColor: "transparent",
+                        border: "none",
+                        outline: "none",
+                        cursor: "pointer",
+                        [`${iconCls}-close`]: {
+                            color: colorIcon,
+                            transition: `color ${motionDurationMid}`,
+                            "&:hover": {
+                                color: colorIconHover
+                            }
+                        }
+                    },
+                    "&-close-text": {
+                        color: colorIcon,
+                        transition: `color ${motionDurationMid}`,
+                        "&:hover": {
+                            color: colorIconHover
+                        }
+                    }
+                }
+            };
+        }, genAlertStyle = token2 => [ genBaseStyle$1(token2), genTypeStyle(token2), genActionStyle(token2) ], useStyle$a = genComponentStyleHook("Alert", (token2 => {
+            const {fontSizeHeading3: fontSizeHeading3} = token2, alertToken = merge(token2, {
+                alertIconSizeLG: fontSizeHeading3,
+                alertPaddingHorizontal: 12
+            });
+            return [ genAlertStyle(alertToken) ];
+        })), iconMapFilled = {
+            success: CheckCircleFilled,
+            info: InfoCircleFilled,
+            error: CloseCircleFilled,
+            warning: ExclamationCircleFilled
+        }, iconMapOutlined = {
+            success: CheckCircleOutlined,
+            info: InfoCircleOutlined,
+            error: CloseCircleOutlined,
+            warning: ExclamationCircleOutlined
+        }, AlertTypes = tuple("success", "info", "warning", "error"), Alert$1 = withInstall(defineComponent({
+            compatConfig: {
+                MODE: 3
+            },
+            name: "AAlert",
+            inheritAttrs: !1,
+            props: (() => ({
+                type: PropTypes.oneOf(AlertTypes),
+                closable: {
+                    type: Boolean,
+                    default: void 0
+                },
+                closeText: PropTypes.any,
+                message: PropTypes.any,
+                description: PropTypes.any,
+                afterClose: Function,
+                showIcon: {
+                    type: Boolean,
+                    default: void 0
+                },
+                prefixCls: String,
+                banner: {
+                    type: Boolean,
+                    default: void 0
+                },
+                icon: PropTypes.any,
+                closeIcon: PropTypes.any,
+                onClose: Function
+            }))(),
+            setup(props2, _ref) {
+                let {slots: slots, emit: emit2, attrs: attrs, expose: expose} = _ref;
+                const {prefixCls: prefixCls, direction: direction} = useConfigInject("alert", props2), [wrapSSR, hashId] = useStyle$a(prefixCls), closing = shallowRef(!1), closed = shallowRef(!1), alertNode = shallowRef(), handleClose = e2 => {
+                    e2.preventDefault();
+                    const dom = alertNode.value;
+                    dom.style.height = `${dom.offsetHeight}px`, dom.style.height = `${dom.offsetHeight}px`, 
+                    closing.value = !0, emit2("close", e2);
+                }, animationEnd = () => {
+                    var _a;
+                    closing.value = !1, closed.value = !0, null === (_a = props2.afterClose) || void 0 === _a || _a.call(props2);
+                }, mergedType = computed((() => {
+                    const {type: type} = props2;
+                    return void 0 !== type ? type : props2.banner ? "warning" : "info";
+                }));
+                expose({
+                    animationEnd: animationEnd
+                });
+                const motionStyle = shallowRef({});
+                return () => {
+                    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+                    const {banner: banner, closeIcon: customCloseIcon = (null === (_a = slots.closeIcon) || void 0 === _a ? void 0 : _a.call(slots))} = props2;
+                    let {closable: closable, showIcon: showIcon} = props2;
+                    const closeText = null !== (_b = props2.closeText) && void 0 !== _b ? _b : null === (_c = slots.closeText) || void 0 === _c ? void 0 : _c.call(slots), description = null !== (_d = props2.description) && void 0 !== _d ? _d : null === (_e = slots.description) || void 0 === _e ? void 0 : _e.call(slots), message = null !== (_f = props2.message) && void 0 !== _f ? _f : null === (_g = slots.message) || void 0 === _g ? void 0 : _g.call(slots), icon = null !== (_h = props2.icon) && void 0 !== _h ? _h : null === (_j = slots.icon) || void 0 === _j ? void 0 : _j.call(slots), action = null === (_k = slots.action) || void 0 === _k ? void 0 : _k.call(slots);
+                    showIcon = !(!banner || void 0 !== showIcon) || showIcon;
+                    const IconType = (description ? iconMapOutlined : iconMapFilled)[mergedType.value] || null;
+                    closeText && (closable = !0);
+                    const prefixClsValue = prefixCls.value, alertCls = classNames(prefixClsValue, {
+                        [`${prefixClsValue}-${mergedType.value}`]: !0,
+                        [`${prefixClsValue}-closing`]: closing.value,
+                        [`${prefixClsValue}-with-description`]: !!description,
+                        [`${prefixClsValue}-no-icon`]: !showIcon,
+                        [`${prefixClsValue}-banner`]: !!banner,
+                        [`${prefixClsValue}-closable`]: closable,
+                        [`${prefixClsValue}-rtl`]: "rtl" === direction.value,
+                        [hashId.value]: !0
+                    }), closeIcon = closable ? createVNode("button", {
+                        type: "button",
+                        onClick: handleClose,
+                        class: `${prefixClsValue}-close-icon`,
+                        tabindex: 0
+                    }, [ closeText ? createVNode("span", {
+                        class: `${prefixClsValue}-close-text`
+                    }, [ closeText ]) : void 0 === customCloseIcon ? createVNode(CloseOutlined, null, null) : customCloseIcon ]) : null, iconNode = icon && (isValidElement(icon) ? cloneElement(icon, {
+                        class: `${prefixClsValue}-icon`
+                    }) : createVNode("span", {
+                        class: `${prefixClsValue}-icon`
+                    }, [ icon ])) || createVNode(IconType, {
+                        class: `${prefixClsValue}-icon`
+                    }, null), transitionProps = getTransitionProps(`${prefixClsValue}-motion`, {
+                        appear: !1,
+                        css: !0,
+                        onAfterLeave: animationEnd,
+                        onBeforeLeave: node2 => {
+                            node2.style.maxHeight = `${node2.offsetHeight}px`;
+                        },
+                        onLeave: node2 => {
+                            node2.style.maxHeight = "0px";
+                        }
+                    });
+                    return wrapSSR(closed.value ? null : createVNode(Transition, transitionProps, {
+                        default: () => [ withDirectives(createVNode("div", _objectSpread2$1(_objectSpread2$1({
+                            role: "alert"
+                        }, attrs), {}, {
+                            style: [ attrs.style, motionStyle.value ],
+                            class: [ attrs.class, alertCls ],
+                            "data-show": !closing.value,
+                            ref: alertNode
+                        }), [ showIcon ? iconNode : null, createVNode("div", {
+                            class: `${prefixClsValue}-content`
+                        }, [ message ? createVNode("div", {
+                            class: `${prefixClsValue}-message`
+                        }, [ message ]) : null, description ? createVNode("div", {
+                            class: `${prefixClsValue}-description`
+                        }, [ description ]) : null ]), action ? createVNode("div", {
+                            class: `${prefixClsValue}-action`
+                        }, [ action ]) : null, closeIcon ]), [ [ vShow, !closing.value ] ]) ]
+                    }));
+                };
+            }
+        })), responsiveArray = [ "xxxl", "xxl", "xl", "lg", "md", "sm", "xs" ], getResponsiveMap = token2 => ({
             xs: `(max-width: ${token2.screenXSMax}px)`,
             sm: `(min-width: ${token2.screenSM}px)`,
             md: `(min-width: ${token2.screenMD}px)`,
@@ -18680,18 +18931,18 @@
             name: "question-circle",
             theme: "outlined"
         };
-        function _objectSpread$3(target) {
+        function _objectSpread$6(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$3(target, key2, source[key2]);
+                    _defineProperty$6(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$3(obj, key2, value) {
+        function _defineProperty$6(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -18700,8 +18951,8 @@
             }) : obj[key2] = value, obj;
         }
         var QuestionCircleOutlined = function QuestionCircleOutlined2(props2, context) {
-            var p2 = _objectSpread$3({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$3({}, p2, {
+            var p2 = _objectSpread$6({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$6({}, p2, {
                 icon: QuestionCircleOutlined$1
             }), null);
         };
@@ -22442,7 +22693,7 @@
             slots: Object,
             setup(props2, _ref) {
                 let {slots: slots, attrs: attrs} = _ref;
-                const {prefixCls: prefixCls, space: space, direction: directionConfig} = useConfigInject("space", props2), [wrapSSR, hashId] = useStyle$a(prefixCls), supportFlexGap = useFlexGapSupport(), size2 = computed((() => {
+                const {prefixCls: prefixCls, space: space, direction: directionConfig} = useConfigInject("space", props2), [wrapSSR, hashId] = useStyle$b(prefixCls), supportFlexGap = useFlexGapSupport(), size2 = computed((() => {
                     var _a, _b, _c;
                     return null !== (_c = null !== (_a = props2.size) && void 0 !== _a ? _a : null === (_b = null == space ? void 0 : space.value) || void 0 === _b ? void 0 : _b.size) && void 0 !== _c ? _c : "small";
                 })), horizontalSize = ref(), verticalSize = ref();
@@ -22513,18 +22764,18 @@
             name: "delete",
             theme: "outlined"
         };
-        function _objectSpread$2(target) {
+        function _objectSpread$5(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$2(target, key2, source[key2]);
+                    _defineProperty$5(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$2(obj, key2, value) {
+        function _defineProperty$5(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -22533,8 +22784,8 @@
             }) : obj[key2] = value, obj;
         }
         var DeleteOutlined = function DeleteOutlined2(props2, context) {
-            var p2 = _objectSpread$2({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$2({}, p2, {
+            var p2 = _objectSpread$5({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$5({}, p2, {
                 icon: DeleteOutlined$1
             }), null);
         };
@@ -22556,18 +22807,18 @@
             name: "arrow-down",
             theme: "outlined"
         };
-        function _objectSpread$1(target) {
+        function _objectSpread$4(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
                 "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
                     return Object.getOwnPropertyDescriptor(source, sym).enumerable;
                 })))), ownKeys2.forEach((function(key2) {
-                    _defineProperty$1(target, key2, source[key2]);
+                    _defineProperty$4(target, key2, source[key2]);
                 }));
             }
             return target;
         }
-        function _defineProperty$1(obj, key2, value) {
+        function _defineProperty$4(obj, key2, value) {
             return key2 in obj ? Object.defineProperty(obj, key2, {
                 value: value,
                 enumerable: !0,
@@ -22576,8 +22827,8 @@
             }) : obj[key2] = value, obj;
         }
         var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
-            var p2 = _objectSpread$1({}, props2, context.attrs);
-            return createVNode(Icon, _objectSpread$1({}, p2, {
+            var p2 = _objectSpread$4({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$4({}, p2, {
                 icon: ArrowDownOutlined$1
             }), null);
         };
@@ -22599,6 +22850,140 @@
             name: "arrow-up",
             theme: "outlined"
         };
+        function _objectSpread$3(target) {
+            for (var i2 = 1; i2 < arguments.length; i2++) {
+                var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
+                "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
+                    return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+                })))), ownKeys2.forEach((function(key2) {
+                    _defineProperty$3(target, key2, source[key2]);
+                }));
+            }
+            return target;
+        }
+        function _defineProperty$3(obj, key2, value) {
+            return key2 in obj ? Object.defineProperty(obj, key2, {
+                value: value,
+                enumerable: !0,
+                configurable: !0,
+                writable: !0
+            }) : obj[key2] = value, obj;
+        }
+        var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+            var p2 = _objectSpread$3({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$3({}, p2, {
+                icon: ArrowUpOutlined$1
+            }), null);
+        };
+        ArrowUpOutlined.displayName = "ArrowUpOutlined", ArrowUpOutlined.inheritAttrs = !1;
+        var BorderOutlined$1 = {
+            icon: {
+                tag: "svg",
+                attrs: {
+                    viewBox: "64 64 896 896",
+                    focusable: "false"
+                },
+                children: [ {
+                    tag: "path",
+                    attrs: {
+                        d: "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z"
+                    }
+                } ]
+            },
+            name: "border",
+            theme: "outlined"
+        };
+        function _objectSpread$2(target) {
+            for (var i2 = 1; i2 < arguments.length; i2++) {
+                var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
+                "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
+                    return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+                })))), ownKeys2.forEach((function(key2) {
+                    _defineProperty$2(target, key2, source[key2]);
+                }));
+            }
+            return target;
+        }
+        function _defineProperty$2(obj, key2, value) {
+            return key2 in obj ? Object.defineProperty(obj, key2, {
+                value: value,
+                enumerable: !0,
+                configurable: !0,
+                writable: !0
+            }) : obj[key2] = value, obj;
+        }
+        var BorderOutlined = function BorderOutlined2(props2, context) {
+            var p2 = _objectSpread$2({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$2({}, p2, {
+                icon: BorderOutlined$1
+            }), null);
+        };
+        BorderOutlined.displayName = "BorderOutlined", BorderOutlined.inheritAttrs = !1;
+        var CheckSquareOutlined$1 = {
+            icon: {
+                tag: "svg",
+                attrs: {
+                    viewBox: "64 64 896 896",
+                    focusable: "false"
+                },
+                children: [ {
+                    tag: "path",
+                    attrs: {
+                        d: "M433.1 657.7a31.8 31.8 0 0051.7 0l210.6-292c3.8-5.3 0-12.7-6.5-12.7H642c-10.2 0-19.9 4.9-25.9 13.3L459 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H315c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8z"
+                    }
+                }, {
+                    tag: "path",
+                    attrs: {
+                        d: "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z"
+                    }
+                } ]
+            },
+            name: "check-square",
+            theme: "outlined"
+        };
+        function _objectSpread$1(target) {
+            for (var i2 = 1; i2 < arguments.length; i2++) {
+                var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
+                "function" == typeof Object.getOwnPropertySymbols && (ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter((function(sym) {
+                    return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+                })))), ownKeys2.forEach((function(key2) {
+                    _defineProperty$1(target, key2, source[key2]);
+                }));
+            }
+            return target;
+        }
+        function _defineProperty$1(obj, key2, value) {
+            return key2 in obj ? Object.defineProperty(obj, key2, {
+                value: value,
+                enumerable: !0,
+                configurable: !0,
+                writable: !0
+            }) : obj[key2] = value, obj;
+        }
+        var CheckSquareOutlined = function CheckSquareOutlined2(props2, context) {
+            var p2 = _objectSpread$1({}, props2, context.attrs);
+            return createVNode(Icon, _objectSpread$1({}, p2, {
+                icon: CheckSquareOutlined$1
+            }), null);
+        };
+        CheckSquareOutlined.displayName = "CheckSquareOutlined", CheckSquareOutlined.inheritAttrs = !1;
+        var SyncOutlined$1 = {
+            icon: {
+                tag: "svg",
+                attrs: {
+                    viewBox: "64 64 896 896",
+                    focusable: "false"
+                },
+                children: [ {
+                    tag: "path",
+                    attrs: {
+                        d: "M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z"
+                    }
+                } ]
+            },
+            name: "sync",
+            theme: "outlined"
+        };
         function _objectSpread(target) {
             for (var i2 = 1; i2 < arguments.length; i2++) {
                 var source = null != arguments[i2] ? Object(arguments[i2]) : {}, ownKeys2 = Object.keys(source);
@@ -22618,13 +23003,13 @@
                 writable: !0
             }) : obj[key2] = value, obj;
         }
-        var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+        var SyncOutlined = function SyncOutlined2(props2, context) {
             var p2 = _objectSpread({}, props2, context.attrs);
             return createVNode(Icon, _objectSpread({}, p2, {
-                icon: ArrowUpOutlined$1
+                icon: SyncOutlined$1
             }), null);
         };
-        ArrowUpOutlined.displayName = "ArrowUpOutlined", ArrowUpOutlined.inheritAttrs = !1;
+        SyncOutlined.displayName = "SyncOutlined", SyncOutlined.inheritAttrs = !1;
         const _export_sfc = (sfc, props2) => {
             const target = sfc.__vccOpts || sfc;
             for (const [key2, val] of props2) target[key2] = val;
@@ -22728,69 +23113,107 @@
             values() {
                 return this.set.values();
             }
-            toArray() {
+            toJSON() {
                 return Array.from(this.set);
             }
         }
         const _hoisted_1 = {
-            class: "leek-count"
-        }, _hoisted_2 = {
             class: "leek-drawer-footer"
-        }, _hoisted_3 = {
+        }, _hoisted_2 = {
             class: "leek-search"
-        }, _hoisted_4 = {
+        }, _hoisted_3 = {
             class: "leek-search-sticky"
+        }, _hoisted_4 = {
+            class: "leek-select-item"
         }, _hoisted_5 = {
-            class: "leek-select-item"
+            class: "leek-select-item-label"
         }, _hoisted_6 = {
-            class: "leek-select-item-label"
-        }, _hoisted_7 = {
             class: "leek-search-history"
-        }, _hoisted_8 = {
+        }, _hoisted_7 = {
             class: "leek-search-history-title"
-        }, _hoisted_9 = createBaseVNode("h4", null, "历史搜索", -1), _hoisted_10 = {
+        }, _hoisted_8 = createBaseVNode("h4", null, "历史搜索", -1), _hoisted_9 = {
             class: "leek-search-history-clear"
-        }, _hoisted_11 = {
+        }, _hoisted_10 = {
             class: "leek-search-history-content"
-        }, _hoisted_12 = {
+        }, _hoisted_11 = {
             class: "leek-select-item"
-        }, _hoisted_13 = {
+        }, _hoisted_12 = {
             class: "leek-select-item-label"
-        }, MaxSelectCount = 5, allItemsInfoLabel = "所有外观";
+        }, MaxSelectCount = 5, selectedItemsInfoLabel = "所有外观";
         createApp(defineComponent({
             __name: "App",
             setup(__props) {
                 ConfigProvider.config({
                     prefixCls: "antVue"
                 });
-                const sandboxWindow = "undefined" != typeof unsafeWindow ? unsafeWindow : window, leekCachesString = sessionStorage.getItem("leekCaches") || "{}";
-                function getLocal() {
+                const sandboxWindow = "undefined" != typeof unsafeWindow ? unsafeWindow : window, getLocal = key2 => {
+                    const leekCachesString = sessionStorage.getItem(key2) || "{}";
                     try {
                         return JSON.parse(leekCachesString);
                     } catch (error) {
-                        return {};
+                        return sessionStorage.removeItem(key2), {};
                     }
-                }
-                function setLocal(key2, json) {
-                    isEqual(leekCaches[key2], json) || (leekCaches[key2] = json, sessionStorage.setItem("leekCaches", JSON.stringify(leekCaches)));
-                }
-                let leekCaches = getLocal();
-                const isInitRef = ref(!1), historyItemsRef = ref(new LimitedSet([], 10)), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), orderRef = ref("price-1"), allItemsInfo = ref({
-                    label: allItemsInfoLabel,
+                }, setLocal = (key2, json) => {
+                    sessionStorage.setItem(key2, JSON.stringify(json));
+                }, appVersion = "1.0.12", defaultSettings = {
+                    runMode: "single",
+                    showMode: "auto",
+                    order: "price-1"
+                }, setting = reactive({
+                    ...defaultSettings,
+                    historyItems: new LimitedSet([], 10),
+                    selectedItems: computed({
+                        get: () => {
+                            if (isSingleMode()) {
+                                const key2 = Object.keys(formModel).find((key22 => formModel[key22]));
+                                return key2 ? formModel[key2] : "";
+                            }
+                            {
+                                const _all = [];
+                                return Object.keys(formModel).map((key2 => {
+                                    formModel[key2] && _all.push(...formModel[key2]);
+                                })), _all;
+                            }
+                        },
+                        set: vals => {
+                            if (isSingleMode()) {
+                                const {typeName: typeName} = dataMap[vals] || {};
+                                Object.keys(formModel).map((key2 => {
+                                    formModel[key2] = key2 === typeName ? vals : "";
+                                }));
+                            } else {
+                                const _formModel = {};
+                                isArray$1(vals) && vals.map((val => {
+                                    const {typeName: typeName} = dataMap[val] || {};
+                                    typeName && (_formModel[typeName] || (_formModel[typeName] = []), _formModel[typeName].push(val));
+                                })), Object.keys(formModel).map((key2 => {
+                                    formModel[key2] = _formModel[key2] || [];
+                                }));
+                            }
+                        }
+                    })
+                }), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), selectedItemsInfo = ref({
+                    label: selectedItemsInfoLabel,
                     options: []
-                }), dataMap = {}, openRef = ref(!1), onClose = () => {
+                }), dataMap = {}, openRef = ref(!1), isSingleMode = () => "single" === setting.runMode, isAutoMode = () => "auto" === setting.showMode, onClose = () => {
                     openRef.value = !1;
                 }, onOpen = () => {
                     /(\/buyer.*t=skin)|localhost/.test(window.location.href) ? (check(), openRef.value = !0) : api$1.error('只能在"买外观"页面使用');
+                }, loadCaches = () => {
+                    let leekSetting = getLocal("leekSetting");
+                    const {historyItems: historyItems = [], ...leekCachesWithoutHistory} = leekSetting;
+                    historyTagsAdd(historyItems), Object.assign(setting, {
+                        ...defaultSettings,
+                        ...leekCachesWithoutHistory
+                    });
                 };
-                function init() {
+                (() => {
                     fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
                         method: "POST"
                     }).then((response => {
                         if (!response.ok) throw new Error("Network response was not ok " + response.statusText);
                         return response.json();
                     })).then((data => {
-                        isInitRef.value = !0;
                         const itemCategory = data.data;
                         let info = [];
                         itemCategory.map((item => {
@@ -22809,91 +23232,73 @@
                             info.push({
                                 label: item.typeName,
                                 options: options
-                            }), allItemsInfo.value.options.push(...options);
-                        })), formInfo.push(...info), sandboxSelect([]), allItems.value = leekCaches.selectedItems || [], 
-                        orderRef.value = leekCaches.order || "price-1", historyTagsAdd(leekCaches.historyItems || []);
+                            }), selectedItemsInfo.value.options.push(...options);
+                        })), formInfo.push(...info), sandboxSelect([]), loadCaches();
                     })).catch((error => {}));
-                }
-                init();
-                const allItems = computed({
-                    get: () => {
-                        const _all = [];
-                        return Object.keys(formModel).map((key2 => {
-                            formModel[key2] && _all.push(...formModel[key2]);
-                        })), _all;
-                    },
-                    set: vals => {
-                        const _formModel = {};
-                        null == vals || vals.map((val => {
-                            const {typeName: typeName} = dataMap[val] || {};
-                            typeName && (_formModel[typeName] || (_formModel[typeName] = []), _formModel[typeName].push(val));
-                        })), Object.keys(formModel).map((key2 => {
-                            key2 !== allItemsInfoLabel && (formModel[key2] = _formModel[key2] || []);
+                })(), watch((() => setting.runMode), (() => {
+                    onReset(!1);
+                }));
+                const onChange = name => (value, options) => {
+                    if (isSingleMode()) {
+                        const {typeName: typeName} = options;
+                        Object.keys(formModel).map((key2 => {
+                            key2 !== typeName && (formModel[key2] = "");
                         }));
-                    }
-                }), onChange = name => (value, _options) => {
-                    allItems.value.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
-                    name !== allItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : allItems.value = value.slice(0, value.length - 1));
-                }, onReset = () => {
-                    orderRef.value = "price-1", Object.keys(formModel).map((key2 => {
-                        formModel[key2] = [];
+                    } else setting.selectedItems.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
+                    name !== selectedItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : setting.selectedItems = value.slice(0, value.length - 1));
+                }, onReset = (force = !0) => {
+                    force && (setting.runMode = "single"), setting.showMode = "auto", setting.order = "price-1", 
+                    Object.keys(formModel).map((key2 => {
+                        formModel[key2] = isSingleMode() ? "" : [];
                     }));
                 }, onSearch = () => {
                     var _a, _b;
-                    openRef.value = !1, null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
+                    isAutoMode() && (openRef.value = !1), null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
                 };
-                function check() {
-                    setLocal("selectedItems", allItems.value), syncSort(), sandboxSelect(allItems.value);
-                }
                 watch(formModel, (() => {
                     check();
                 }), {
                     deep: !0
                 });
-                const remainingMaxCount = computed((() => MaxSelectCount - allItems.value.length));
-                function sandboxSelect(values) {
+                const check = () => {
+                    syncSort(), sandboxSelect(setting.selectedItems);
+                }, remainingMaxCount = computed((() => isSingleMode() ? "" : MaxSelectCount - setting.selectedItems.length)), sandboxSelect = values => {
                     var _a, _b, _c;
-                    (null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _a.selectedList) && (sandboxWindow.buyerFilter.selectedList = values.map((name => ({
+                    let arrayValues = castArray(values);
+                    (null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _a.selectedList) && (sandboxWindow.buyerFilter.selectedList = arrayValues.map((name => ({
                         name: name
-                    })))), null == (_c = null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _b.roleFilterStore) || _c.setCurrentAppearance(values, !1);
-                }
-                function selectFilter(inputValue, option) {
-                    return option.search = inputValue, option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
-                }
-                function selectSelect(value) {
+                    })))), null == (_c = null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _b.roleFilterStore) || _c.setCurrentAppearance(arrayValues, !1);
+                }, selectFilter = (inputValue, option) => (option.search = inputValue, option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0), selectSelect = value => {
                     historyTagsAdd(value);
-                }
-                function syncSort() {
-                    var _a, _b;
-                    const [sortType, sortOrder] = orderRef.value.split("-");
-                    null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _a.setSortType(sortType), 
-                    null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _b.setSortOrder(sortOrder), 
-                    setLocal("order", orderRef.value);
-                }
-                function historyTagsAdd(value) {
-                    historyItemsRef.value.add(...[].concat(value)), setLocal("historyItems", historyItemsRef.value.toArray());
-                }
-                function historyTagsClose(text) {
-                    historyItemsRef.value.delete(text), setLocal("historyItems", historyItemsRef.value.toArray());
-                }
-                function historyTagsClick(text) {
-                    if (allItems.value.includes(text)) api$1.error(`${text} 已存在`); else if (allItems.value.length >= MaxSelectCount) api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`); else {
-                        const items = [ ...allItems.value ];
-                        items.push(text), allItems.value = items;
-                    }
-                }
-                function historyTagsClear() {
-                    historyItemsRef.value.clear(), setLocal("historyItems", historyItemsRef.value.toArray());
-                }
-                function historyTagTransform(tag) {
-                    const {name: name, showName: showName} = dataMap[tag];
-                    return `${name}(${showName})`;
-                }
-                watch((() => orderRef.value), (() => {
+                };
+                watch((() => setting.order), (() => {
                     syncSort();
                 }), {});
-                const appVersion = "1.0.11";
-                return (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
+                const syncSort = () => {
+                    var _a, _b;
+                    const [sortType, sortOrder] = setting.order.split("-");
+                    null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _a.setSortType(sortType), 
+                    null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _b.setSortOrder(sortOrder);
+                }, historyTagsAdd = value => {
+                    setting.historyItems.add(...castArray(value));
+                }, historyTagsClose = text => {
+                    setting.historyItems.delete(text);
+                }, historyTagsClick = text => {
+                    if (isSingleMode()) setting.selectedItems = text; else if (setting.selectedItems.includes(text)) api$1.error(`${text} 已存在`); else if (setting.selectedItems.length >= MaxSelectCount) api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`); else {
+                        const items = [ ...setting.selectedItems ];
+                        items.push(text), setting.selectedItems = items;
+                    }
+                }, historyTagsClear = () => {
+                    setting.historyItems.clear();
+                }, historyTagTransform = tag => {
+                    const {name: name, showName: showName} = dataMap[tag];
+                    return `${name}(${showName})`;
+                };
+                return watch((() => setting), (() => {
+                    setLocal("leekSetting", setting);
+                }), {
+                    deep: !0
+                }), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
                 createBlock(Teleport, {
                     to: "body"
                 }, [ createBaseVNode("div", {
@@ -22905,10 +23310,14 @@
                 }, [ createVNode(IconLeek) ], 2) ])), createVNode(unref(Drawer$1), {
                     width: 480,
                     open: openRef.value,
-                    onClose: onClose
+                    onClose: onClose,
+                    class: "leek-drawer",
+                    mask: isAutoMode()
                 }, {
-                    title: withCtx((() => [ createTextVNode(" 外观可选数量 "), createBaseVNode("span", _hoisted_1, "(" + toDisplayString(remainingMaxCount.value) + ")", 1) ])),
-                    footer: withCtx((() => [ createBaseVNode("div", _hoisted_2, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
+                    title: withCtx((() => [ createTextVNode(" 外观可选数量 "), withDirectives(createBaseVNode("span", {
+                        class: "leek-count"
+                    }, "(" + toDisplayString(remainingMaxCount.value) + ")", 513), [ [ vShow, !isSingleMode() ] ]) ])),
+                    footer: withCtx((() => [ createBaseVNode("div", _hoisted_1, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
                     extra: withCtx((() => [ createVNode(unref(Space), null, {
                         default: withCtx((() => [ createVNode(unref(Button), {
                             onClick: onReset
@@ -22924,19 +23333,74 @@
                         }) ])),
                         _: 1
                     }) ])),
-                    default: withCtx((() => [ createBaseVNode("section", _hoisted_3, [ createVNode(unref(Form), {
+                    default: withCtx((() => [ createBaseVNode("section", _hoisted_2, [ createVNode(unref(Form), {
                         ref_key: "formRef",
                         ref: formRef,
                         model: formModel
                     }, {
-                        default: withCtx((() => [ createBaseVNode("div", _hoisted_4, [ (openBlock(), createBlock(unref(FormItem), {
+                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ createVNode(unref(Alert$1), {
+                            style: {
+                                "margin-block-end": "16px"
+                            },
+                            message: "盒子散件数据部分有问题，用礼盒搜索",
+                            type: "warning",
+                            closable: ""
+                        }), (openBlock(), createBlock(unref(FormItem), {
+                            key: "弹窗模式",
+                            label: "弹窗模式",
+                            name: "showMode"
+                        }, {
+                            default: withCtx((() => [ createVNode(unref(RadioGroup), {
+                                value: setting.showMode,
+                                "onUpdate:value": _cache[0] || (_cache[0] = $event => setting.showMode = $event),
+                                "button-style": "solid"
+                            }, {
+                                default: withCtx((() => [ createVNode(unref(RadioButton), {
+                                    value: "auto"
+                                }, {
+                                    default: withCtx((() => [ createTextVNode(" 自动 "), createVNode(unref(SyncOutlined)) ])),
+                                    _: 1
+                                }), createVNode(unref(RadioButton), {
+                                    value: "always"
+                                }, {
+                                    default: withCtx((() => [ createTextVNode(" 常驻 "), createVNode(unref(BorderOutlined)) ])),
+                                    _: 1
+                                }) ])),
+                                _: 1
+                            }, 8, [ "value" ]) ])),
+                            _: 1
+                        })), (openBlock(), createBlock(unref(FormItem), {
+                            key: "运行模式",
+                            label: "运行模式",
+                            name: "runMode"
+                        }, {
+                            default: withCtx((() => [ createVNode(unref(RadioGroup), {
+                                value: setting.runMode,
+                                "onUpdate:value": _cache[1] || (_cache[1] = $event => setting.runMode = $event),
+                                "button-style": "solid"
+                            }, {
+                                default: withCtx((() => [ createVNode(unref(RadioButton), {
+                                    value: "single"
+                                }, {
+                                    default: withCtx((() => [ createTextVNode(" 单选 "), createVNode(unref(CheckCircleOutlined)) ])),
+                                    _: 1
+                                }), createVNode(unref(RadioButton), {
+                                    value: "multiple"
+                                }, {
+                                    default: withCtx((() => [ createTextVNode(" 多选 "), createVNode(unref(CheckSquareOutlined)) ])),
+                                    _: 1
+                                }) ])),
+                                _: 1
+                            }, 8, [ "value" ]) ])),
+                            _: 1
+                        })), (openBlock(), createBlock(unref(FormItem), {
                             key: "排序方式",
                             label: "排序方式",
                             name: "order"
                         }, {
                             default: withCtx((() => [ createVNode(unref(RadioGroup), {
-                                value: orderRef.value,
-                                "onUpdate:value": _cache[0] || (_cache[0] = $event => orderRef.value = $event),
+                                value: setting.order,
+                                "onUpdate:value": _cache[2] || (_cache[2] = $event => setting.order = $event),
                                 "button-style": "solid"
                             }, {
                                 default: withCtx((() => [ createVNode(unref(RadioButton), {
@@ -22964,25 +23428,25 @@
                             }, 8, [ "value" ]) ])),
                             _: 1
                         })), (openBlock(), createBlock(unref(FormItem), {
-                            key: allItemsInfo.value.label,
-                            label: allItemsInfo.value.label,
-                            name: "allItemsInfo.label"
+                            key: selectedItemsInfo.value.label,
+                            label: selectedItemsInfo.value.label,
+                            name: "selectedItemsInfo.label"
                         }, {
                             default: withCtx((() => [ createVNode(unref(Select), {
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[1] || (_cache[1] = (value, options) => onChange(allItemsInfo.value.label)(value, options)),
+                                onChange: _cache[3] || (_cache[3] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
                                 onSelect: selectSelect,
-                                options: allItemsInfo.value.options,
-                                mode: "multiple",
+                                options: selectedItemsInfo.value.options,
+                                mode: isSingleMode() ? void 0 : "multiple",
                                 "show-search": "",
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
-                                value: allItems.value,
-                                "onUpdate:value": _cache[2] || (_cache[2] = $event => allItems.value = $event),
+                                value: setting.selectedItems,
+                                "onUpdate:value": _cache[4] || (_cache[4] = $event => setting.selectedItems = $event),
                                 "max-tag-count": 0
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_5, [ createBaseVNode("span", _hoisted_6, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -22990,15 +23454,15 @@
                                     _: 2
                                 }, 1024) ]) ])),
                                 _: 1
-                            }, 8, [ "options", "value" ]) ])),
+                            }, 8, [ "options", "mode", "value" ]) ])),
                             _: 1
-                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_7, [ createBaseVNode("div", _hoisted_8, [ _hoisted_9, createBaseVNode("div", _hoisted_10, [ createVNode(unref(DeleteOutlined), {
+                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_6, [ createBaseVNode("div", _hoisted_7, [ _hoisted_8, createBaseVNode("div", _hoisted_9, [ createVNode(unref(DeleteOutlined), {
                             onClick: historyTagsClear
-                        }) ]) ]), createBaseVNode("div", _hoisted_11, [ createVNode(unref(Space), {
+                        }) ]) ]), createBaseVNode("div", _hoisted_10, [ createVNode(unref(Space), {
                             size: [ 0, "small" ],
                             wrap: ""
                         }, {
-                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(historyItemsRef.value.toArray(), (tag => (openBlock(), 
+                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON(), (tag => (openBlock(), 
                             createBlock(unref(Tag), {
                                 class: "leek-search-history-tag",
                                 key: tag,
@@ -23011,8 +23475,8 @@
                                 _: 2
                             }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
                             _: 1
-                        }) ]) ], 512), [ [ vShow, historyItemsRef.value.size() ] ]) ]), (openBlock(!0), 
-                        createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), createBlock(unref(FormItem), {
+                        }) ]) ], 512), [ [ vShow, setting.historyItems.size() ] ]) ]), (openBlock(!0), createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), 
+                        createBlock(unref(FormItem), {
                             key: item.label,
                             label: item.label,
                             name: item.label
@@ -23023,14 +23487,14 @@
                                 onChange: (value, options) => onChange(item.label)(value, options),
                                 onSelect: selectSelect,
                                 options: item.options,
-                                mode: "multiple",
+                                mode: isSingleMode() ? void 0 : "multiple",
                                 "show-search": "",
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
                                 value: formModel[item.label],
                                 "onUpdate:value": $event => formModel[item.label] = $event
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_12, [ createBaseVNode("span", _hoisted_13, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_11, [ createBaseVNode("span", _hoisted_12, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -23038,13 +23502,13 @@
                                     _: 2
                                 }, 1024) ]) ])),
                                 _: 2
-                            }, 1032, [ "onChange", "options", "value", "onUpdate:value" ]) ])),
+                            }, 1032, [ "onChange", "options", "mode", "value", "onUpdate:value" ]) ])),
                             _: 2
                         }, 1032, [ "label", "name" ])))), 128)) ])),
                         _: 1
                     }, 8, [ "model" ]) ]) ])),
                     _: 1
-                }, 8, [ "open" ]) ], 64));
+                }, 8, [ "open", "mask" ]) ], 64));
             }
         })).mount("#leek-app");
     }
