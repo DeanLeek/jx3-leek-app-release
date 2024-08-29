@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.15
+// @version      1.0.16
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -23276,7 +23276,7 @@
                     }
                 }, setLocal = (key2, json) => {
                     sessionStorage.setItem(key2, JSON.stringify(json));
-                }, appVersion = "1.0.15", defaultSettings = {
+                }, appVersion = "1.0.16", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23382,7 +23382,7 @@
                     isAutoMode() && (openRef.value = !1), null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
                 };
                 watch(formModel, (() => {
-                    check();
+                    check(), onSearch();
                 }), {
                     deep: !0
                 });
