@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.12
+// @version      1.0.13
 // @author       吴彦祖
 // @description  万宝楼物品搜索辅助
 // @license MIT
@@ -88,7 +88,7 @@
 
     GM_addElement(document.head, 'style', {
       textContent: `
-      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}.leek-drawer .ant-drawer-body{padding:18px}
+      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:50px;font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}.leek-drawer .ant-drawer-body{padding:18px}body{overflow-y:scroll!important}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background-color:#0000000d}::-webkit-scrollbar-thumb{background-color:#9093934d}::-webkit-scrollbar-thumb:hover{background-color:#b6b7b9}
 
      `,
     });
@@ -14741,7 +14741,7 @@
                     }
                 }
             };
-        }, genBaseStyle$2 = token2 => {
+        }, genBaseStyle$1 = token2 => {
             const {componentCls: componentCls, inputPaddingHorizontalBase: inputPaddingHorizontalBase, iconCls: iconCls} = token2;
             return {
                 [componentCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
@@ -14842,7 +14842,7 @@
                         width: "100%"
                     }
                 }
-            }, genBaseStyle$2(token2), genSingleStyle(token2), genMultipleStyle(token2), genSingleStyle$1(token2), {
+            }, genBaseStyle$1(token2), genSingleStyle(token2), genMultipleStyle(token2), genSingleStyle$1(token2), {
                 [`${componentCls}-rtl`]: {
                     direction: "rtl"
                 }
@@ -15307,253 +15307,7 @@
             }), null);
         };
         InfoCircleFilled.displayName = "InfoCircleFilled", InfoCircleFilled.inheritAttrs = !1;
-        const genAlertTypeStyle = (bgColor, borderColor, iconColor, token2, alertCls) => ({
-            backgroundColor: bgColor,
-            border: `${token2.lineWidth}px ${token2.lineType} ${borderColor}`,
-            [`${alertCls}-icon`]: {
-                color: iconColor
-            }
-        }), genBaseStyle$1 = token2 => {
-            const {componentCls: componentCls, motionDurationSlow: duration, marginXS: marginXS, marginSM: marginSM, fontSize: fontSize, fontSizeLG: fontSizeLG, lineHeight: lineHeight, borderRadiusLG: borderRadius, motionEaseInOutCirc: motionEaseInOutCirc, alertIconSizeLG: alertIconSizeLG, colorText: colorText, paddingContentVerticalSM: paddingContentVerticalSM, alertPaddingHorizontal: alertPaddingHorizontal, paddingMD: paddingMD, paddingContentHorizontalLG: paddingContentHorizontalLG} = token2;
-            return {
-                [componentCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    padding: `${paddingContentVerticalSM}px ${alertPaddingHorizontal}px`,
-                    wordWrap: "break-word",
-                    borderRadius: borderRadius,
-                    [`&${componentCls}-rtl`]: {
-                        direction: "rtl"
-                    },
-                    [`${componentCls}-content`]: {
-                        flex: 1,
-                        minWidth: 0
-                    },
-                    [`${componentCls}-icon`]: {
-                        marginInlineEnd: marginXS,
-                        lineHeight: 0
-                    },
-                    "&-description": {
-                        display: "none",
-                        fontSize: fontSize,
-                        lineHeight: lineHeight
-                    },
-                    "&-message": {
-                        color: colorText
-                    },
-                    [`&${componentCls}-motion-leave`]: {
-                        overflow: "hidden",
-                        opacity: 1,
-                        transition: `max-height ${duration} ${motionEaseInOutCirc}, opacity ${duration} ${motionEaseInOutCirc},\n        padding-top ${duration} ${motionEaseInOutCirc}, padding-bottom ${duration} ${motionEaseInOutCirc},\n        margin-bottom ${duration} ${motionEaseInOutCirc}`
-                    },
-                    [`&${componentCls}-motion-leave-active`]: {
-                        maxHeight: 0,
-                        marginBottom: "0 !important",
-                        paddingTop: 0,
-                        paddingBottom: 0,
-                        opacity: 0
-                    }
-                }),
-                [`${componentCls}-with-description`]: {
-                    alignItems: "flex-start",
-                    paddingInline: paddingContentHorizontalLG,
-                    paddingBlock: paddingMD,
-                    [`${componentCls}-icon`]: {
-                        marginInlineEnd: marginSM,
-                        fontSize: alertIconSizeLG,
-                        lineHeight: 0
-                    },
-                    [`${componentCls}-message`]: {
-                        display: "block",
-                        marginBottom: marginXS,
-                        color: colorText,
-                        fontSize: fontSizeLG
-                    },
-                    [`${componentCls}-description`]: {
-                        display: "block"
-                    }
-                },
-                [`${componentCls}-banner`]: {
-                    marginBottom: 0,
-                    border: "0 !important",
-                    borderRadius: 0
-                }
-            };
-        }, genTypeStyle = token2 => {
-            const {componentCls: componentCls, colorSuccess: colorSuccess, colorSuccessBorder: colorSuccessBorder, colorSuccessBg: colorSuccessBg, colorWarning: colorWarning, colorWarningBorder: colorWarningBorder, colorWarningBg: colorWarningBg, colorError: colorError, colorErrorBorder: colorErrorBorder, colorErrorBg: colorErrorBg, colorInfo: colorInfo, colorInfoBorder: colorInfoBorder, colorInfoBg: colorInfoBg} = token2;
-            return {
-                [componentCls]: {
-                    "&-success": genAlertTypeStyle(colorSuccessBg, colorSuccessBorder, colorSuccess, token2, componentCls),
-                    "&-info": genAlertTypeStyle(colorInfoBg, colorInfoBorder, colorInfo, token2, componentCls),
-                    "&-warning": genAlertTypeStyle(colorWarningBg, colorWarningBorder, colorWarning, token2, componentCls),
-                    "&-error": _extends$1(_extends$1({}, genAlertTypeStyle(colorErrorBg, colorErrorBorder, colorError, token2, componentCls)), {
-                        [`${componentCls}-description > pre`]: {
-                            margin: 0,
-                            padding: 0
-                        }
-                    })
-                }
-            };
-        }, genActionStyle = token2 => {
-            const {componentCls: componentCls, iconCls: iconCls, motionDurationMid: motionDurationMid, marginXS: marginXS, fontSizeIcon: fontSizeIcon, colorIcon: colorIcon, colorIconHover: colorIconHover} = token2;
-            return {
-                [componentCls]: {
-                    "&-action": {
-                        marginInlineStart: marginXS
-                    },
-                    [`${componentCls}-close-icon`]: {
-                        marginInlineStart: marginXS,
-                        padding: 0,
-                        overflow: "hidden",
-                        fontSize: fontSizeIcon,
-                        lineHeight: `${fontSizeIcon}px`,
-                        backgroundColor: "transparent",
-                        border: "none",
-                        outline: "none",
-                        cursor: "pointer",
-                        [`${iconCls}-close`]: {
-                            color: colorIcon,
-                            transition: `color ${motionDurationMid}`,
-                            "&:hover": {
-                                color: colorIconHover
-                            }
-                        }
-                    },
-                    "&-close-text": {
-                        color: colorIcon,
-                        transition: `color ${motionDurationMid}`,
-                        "&:hover": {
-                            color: colorIconHover
-                        }
-                    }
-                }
-            };
-        }, genAlertStyle = token2 => [ genBaseStyle$1(token2), genTypeStyle(token2), genActionStyle(token2) ], useStyle$a = genComponentStyleHook("Alert", (token2 => {
-            const {fontSizeHeading3: fontSizeHeading3} = token2, alertToken = merge(token2, {
-                alertIconSizeLG: fontSizeHeading3,
-                alertPaddingHorizontal: 12
-            });
-            return [ genAlertStyle(alertToken) ];
-        })), iconMapFilled = {
-            success: CheckCircleFilled,
-            info: InfoCircleFilled,
-            error: CloseCircleFilled,
-            warning: ExclamationCircleFilled
-        }, iconMapOutlined = {
-            success: CheckCircleOutlined,
-            info: InfoCircleOutlined,
-            error: CloseCircleOutlined,
-            warning: ExclamationCircleOutlined
-        }, AlertTypes = tuple("success", "info", "warning", "error"), Alert$1 = withInstall(defineComponent({
-            compatConfig: {
-                MODE: 3
-            },
-            name: "AAlert",
-            inheritAttrs: !1,
-            props: (() => ({
-                type: PropTypes.oneOf(AlertTypes),
-                closable: {
-                    type: Boolean,
-                    default: void 0
-                },
-                closeText: PropTypes.any,
-                message: PropTypes.any,
-                description: PropTypes.any,
-                afterClose: Function,
-                showIcon: {
-                    type: Boolean,
-                    default: void 0
-                },
-                prefixCls: String,
-                banner: {
-                    type: Boolean,
-                    default: void 0
-                },
-                icon: PropTypes.any,
-                closeIcon: PropTypes.any,
-                onClose: Function
-            }))(),
-            setup(props2, _ref) {
-                let {slots: slots, emit: emit2, attrs: attrs, expose: expose} = _ref;
-                const {prefixCls: prefixCls, direction: direction} = useConfigInject("alert", props2), [wrapSSR, hashId] = useStyle$a(prefixCls), closing = shallowRef(!1), closed = shallowRef(!1), alertNode = shallowRef(), handleClose = e2 => {
-                    e2.preventDefault();
-                    const dom = alertNode.value;
-                    dom.style.height = `${dom.offsetHeight}px`, dom.style.height = `${dom.offsetHeight}px`, 
-                    closing.value = !0, emit2("close", e2);
-                }, animationEnd = () => {
-                    var _a;
-                    closing.value = !1, closed.value = !0, null === (_a = props2.afterClose) || void 0 === _a || _a.call(props2);
-                }, mergedType = computed((() => {
-                    const {type: type} = props2;
-                    return void 0 !== type ? type : props2.banner ? "warning" : "info";
-                }));
-                expose({
-                    animationEnd: animationEnd
-                });
-                const motionStyle = shallowRef({});
-                return () => {
-                    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-                    const {banner: banner, closeIcon: customCloseIcon = (null === (_a = slots.closeIcon) || void 0 === _a ? void 0 : _a.call(slots))} = props2;
-                    let {closable: closable, showIcon: showIcon} = props2;
-                    const closeText = null !== (_b = props2.closeText) && void 0 !== _b ? _b : null === (_c = slots.closeText) || void 0 === _c ? void 0 : _c.call(slots), description = null !== (_d = props2.description) && void 0 !== _d ? _d : null === (_e = slots.description) || void 0 === _e ? void 0 : _e.call(slots), message = null !== (_f = props2.message) && void 0 !== _f ? _f : null === (_g = slots.message) || void 0 === _g ? void 0 : _g.call(slots), icon = null !== (_h = props2.icon) && void 0 !== _h ? _h : null === (_j = slots.icon) || void 0 === _j ? void 0 : _j.call(slots), action = null === (_k = slots.action) || void 0 === _k ? void 0 : _k.call(slots);
-                    showIcon = !(!banner || void 0 !== showIcon) || showIcon;
-                    const IconType = (description ? iconMapOutlined : iconMapFilled)[mergedType.value] || null;
-                    closeText && (closable = !0);
-                    const prefixClsValue = prefixCls.value, alertCls = classNames(prefixClsValue, {
-                        [`${prefixClsValue}-${mergedType.value}`]: !0,
-                        [`${prefixClsValue}-closing`]: closing.value,
-                        [`${prefixClsValue}-with-description`]: !!description,
-                        [`${prefixClsValue}-no-icon`]: !showIcon,
-                        [`${prefixClsValue}-banner`]: !!banner,
-                        [`${prefixClsValue}-closable`]: closable,
-                        [`${prefixClsValue}-rtl`]: "rtl" === direction.value,
-                        [hashId.value]: !0
-                    }), closeIcon = closable ? createVNode("button", {
-                        type: "button",
-                        onClick: handleClose,
-                        class: `${prefixClsValue}-close-icon`,
-                        tabindex: 0
-                    }, [ closeText ? createVNode("span", {
-                        class: `${prefixClsValue}-close-text`
-                    }, [ closeText ]) : void 0 === customCloseIcon ? createVNode(CloseOutlined, null, null) : customCloseIcon ]) : null, iconNode = icon && (isValidElement(icon) ? cloneElement(icon, {
-                        class: `${prefixClsValue}-icon`
-                    }) : createVNode("span", {
-                        class: `${prefixClsValue}-icon`
-                    }, [ icon ])) || createVNode(IconType, {
-                        class: `${prefixClsValue}-icon`
-                    }, null), transitionProps = getTransitionProps(`${prefixClsValue}-motion`, {
-                        appear: !1,
-                        css: !0,
-                        onAfterLeave: animationEnd,
-                        onBeforeLeave: node2 => {
-                            node2.style.maxHeight = `${node2.offsetHeight}px`;
-                        },
-                        onLeave: node2 => {
-                            node2.style.maxHeight = "0px";
-                        }
-                    });
-                    return wrapSSR(closed.value ? null : createVNode(Transition, transitionProps, {
-                        default: () => [ withDirectives(createVNode("div", _objectSpread2$1(_objectSpread2$1({
-                            role: "alert"
-                        }, attrs), {}, {
-                            style: [ attrs.style, motionStyle.value ],
-                            class: [ attrs.class, alertCls ],
-                            "data-show": !closing.value,
-                            ref: alertNode
-                        }), [ showIcon ? iconNode : null, createVNode("div", {
-                            class: `${prefixClsValue}-content`
-                        }, [ message ? createVNode("div", {
-                            class: `${prefixClsValue}-message`
-                        }, [ message ]) : null, description ? createVNode("div", {
-                            class: `${prefixClsValue}-description`
-                        }, [ description ]) : null ]), action ? createVNode("div", {
-                            class: `${prefixClsValue}-action`
-                        }, [ action ]) : null, closeIcon ]), [ [ vShow, !closing.value ] ]) ]
-                    }));
-                };
-            }
-        })), responsiveArray = [ "xxxl", "xxl", "xl", "lg", "md", "sm", "xs" ], getResponsiveMap = token2 => ({
+        const responsiveArray = [ "xxxl", "xxl", "xl", "lg", "md", "sm", "xs" ], getResponsiveMap = token2 => ({
             xs: `(max-width: ${token2.screenXSMax}px)`,
             sm: `(min-width: ${token2.screenSM}px)`,
             md: `(min-width: ${token2.screenMD}px)`,
@@ -16166,7 +15920,7 @@
                     maxWidth: "none"
                 }
             } ];
-        }, useStyle$9 = (prefixCls, injectStyle) => genComponentStyleHook("Tooltip", (token2 => {
+        }, useStyle$a = (prefixCls, injectStyle) => genComponentStyleHook("Tooltip", (token2 => {
             if (!1 === (null == injectStyle ? void 0 : injectStyle.value)) return [];
             const {borderRadius: borderRadius, colorTextLightSolid: colorTextLightSolid, colorBgDefault: colorBgDefault, borderRadiusOuter: borderRadiusOuter} = token2, TooltipToken = merge(token2, {
                 tooltipMaxWidth: 250,
@@ -16283,7 +16037,7 @@
                         placement.indexOf("left") >= 0 || placement.indexOf("Right") >= 0 ? transformOrigin.left = rect.width - align.offset[0] + "px" : (placement.indexOf("right") >= 0 || placement.indexOf("Left") >= 0) && (transformOrigin.left = -align.offset[0] + "px"), 
                         domNode.style.transformOrigin = `${transformOrigin.left} ${transformOrigin.top}`;
                     }
-                }, colorInfo = computed((() => parseColor(prefixCls.value, props2.color))), injectFromPopover = computed((() => attrs["data-popover-inject"])), [wrapSSR, hashId] = useStyle$9(prefixCls, computed((() => !injectFromPopover.value)));
+                }, colorInfo = computed((() => parseColor(prefixCls.value, props2.color))), injectFromPopover = computed((() => attrs["data-popover-inject"])), [wrapSSR, hashId] = useStyle$a(prefixCls, computed((() => !injectFromPopover.value)));
                 return () => {
                     var _a, _b;
                     const {openClassName: openClassName, overlayClassName: overlayClassName, overlayStyle: overlayStyle, overlayInnerStyle: overlayInnerStyle} = props2;
@@ -16341,7 +16095,7 @@
                     }
                 }
             };
-        }, useStyle$8 = genComponentStyleHook("Wave", (token2 => [ genWaveStyle(token2) ]));
+        }, useStyle$9 = genComponentStyleHook("Wave", (token2 => [ genWaveStyle(token2) ]));
         function isNotGrey(color) {
             const match2 = (color || "").match(/rgba?\((\d*), (\d*), (\d*)(, [\d.]*)?\)/);
             return !(match2 && match2[1] && match2[2] && match2[3]) || !(match2[1] === match2[2] && match2[2] === match2[3]);
@@ -16449,7 +16203,7 @@
             },
             setup(props2, _ref) {
                 let {slots: slots} = _ref;
-                const instance = getCurrentInstance(), {prefixCls: prefixCls, wave: wave} = useConfigInject("wave", props2), [, hashId] = useStyle$8(prefixCls), showWave = useWave(instance, computed((() => classNames(prefixCls.value, hashId.value))), wave);
+                const instance = getCurrentInstance(), {prefixCls: prefixCls, wave: wave} = useConfigInject("wave", props2), [, hashId] = useStyle$9(prefixCls), showWave = useWave(instance, computed((() => classNames(prefixCls.value, hashId.value))), wave);
                 let onClick;
                 const clear2 = () => {
                     findDOMNode(instance).removeEventListener("click", onClick, !0);
@@ -16915,7 +16669,7 @@
                     }
                 }
             };
-        }, useStyle$7 = genComponentStyleHook("Button", (token2 => {
+        }, useStyle$8 = genComponentStyleHook("Button", (token2 => {
             const {controlTmpOutline: controlTmpOutline, paddingContentHorizontal: paddingContentHorizontal} = token2, buttonToken = merge(token2, {
                 colorOutlineDefault: controlTmpOutline,
                 buttonPaddingHorizontal: paddingContentHorizontal
@@ -16990,7 +16744,7 @@
             slots: Object,
             setup(props2, _ref) {
                 let {slots: slots, attrs: attrs, emit: emit2, expose: expose} = _ref;
-                const {prefixCls: prefixCls, autoInsertSpaceInButton: autoInsertSpaceInButton, direction: direction, size: size2} = useConfigInject("btn", props2), [wrapSSR, hashId] = useStyle$7(prefixCls), groupSizeContext = GroupSizeContext.useInject(), disabledContext = useInjectDisabled(), mergedDisabled = computed((() => {
+                const {prefixCls: prefixCls, autoInsertSpaceInButton: autoInsertSpaceInButton, direction: direction, size: size2} = useConfigInject("btn", props2), [wrapSSR, hashId] = useStyle$8(prefixCls), groupSizeContext = GroupSizeContext.useInject(), disabledContext = useInjectDisabled(), mergedDisabled = computed((() => {
                     var _a;
                     return null !== (_a = props2.disabled) && void 0 !== _a ? _a : disabledContext.value;
                 })), buttonNodeRef = shallowRef(null), delayTimeoutRef = shallowRef(void 0);
@@ -17580,7 +17334,7 @@
                     }
                 }
             };
-        }, useStyle$6 = genComponentStyleHook("Radio", (token2 => {
+        }, useStyle$7 = genComponentStyleHook("Radio", (token2 => {
             const {padding: padding, lineWidth: lineWidth, controlItemBgActiveDisabled: controlItemBgActiveDisabled, colorTextDisabled: colorTextDisabled, colorBgContainer: colorBgContainer, fontSizeLG: fontSizeLG, controlOutline: controlOutline, colorPrimaryHover: colorPrimaryHover, colorPrimaryActive: colorPrimaryActive, colorText: colorText, colorPrimary: colorPrimary, marginXS: marginXS, controlOutlineWidth: controlOutlineWidth, colorTextLightSolid: colorTextLightSolid, wireframe: wireframe} = token2, radioFocusShadow = `0 0 0 ${controlOutlineWidth}px ${controlOutline}`, dotPadding = 4, radioDotDisabledSize = fontSizeLG - 2 * dotPadding, radioToken = merge(token2, {
                 radioFocusShadow: radioFocusShadow,
                 radioButtonFocusShadow: radioFocusShadow,
@@ -17638,7 +17392,7 @@
                 const formItemContext = useInjectFormItemContext(), formItemInputContext = FormItemInputContext.useInject(), radioOptionTypeContext = useInjectRadioOptionTypeContext(), radioGroupContext = useInjectRadioGroupContext(), disabledContext = useInjectDisabled(), mergedDisabled = computed((() => {
                     var _a;
                     return null !== (_a = disabled.value) && void 0 !== _a ? _a : disabledContext.value;
-                })), vcCheckbox = ref(), {prefixCls: radioPrefixCls, direction: direction, disabled: disabled} = useConfigInject("radio", props2), prefixCls = computed((() => "button" === (null == radioGroupContext ? void 0 : radioGroupContext.optionType.value) || "button" === radioOptionTypeContext ? `${radioPrefixCls.value}-button` : radioPrefixCls.value)), contextDisabled = useInjectDisabled(), [wrapSSR, hashId] = useStyle$6(radioPrefixCls);
+                })), vcCheckbox = ref(), {prefixCls: radioPrefixCls, direction: direction, disabled: disabled} = useConfigInject("radio", props2), prefixCls = computed((() => "button" === (null == radioGroupContext ? void 0 : radioGroupContext.optionType.value) || "button" === radioOptionTypeContext ? `${radioPrefixCls.value}-button` : radioPrefixCls.value)), contextDisabled = useInjectDisabled(), [wrapSSR, hashId] = useStyle$7(radioPrefixCls);
                 expose({
                     focus: () => {
                         vcCheckbox.value.focus();
@@ -17700,7 +17454,7 @@
             }))(),
             setup(props2, _ref) {
                 let {slots: slots, emit: emit2, attrs: attrs} = _ref;
-                const formItemContext = useInjectFormItemContext(), {prefixCls: prefixCls, direction: direction, size: size2} = useConfigInject("radio", props2), [wrapSSR, hashId] = useStyle$6(prefixCls), stateValue = ref(props2.value), updatingValue = ref(!1);
+                const formItemContext = useInjectFormItemContext(), {prefixCls: prefixCls, direction: direction, size: size2} = useConfigInject("radio", props2), [wrapSSR, hashId] = useStyle$7(prefixCls), stateValue = ref(props2.value), updatingValue = ref(!1);
                 watch((() => props2.value), (val => {
                     stateValue.value = val, updatingValue.value = !1;
                 }));
@@ -19364,7 +19118,7 @@
                     }
                 }
             };
-        }, useStyle$5 = genComponentStyleHook("Form", ((token2, _ref) => {
+        }, useStyle$6 = genComponentStyleHook("Form", ((token2, _ref) => {
             let {rootPrefixCls: rootPrefixCls} = _ref;
             const formToken = merge(token2, {
                 formItemCls: `${token2.componentCls}-item`,
@@ -19380,7 +19134,7 @@
             props: [ "errors", "help", "onErrorVisibleChanged", "helpStatus", "warnings" ],
             setup(props2, _ref) {
                 let {attrs: attrs} = _ref;
-                const {prefixCls: prefixCls, status: status} = useInjectFormItemPrefix(), baseClassName = computed((() => `${prefixCls.value}-item-explain`)), visible = computed((() => !(!props2.errors || !props2.errors.length))), innerStatus = ref(status.value), [, hashId] = useStyle$5(prefixCls);
+                const {prefixCls: prefixCls, status: status} = useInjectFormItemPrefix(), baseClassName = computed((() => `${prefixCls.value}-item-explain`)), visible = computed((() => !(!props2.errors || !props2.errors.length))), innerStatus = ref(status.value), [, hashId] = useStyle$6(prefixCls);
                 return watch([ visible, status ], (() => {
                     visible.value && (innerStatus.value = status.value);
                 })), () => {
@@ -19551,7 +19305,7 @@
             setup(props2, _ref) {
                 let {slots: slots, attrs: attrs, expose: expose} = _ref;
                 warning$3(void 0 === props2.prop);
-                const eventKey = "form-item-" + ++indexGuid, {prefixCls: prefixCls} = useConfigInject("form", props2), [wrapSSR, hashId] = useStyle$5(prefixCls), itemRef = shallowRef(), formContext = useInjectForm(), fieldName = computed((() => props2.name || props2.prop)), errors = shallowRef([]), validateDisabled = shallowRef(!1), inputRef = shallowRef(), namePath = computed((() => getNamePath(fieldName.value))), fieldId = computed((() => {
+                const eventKey = "form-item-" + ++indexGuid, {prefixCls: prefixCls} = useConfigInject("form", props2), [wrapSSR, hashId] = useStyle$6(prefixCls), itemRef = shallowRef(), formContext = useInjectForm(), fieldName = computed((() => props2.name || props2.prop)), errors = shallowRef([]), validateDisabled = shallowRef(!1), inputRef = shallowRef(), namePath = computed((() => getNamePath(fieldName.value))), fieldId = computed((() => {
                     if (namePath.value.length) {
                         const formName = formContext.name.value, mergedId = namePath.value.join("_");
                         return formName ? `${formName}_${mergedId}` : `${defaultItemNamePrefixCls}_${mergedId}`;
@@ -19982,7 +19736,7 @@
                 const mergedColon = computed((() => {
                     var _a, _b;
                     return null !== (_a = props2.colon) && void 0 !== _a ? _a : null === (_b = contextForm.value) || void 0 === _b ? void 0 : _b.colon;
-                })), {validateMessages: globalValidateMessages} = useInjectGlobalForm(), validateMessages = computed((() => _extends$1(_extends$1(_extends$1({}, defaultValidateMessages), globalValidateMessages.value), props2.validateMessages))), [wrapSSR, hashId] = useStyle$5(prefixCls), formClassName = computed((() => classNames(prefixCls.value, {
+                })), {validateMessages: globalValidateMessages} = useInjectGlobalForm(), validateMessages = computed((() => _extends$1(_extends$1(_extends$1({}, defaultValidateMessages), globalValidateMessages.value), props2.validateMessages))), [wrapSSR, hashId] = useStyle$6(prefixCls), formClassName = computed((() => classNames(prefixCls.value, {
                     [`${prefixCls.value}-${props2.layout}`]: !0,
                     [`${prefixCls.value}-hide-required-mark`]: !1 === mergedRequiredMark.value,
                     [`${prefixCls.value}-rtl`]: "rtl" === direction.value,
@@ -20671,7 +20425,7 @@
                     textAlign: "start"
                 }
             } ];
-        }, useStyle$4 = genComponentStyleHook("Message", (token2 => {
+        }, useStyle$5 = genComponentStyleHook("Message", (token2 => {
             const combinedToken = merge(token2, {
                 messageNoticeContentPadding: `${(token2.controlHeightLG - token2.fontSize * token2.lineHeight) / 2}px ${token2.paddingSM}px`
             });
@@ -20715,7 +20469,7 @@
             setup(props2, _ref) {
                 let {expose: expose} = _ref;
                 var _a, _b;
-                const {getPrefixCls: getPrefixCls, getPopupContainer: getPopupContainer} = useConfigInject("message", props2), prefixCls = computed((() => getPrefixCls("message", props2.prefixCls))), [, hashId] = useStyle$4(prefixCls), getStyles = () => {
+                const {getPrefixCls: getPrefixCls, getPopupContainer: getPopupContainer} = useConfigInject("message", props2), prefixCls = computed((() => getPrefixCls("message", props2.prefixCls))), [, hashId] = useStyle$5(prefixCls), getStyles = () => {
                     var _a2;
                     const top = null !== (_a2 = props2.top) && void 0 !== _a2 ? _a2 : DEFAULT_OFFSET$1;
                     return {
@@ -20839,7 +20593,7 @@
                 getContainer: getContainer || args.getPopupContainer,
                 maxCount: maxCount$1,
                 name: "message",
-                useStyle: useStyle$4
+                useStyle: useStyle$5
             }, (instance => {
                 messageInstance ? callback(messageInstance) : (messageInstance = instance, callback(instance));
             }));
@@ -21128,7 +20882,7 @@
                     margin: 0
                 }
             } ];
-        }, useStyle$3 = genComponentStyleHook("Notification", (token2 => {
+        }, useStyle$4 = genComponentStyleHook("Notification", (token2 => {
             const notificationPaddingVertical = token2.paddingMD, notificationPaddingHorizontal = token2.paddingLG, notificationToken = merge(token2, {
                 notificationBg: token2.colorBgElevated,
                 notificationPaddingVertical: notificationPaddingVertical,
@@ -21264,7 +21018,7 @@
                 const {getPrefixCls: getPrefixCls, getPopupContainer: getPopupContainer} = useConfigInject("notification", props2), prefixCls = computed((() => props2.prefixCls || getPrefixCls("notification"))), getStyles = placement => {
                     var _a, _b;
                     return getPlacementStyle(placement, null !== (_a = props2.top) && void 0 !== _a ? _a : DEFAULT_OFFSET, null !== (_b = props2.bottom) && void 0 !== _b ? _b : DEFAULT_OFFSET);
-                }, [, hashId] = useStyle$3(prefixCls), getClassName = () => classNames(hashId.value, {
+                }, [, hashId] = useStyle$4(prefixCls), getClassName = () => classNames(hashId.value, {
                     [`${prefixCls.value}-rtl`]: props2.rtl
                 }), getNotificationMotion = () => getMotion(prefixCls.value), [api2, holder] = useNotification$1({
                     prefixCls: prefixCls.value,
@@ -21347,7 +21101,7 @@
             Notification$1.newInstance({
                 name: "notification",
                 prefixCls: customizePrefixCls || defaultPrefixCls$1,
-                useStyle: useStyle$3,
+                useStyle: useStyle$4,
                 class: notificationClass,
                 style: getPlacementStyle(placement, null != top ? top : defaultTop, null != bottom ? bottom : defaultBottom),
                 appContext: appContext,
@@ -21465,7 +21219,7 @@
             const style = getStyle(globalPrefixCls, theme);
             canUseDom$1() && updateCSS$1(style, `${dynamicStyleMark}-dynamic-theme`);
         }
-        const useStyle$2 = iconPrefixCls => {
+        const useStyle$3 = iconPrefixCls => {
             const [theme, token2] = useToken();
             return useStyleRegister(computed((() => ({
                 theme: theme.value,
@@ -21541,7 +21295,7 @@
                 }, iconPrefixCls = computed((() => props2.iconPrefixCls || parentContext.iconPrefixCls.value || defaultIconPrefixCls)), shouldWrapSSR = computed((() => iconPrefixCls.value !== parentContext.iconPrefixCls.value)), csp = computed((() => {
                     var _a;
                     return props2.csp || (null === (_a = parentContext.csp) || void 0 === _a ? void 0 : _a.value);
-                })), wrapSSR = useStyle$2(iconPrefixCls), mergedTheme = useTheme(computed((() => props2.theme)), computed((() => {
+                })), wrapSSR = useStyle$3(iconPrefixCls), mergedTheme = useTheme(computed((() => props2.theme)), computed((() => {
                     var _a;
                     return null === (_a = parentContext.theme) || void 0 === _a ? void 0 : _a.value;
                 }))), renderEmptyComponent = name => (props2.renderEmpty || slots.renderEmpty || parentContext.renderEmpty || renderEmpty)(name), autoInsertSpaceInButton = computed((() => {
@@ -21769,7 +21523,7 @@
                     background: token2.tagBorderlessBg
                 }
             };
-        }, useStyle$1 = genComponentStyleHook("Tag", (token2 => {
+        }, useStyle$2 = genComponentStyleHook("Tag", (token2 => {
             const {fontSize: fontSize, lineHeight: lineHeight, lineWidth: lineWidth, fontSizeIcon: fontSizeIcon} = token2, tagHeight = Math.round(fontSize * lineHeight), tagToken = merge(token2, {
                 tagFontSize: token2.fontSizeSM,
                 tagLineHeight: tagHeight - 2 * lineWidth,
@@ -21802,7 +21556,7 @@
             }))(),
             setup(props2, _ref) {
                 let {slots: slots, emit: emit2, attrs: attrs} = _ref;
-                const {prefixCls: prefixCls} = useConfigInject("tag", props2), [wrapSSR, hashId] = useStyle$1(prefixCls), handleClick = e2 => {
+                const {prefixCls: prefixCls} = useConfigInject("tag", props2), [wrapSSR, hashId] = useStyle$2(prefixCls), handleClick = e2 => {
                     const {checked: checked} = props2;
                     emit2("update:checked", !checked), emit2("change", !checked), emit2("click", e2);
                 }, cls = computed((() => classNames(prefixCls.value, hashId.value, {
@@ -21851,7 +21605,7 @@
             slots: Object,
             setup(props2, _ref) {
                 let {slots: slots, emit: emit2, attrs: attrs} = _ref;
-                const {prefixCls: prefixCls, direction: direction} = useConfigInject("tag", props2), [wrapSSR, hashId] = useStyle$1(prefixCls), visible = shallowRef(!0);
+                const {prefixCls: prefixCls, direction: direction} = useConfigInject("tag", props2), [wrapSSR, hashId] = useStyle$2(prefixCls), visible = shallowRef(!0);
                 watchEffect((() => {
                     void 0 !== props2.visible && (visible.value = props2.visible);
                 }));
@@ -22410,7 +22164,7 @@
                     }
                 }
             };
-        }, useStyle = genComponentStyleHook("Drawer", (token2 => {
+        }, useStyle$1 = genComponentStyleHook("Drawer", (token2 => {
             const drawerToken = merge(token2, {
                 drawerFooterPaddingVertical: token2.paddingXS,
                 drawerFooterPaddingHorizontal: token2.padding
@@ -22539,7 +22293,7 @@
                 }), {
                     immediate: !0
                 });
-                const parentDrawerOpts = inject("parentDrawerOpts", null), {prefixCls: prefixCls, getPopupContainer: getPopupContainer, direction: direction} = useConfigInject("drawer", props2), [wrapSSR, hashId] = useStyle(prefixCls), getContainer2 = computed((() => void 0 === props2.getContainer && (null == getPopupContainer ? void 0 : getPopupContainer.value) ? () => getPopupContainer.value(document.body) : props2.getContainer));
+                const parentDrawerOpts = inject("parentDrawerOpts", null), {prefixCls: prefixCls, getPopupContainer: getPopupContainer, direction: direction} = useConfigInject("drawer", props2), [wrapSSR, hashId] = useStyle$1(prefixCls), getContainer2 = computed((() => void 0 === props2.getContainer && (null == getPopupContainer ? void 0 : getPopupContainer.value) ? () => getPopupContainer.value(document.body) : props2.getContainer));
                 devWarning(!props2.afterVisibleChange, "Drawer", "`afterVisibleChange` prop is deprecated, please use `@afterVisibleChange` event instead");
                 provide("parentDrawerOpts", {
                     setPush: () => {
@@ -22747,6 +22501,371 @@
         Space.Compact = Compact, Space.install = function(app) {
             return app.component(Space.name, Space), app.component(Compact.name, Compact), app;
         };
+        const genSwitchSmallStyle = token2 => {
+            const {componentCls: componentCls} = token2, switchInnerCls = `${componentCls}-inner`;
+            return {
+                [componentCls]: {
+                    [`&${componentCls}-small`]: {
+                        minWidth: token2.switchMinWidthSM,
+                        height: token2.switchHeightSM,
+                        lineHeight: `${token2.switchHeightSM}px`,
+                        [`${componentCls}-inner`]: {
+                            paddingInlineStart: token2.switchInnerMarginMaxSM,
+                            paddingInlineEnd: token2.switchInnerMarginMinSM,
+                            [`${switchInnerCls}-checked`]: {
+                                marginInlineStart: `calc(-100% + ${token2.switchPinSizeSM + 2 * token2.switchPadding}px - ${2 * token2.switchInnerMarginMaxSM}px)`,
+                                marginInlineEnd: `calc(100% - ${token2.switchPinSizeSM + 2 * token2.switchPadding}px + ${2 * token2.switchInnerMarginMaxSM}px)`
+                            },
+                            [`${switchInnerCls}-unchecked`]: {
+                                marginTop: -token2.switchHeightSM,
+                                marginInlineStart: 0,
+                                marginInlineEnd: 0
+                            }
+                        },
+                        [`${componentCls}-handle`]: {
+                            width: token2.switchPinSizeSM,
+                            height: token2.switchPinSizeSM
+                        },
+                        [`${componentCls}-loading-icon`]: {
+                            top: (token2.switchPinSizeSM - token2.switchLoadingIconSize) / 2,
+                            fontSize: token2.switchLoadingIconSize
+                        },
+                        [`&${componentCls}-checked`]: {
+                            [`${componentCls}-inner`]: {
+                                paddingInlineStart: token2.switchInnerMarginMinSM,
+                                paddingInlineEnd: token2.switchInnerMarginMaxSM,
+                                [`${switchInnerCls}-checked`]: {
+                                    marginInlineStart: 0,
+                                    marginInlineEnd: 0
+                                },
+                                [`${switchInnerCls}-unchecked`]: {
+                                    marginInlineStart: `calc(100% - ${token2.switchPinSizeSM + 2 * token2.switchPadding}px + ${2 * token2.switchInnerMarginMaxSM}px)`,
+                                    marginInlineEnd: `calc(-100% + ${token2.switchPinSizeSM + 2 * token2.switchPadding}px - ${2 * token2.switchInnerMarginMaxSM}px)`
+                                }
+                            },
+                            [`${componentCls}-handle`]: {
+                                insetInlineStart: `calc(100% - ${token2.switchPinSizeSM + token2.switchPadding}px)`
+                            }
+                        },
+                        [`&:not(${componentCls}-disabled):active`]: {
+                            [`&:not(${componentCls}-checked) ${switchInnerCls}`]: {
+                                [`${switchInnerCls}-unchecked`]: {
+                                    marginInlineStart: token2.marginXXS / 2,
+                                    marginInlineEnd: -token2.marginXXS / 2
+                                }
+                            },
+                            [`&${componentCls}-checked ${switchInnerCls}`]: {
+                                [`${switchInnerCls}-checked`]: {
+                                    marginInlineStart: -token2.marginXXS / 2,
+                                    marginInlineEnd: token2.marginXXS / 2
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }, genSwitchLoadingStyle = token2 => {
+            const {componentCls: componentCls} = token2;
+            return {
+                [componentCls]: {
+                    [`${componentCls}-loading-icon${token2.iconCls}`]: {
+                        position: "relative",
+                        top: (token2.switchPinSize - token2.fontSize) / 2,
+                        color: token2.switchLoadingIconColor,
+                        verticalAlign: "top"
+                    },
+                    [`&${componentCls}-checked ${componentCls}-loading-icon`]: {
+                        color: token2.switchColor
+                    }
+                }
+            };
+        }, genSwitchHandleStyle = token2 => {
+            const {componentCls: componentCls} = token2, switchHandleCls = `${componentCls}-handle`;
+            return {
+                [componentCls]: {
+                    [switchHandleCls]: {
+                        position: "absolute",
+                        top: token2.switchPadding,
+                        insetInlineStart: token2.switchPadding,
+                        width: token2.switchPinSize,
+                        height: token2.switchPinSize,
+                        transition: `all ${token2.switchDuration} ease-in-out`,
+                        "&::before": {
+                            position: "absolute",
+                            top: 0,
+                            insetInlineEnd: 0,
+                            bottom: 0,
+                            insetInlineStart: 0,
+                            backgroundColor: token2.colorWhite,
+                            borderRadius: token2.switchPinSize / 2,
+                            boxShadow: token2.switchHandleShadow,
+                            transition: `all ${token2.switchDuration} ease-in-out`,
+                            content: '""'
+                        }
+                    },
+                    [`&${componentCls}-checked ${switchHandleCls}`]: {
+                        insetInlineStart: `calc(100% - ${token2.switchPinSize + token2.switchPadding}px)`
+                    },
+                    [`&:not(${componentCls}-disabled):active`]: {
+                        [`${switchHandleCls}::before`]: {
+                            insetInlineEnd: token2.switchHandleActiveInset,
+                            insetInlineStart: 0
+                        },
+                        [`&${componentCls}-checked ${switchHandleCls}::before`]: {
+                            insetInlineEnd: 0,
+                            insetInlineStart: token2.switchHandleActiveInset
+                        }
+                    }
+                }
+            };
+        }, genSwitchInnerStyle = token2 => {
+            const {componentCls: componentCls} = token2, switchInnerCls = `${componentCls}-inner`;
+            return {
+                [componentCls]: {
+                    [switchInnerCls]: {
+                        display: "block",
+                        overflow: "hidden",
+                        borderRadius: 100,
+                        height: "100%",
+                        paddingInlineStart: token2.switchInnerMarginMax,
+                        paddingInlineEnd: token2.switchInnerMarginMin,
+                        transition: `padding-inline-start ${token2.switchDuration} ease-in-out, padding-inline-end ${token2.switchDuration} ease-in-out`,
+                        [`${switchInnerCls}-checked, ${switchInnerCls}-unchecked`]: {
+                            display: "block",
+                            color: token2.colorTextLightSolid,
+                            fontSize: token2.fontSizeSM,
+                            transition: `margin-inline-start ${token2.switchDuration} ease-in-out, margin-inline-end ${token2.switchDuration} ease-in-out`,
+                            pointerEvents: "none"
+                        },
+                        [`${switchInnerCls}-checked`]: {
+                            marginInlineStart: `calc(-100% + ${token2.switchPinSize + 2 * token2.switchPadding}px - ${2 * token2.switchInnerMarginMax}px)`,
+                            marginInlineEnd: `calc(100% - ${token2.switchPinSize + 2 * token2.switchPadding}px + ${2 * token2.switchInnerMarginMax}px)`
+                        },
+                        [`${switchInnerCls}-unchecked`]: {
+                            marginTop: -token2.switchHeight,
+                            marginInlineStart: 0,
+                            marginInlineEnd: 0
+                        }
+                    },
+                    [`&${componentCls}-checked ${switchInnerCls}`]: {
+                        paddingInlineStart: token2.switchInnerMarginMin,
+                        paddingInlineEnd: token2.switchInnerMarginMax,
+                        [`${switchInnerCls}-checked`]: {
+                            marginInlineStart: 0,
+                            marginInlineEnd: 0
+                        },
+                        [`${switchInnerCls}-unchecked`]: {
+                            marginInlineStart: `calc(100% - ${token2.switchPinSize + 2 * token2.switchPadding}px + ${2 * token2.switchInnerMarginMax}px)`,
+                            marginInlineEnd: `calc(-100% + ${token2.switchPinSize + 2 * token2.switchPadding}px - ${2 * token2.switchInnerMarginMax}px)`
+                        }
+                    },
+                    [`&:not(${componentCls}-disabled):active`]: {
+                        [`&:not(${componentCls}-checked) ${switchInnerCls}`]: {
+                            [`${switchInnerCls}-unchecked`]: {
+                                marginInlineStart: 2 * token2.switchPadding,
+                                marginInlineEnd: 2 * -token2.switchPadding
+                            }
+                        },
+                        [`&${componentCls}-checked ${switchInnerCls}`]: {
+                            [`${switchInnerCls}-checked`]: {
+                                marginInlineStart: 2 * -token2.switchPadding,
+                                marginInlineEnd: 2 * token2.switchPadding
+                            }
+                        }
+                    }
+                }
+            };
+        }, genSwitchStyle = token2 => {
+            const {componentCls: componentCls} = token2;
+            return {
+                [componentCls]: _extends$1(_extends$1(_extends$1(_extends$1({}, resetComponent(token2)), {
+                    position: "relative",
+                    display: "inline-block",
+                    boxSizing: "border-box",
+                    minWidth: token2.switchMinWidth,
+                    height: token2.switchHeight,
+                    lineHeight: `${token2.switchHeight}px`,
+                    verticalAlign: "middle",
+                    background: token2.colorTextQuaternary,
+                    border: "0",
+                    borderRadius: 100,
+                    cursor: "pointer",
+                    transition: `all ${token2.motionDurationMid}`,
+                    userSelect: "none",
+                    [`&:hover:not(${componentCls}-disabled)`]: {
+                        background: token2.colorTextTertiary
+                    }
+                }), genFocusStyle(token2)), {
+                    [`&${componentCls}-checked`]: {
+                        background: token2.switchColor,
+                        [`&:hover:not(${componentCls}-disabled)`]: {
+                            background: token2.colorPrimaryHover
+                        }
+                    },
+                    [`&${componentCls}-loading, &${componentCls}-disabled`]: {
+                        cursor: "not-allowed",
+                        opacity: token2.switchDisabledOpacity,
+                        "*": {
+                            boxShadow: "none",
+                            cursor: "not-allowed"
+                        }
+                    },
+                    [`&${componentCls}-rtl`]: {
+                        direction: "rtl"
+                    }
+                })
+            };
+        }, useStyle = genComponentStyleHook("Switch", (token2 => {
+            const switchHeight = token2.fontSize * token2.lineHeight, switchHeightSM = token2.controlHeight / 2, switchPadding = 2, switchPinSize = switchHeight - 2 * switchPadding, switchPinSizeSM = switchHeightSM - 2 * switchPadding, switchToken = merge(token2, {
+                switchMinWidth: 2 * switchPinSize + 4 * switchPadding,
+                switchHeight: switchHeight,
+                switchDuration: token2.motionDurationMid,
+                switchColor: token2.colorPrimary,
+                switchDisabledOpacity: token2.opacityLoading,
+                switchInnerMarginMin: switchPinSize / 2,
+                switchInnerMarginMax: switchPinSize + switchPadding + 2 * switchPadding,
+                switchPadding: switchPadding,
+                switchPinSize: switchPinSize,
+                switchBg: token2.colorBgContainer,
+                switchMinWidthSM: 2 * switchPinSizeSM + 2 * switchPadding,
+                switchHeightSM: switchHeightSM,
+                switchInnerMarginMinSM: switchPinSizeSM / 2,
+                switchInnerMarginMaxSM: switchPinSizeSM + switchPadding + 2 * switchPadding,
+                switchPinSizeSM: switchPinSizeSM,
+                switchHandleShadow: `0 2px 4px 0 ${new TinyColor("#00230b").setAlpha(.2).toRgbString()}`,
+                switchLoadingIconSize: .75 * token2.fontSizeIcon,
+                switchLoadingIconColor: `rgba(0, 0, 0, ${token2.opacityLoading})`,
+                switchHandleActiveInset: "-30%"
+            });
+            return [ genSwitchStyle(switchToken), genSwitchInnerStyle(switchToken), genSwitchHandleStyle(switchToken), genSwitchLoadingStyle(switchToken), genSwitchSmallStyle(switchToken) ];
+        })), SwitchSizes = tuple("small", "default"), Switch$1 = withInstall(defineComponent({
+            compatConfig: {
+                MODE: 3
+            },
+            name: "ASwitch",
+            __ANT_SWITCH: !0,
+            inheritAttrs: !1,
+            props: (() => ({
+                id: String,
+                prefixCls: String,
+                size: PropTypes.oneOf(SwitchSizes),
+                disabled: {
+                    type: Boolean,
+                    default: void 0
+                },
+                checkedChildren: PropTypes.any,
+                unCheckedChildren: PropTypes.any,
+                tabindex: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
+                autofocus: {
+                    type: Boolean,
+                    default: void 0
+                },
+                loading: {
+                    type: Boolean,
+                    default: void 0
+                },
+                checked: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.looseBool ]),
+                checkedValue: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.looseBool ]).def(!0),
+                unCheckedValue: PropTypes.oneOfType([ PropTypes.string, PropTypes.number, PropTypes.looseBool ]).def(!1),
+                onChange: {
+                    type: Function
+                },
+                onClick: {
+                    type: Function
+                },
+                onKeydown: {
+                    type: Function
+                },
+                onMouseup: {
+                    type: Function
+                },
+                "onUpdate:checked": {
+                    type: Function
+                },
+                onBlur: Function,
+                onFocus: Function
+            }))(),
+            slots: Object,
+            setup(props2, _ref) {
+                let {attrs: attrs, slots: slots, expose: expose, emit: emit2} = _ref;
+                const formItemContext = useInjectFormItemContext(), disabledContext = useInjectDisabled(), mergedDisabled = computed((() => {
+                    var _a;
+                    return null !== (_a = props2.disabled) && void 0 !== _a ? _a : disabledContext.value;
+                }));
+                onBeforeMount((() => {}));
+                const checked = ref(void 0 !== props2.checked ? props2.checked : attrs.defaultChecked), checkedStatus = computed((() => checked.value === props2.checkedValue));
+                watch((() => props2.checked), (() => {
+                    checked.value = props2.checked;
+                }));
+                const {prefixCls: prefixCls, direction: direction, size: size2} = useConfigInject("switch", props2), [wrapSSR, hashId] = useStyle(prefixCls), refSwitchNode = ref(), focus = () => {
+                    var _a;
+                    null === (_a = refSwitchNode.value) || void 0 === _a || _a.focus();
+                };
+                expose({
+                    focus: focus,
+                    blur: () => {
+                        var _a;
+                        null === (_a = refSwitchNode.value) || void 0 === _a || _a.blur();
+                    }
+                }), onMounted((() => {
+                    nextTick((() => {
+                        props2.autofocus && !mergedDisabled.value && refSwitchNode.value.focus();
+                    }));
+                }));
+                const setChecked = (check, e2) => {
+                    mergedDisabled.value || (emit2("update:checked", check), emit2("change", check, e2), 
+                    formItemContext.onFieldChange());
+                }, handleBlur = e2 => {
+                    emit2("blur", e2);
+                }, handleClick = e2 => {
+                    focus();
+                    const newChecked = checkedStatus.value ? props2.unCheckedValue : props2.checkedValue;
+                    setChecked(newChecked, e2), emit2("click", newChecked, e2);
+                }, handleKeyDown = e2 => {
+                    e2.keyCode === KeyCode.LEFT ? setChecked(props2.unCheckedValue, e2) : e2.keyCode === KeyCode.RIGHT && setChecked(props2.checkedValue, e2), 
+                    emit2("keydown", e2);
+                }, handleMouseUp = e2 => {
+                    var _a;
+                    null === (_a = refSwitchNode.value) || void 0 === _a || _a.blur(), emit2("mouseup", e2);
+                }, classNames2 = computed((() => ({
+                    [`${prefixCls.value}-small`]: "small" === size2.value,
+                    [`${prefixCls.value}-loading`]: props2.loading,
+                    [`${prefixCls.value}-checked`]: checkedStatus.value,
+                    [`${prefixCls.value}-disabled`]: mergedDisabled.value,
+                    [prefixCls.value]: !0,
+                    [`${prefixCls.value}-rtl`]: "rtl" === direction.value,
+                    [hashId.value]: !0
+                })));
+                return () => {
+                    var _a;
+                    return wrapSSR(createVNode(Wave, null, {
+                        default: () => [ createVNode("button", _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, omit(props2, [ "prefixCls", "checkedChildren", "unCheckedChildren", "checked", "autofocus", "checkedValue", "unCheckedValue", "id", "onChange", "onUpdate:checked" ])), attrs), {}, {
+                            id: null !== (_a = props2.id) && void 0 !== _a ? _a : formItemContext.id.value,
+                            onKeydown: handleKeyDown,
+                            onClick: handleClick,
+                            onBlur: handleBlur,
+                            onMouseup: handleMouseUp,
+                            type: "button",
+                            role: "switch",
+                            "aria-checked": checked.value,
+                            disabled: mergedDisabled.value || props2.loading,
+                            class: [ attrs.class, classNames2.value ],
+                            ref: refSwitchNode
+                        }), [ createVNode("div", {
+                            class: `${prefixCls.value}-handle`
+                        }, [ props2.loading ? createVNode(LoadingOutlined, {
+                            class: `${prefixCls.value}-loading-icon`
+                        }, null) : null ]), createVNode("span", {
+                            class: `${prefixCls.value}-inner`
+                        }, [ createVNode("span", {
+                            class: `${prefixCls.value}-inner-checked`
+                        }, [ getPropsSlot(slots, props2, "checkedChildren") ]), createVNode("span", {
+                            class: `${prefixCls.value}-inner-unchecked`
+                        }, [ getPropsSlot(slots, props2, "unCheckedChildren") ]) ]) ]) ]
+                    }));
+                };
+            }
+        }));
         var DeleteOutlined$1 = {
             icon: {
                 tag: "svg",
@@ -23136,8 +23255,10 @@
         }, _hoisted_10 = {
             class: "leek-search-history-content"
         }, _hoisted_11 = {
-            class: "leek-select-item"
+            class: "leek-search-main"
         }, _hoisted_12 = {
+            class: "leek-select-item"
+        }, _hoisted_13 = {
             class: "leek-select-item-label"
         }, MaxSelectCount = 5, selectedItemsInfoLabel = "所有外观";
         createApp(defineComponent({
@@ -23155,10 +23276,11 @@
                     }
                 }, setLocal = (key2, json) => {
                     sessionStorage.setItem(key2, JSON.stringify(json));
-                }, appVersion = "1.0.12", defaultSettings = {
+                }, appVersion = "1.0.13", defaultSettings = {
                     runMode: "single",
-                    showMode: "auto",
-                    order: "price-1"
+                    showMode: "always",
+                    order: "price-1",
+                    extra: !1
                 }, setting = reactive({
                     ...defaultSettings,
                     historyItems: new LimitedSet([], 10),
@@ -23219,9 +23341,12 @@
                         itemCategory.map((item => {
                             formModel[item.typeName] || (formModel[item.typeName] = []);
                             const options = item.dataModels.map((i2 => {
-                                dataMap[i2.showName] = i2;
-                                const {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = i2;
-                                return {
+                                let {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = i2;
+                                return "其他成衣" !== typeName || "盒子成衣" !== searchDescType || showName.includes("·衣") || (showName = `${showName}·衣`), 
+                                dataMap[showName] = {
+                                    ...i2,
+                                    showName: showName
+                                }, {
                                     label: `${name}(${showName})`,
                                     value: showName,
                                     typeName: typeName,
@@ -23247,8 +23372,9 @@
                     } else setting.selectedItems.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
                     name !== selectedItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : setting.selectedItems = value.slice(0, value.length - 1));
                 }, onReset = (force = !0) => {
-                    force && (setting.runMode = "single"), setting.showMode = "auto", setting.order = "price-1", 
-                    Object.keys(formModel).map((key2 => {
+                    force && Object.assign(setting, {
+                        ...defaultSettings
+                    }), Object.keys(formModel).map((key2 => {
                         formModel[key2] = isSingleMode() ? "" : [];
                     }));
                 }, onSearch = () => {
@@ -23312,7 +23438,8 @@
                     open: openRef.value,
                     onClose: onClose,
                     class: "leek-drawer",
-                    mask: isAutoMode()
+                    mask: isAutoMode(),
+                    autofocus: ""
                 }, {
                     title: withCtx((() => [ createTextVNode(" 外观可选数量 "), withDirectives(createBaseVNode("span", {
                         class: "leek-count"
@@ -23338,14 +23465,7 @@
                         ref: formRef,
                         model: formModel
                     }, {
-                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ createVNode(unref(Alert$1), {
-                            style: {
-                                "margin-block-end": "16px"
-                            },
-                            message: "盒子散件数据部分有问题，用礼盒搜索",
-                            type: "warning",
-                            closable: ""
-                        }), (openBlock(), createBlock(unref(FormItem), {
+                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ (openBlock(), createBlock(unref(FormItem), {
                             key: "弹窗模式",
                             label: "弹窗模式",
                             name: "showMode"
@@ -23428,6 +23548,16 @@
                             }, 8, [ "value" ]) ])),
                             _: 1
                         })), (openBlock(), createBlock(unref(FormItem), {
+                            key: "更多搜索",
+                            label: "更多搜索",
+                            name: "extra"
+                        }, {
+                            default: withCtx((() => [ createVNode(unref(Switch$1), {
+                                checked: setting.extra,
+                                "onUpdate:checked": _cache[3] || (_cache[3] = $event => setting.extra = $event)
+                            }, null, 8, [ "checked" ]) ])),
+                            _: 1
+                        })), (openBlock(), createBlock(unref(FormItem), {
                             key: selectedItemsInfo.value.label,
                             label: selectedItemsInfo.value.label,
                             name: "selectedItemsInfo.label"
@@ -23435,7 +23565,7 @@
                             default: withCtx((() => [ createVNode(unref(Select), {
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[3] || (_cache[3] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
+                                onChange: _cache[4] || (_cache[4] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
                                 onSelect: selectSelect,
                                 options: selectedItemsInfo.value.options,
                                 mode: isSingleMode() ? void 0 : "multiple",
@@ -23443,8 +23573,8 @@
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
                                 value: setting.selectedItems,
-                                "onUpdate:value": _cache[4] || (_cache[4] = $event => setting.selectedItems = $event),
-                                "max-tag-count": 0
+                                "onUpdate:value": _cache[5] || (_cache[5] = $event => setting.selectedItems = $event),
+                                "max-tag-count": 10
                             }, {
                                 option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
@@ -23475,8 +23605,8 @@
                                 _: 2
                             }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
                             _: 1
-                        }) ]) ], 512), [ [ vShow, setting.historyItems.size() ] ]) ]), (openBlock(!0), createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), 
-                        createBlock(unref(FormItem), {
+                        }) ]) ], 512), [ [ vShow, setting.historyItems.size() ] ]) ]), withDirectives(createBaseVNode("div", _hoisted_11, [ (openBlock(!0), 
+                        createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), createBlock(unref(FormItem), {
                             key: item.label,
                             label: item.label,
                             name: item.label
@@ -23494,7 +23624,7 @@
                                 value: formModel[item.label],
                                 "onUpdate:value": $event => formModel[item.label] = $event
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_11, [ createBaseVNode("span", _hoisted_12, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_12, [ createBaseVNode("span", _hoisted_13, toDisplayString(label), 1), createVNode(unref(Tag), {
                                     class: "leek-select-item-tag",
                                     color: "default"
                                 }, {
@@ -23504,7 +23634,7 @@
                                 _: 2
                             }, 1032, [ "onChange", "options", "mode", "value", "onUpdate:value" ]) ])),
                             _: 2
-                        }, 1032, [ "label", "name" ])))), 128)) ])),
+                        }, 1032, [ "label", "name" ])))), 128)) ], 512), [ [ vShow, setting.extra ] ]) ])),
                         _: 1
                     }, 8, [ "model" ]) ]) ])),
                     _: 1
