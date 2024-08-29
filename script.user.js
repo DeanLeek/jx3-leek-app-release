@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.16
+// @version      1.0.17
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -88,7 +88,127 @@
 
     GM_addElement(document.head, 'style', {
       textContent: `
-      .leek-count{padding:0 3px;font-weight:700;color:red;letter-spacing:3px}.leek-drawer-footer{display:flex;font-size:12px;justify-content:right}.leek-search .leek-search-sticky{position:sticky;top:0;z-index:10;background-color:#fff}.leek-search .leek-search-history{display:flex;flex-direction:column;padding-block-end:32px}.leek-search .leek-search-history .leek-search-history-title{display:flex;justify-content:space-between;height:40px}.leek-search .leek-search-history .leek-search-history-title h4{margin:0;padding:0}.leek-search .leek-search-history .leek-search-history-title .leek-search-history-clear{cursor:pointer;width:32px;height:32px;display:flex;justify-content:center;align-items:center}.leek-search .leek-search-history .leek-search-history-content{display:flex}.leek-search .leek-search-history .leek-search-history-content .leek-search-history-tag{cursor:pointer}.leek-select-item{display:flex;justify-content:space-between}.leek-search-select-popup .ant-select-item-option-state{display:none}.leek-btn-start{position:fixed;top:200px;right:max(calc((100% - 1160px)/2 - 90px),50px);font-size:80px;width:80px;height:80px;cursor:pointer;overflow:hidden;display:flex;z-index:9999;transform:translate(0);transform-origin:center bottom}.leek-growing{animation:leek-growAnimation .8s ease forwards}@keyframes leek-growAnimation{0%{transform:scale(0) translateY(0)}to{transform:scale(1) translateY(0)}}@keyframes leek-pullOutAnimation{0%{transform:translate(0)}50%{transform:translateY(-20px);animation-timing-function:ease-in-out}70%{transform:translateY(-50px);animation-timing-function:ease-in-out}to{transform:translateY(-120vh);animation-timing-function:ease-in}}.leek-fly-out{animation:leek-pullOutAnimation .6s ease forwards}.leek-drawer .ant-drawer-body{padding:18px}body{overflow-y:scroll!important}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background-color:#0000000d}::-webkit-scrollbar-thumb{background-color:#9093934d}::-webkit-scrollbar-thumb:hover{background-color:#b6b7b9}
+      
+.leek-count {
+    padding: 0 3px;
+    font-weight: bold;
+    color: red;
+    letter-spacing: 3px;
+}
+.leek-drawer-footer {
+    display: flex;
+    font-size: 12px;
+    justify-content: right;
+}
+.leek-search {
+.leek-search-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: #fff;
+}
+.leek-search-history {
+      display: flex;
+      flex-direction: column;
+      padding-block-end: 32px;
+.leek-search-history-title {
+        display: flex;
+        justify-content: space-between;
+        height: 40px;
+h4 {
+          margin: 0;
+          padding: 0;
+}
+.leek-search-history-clear {
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+}
+}
+.leek-search-history-content {
+        display: flex;
+.leek-search-history-tag {
+          cursor: pointer;
+}
+}
+}
+}
+.leek-select-item {
+    display: flex;
+    justify-content: space-between;
+}
+.leek-search-select-popup .ant-select-item-option-state {
+    display: none;
+}
+.leek-btn-start {
+    position: fixed;
+    top: 200px;
+    right: max(calc((100% - 1160px) / 2 - 90px), 50px);
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    z-index: 9999;
+    transform: translate(0, 0);
+    transform-origin: center bottom;
+}
+.leek-growing {
+    animation: leek-growAnimation 0.8s ease forwards;
+}
+@keyframes leek-growAnimation {
+0% {
+      transform: scale(0) translateY(0); /* 初始为原始大小的50% */
+}
+100% {
+      transform: scale(1) translateY(0); /* 恢复到正常大小 */
+}
+}
+@keyframes leek-pullOutAnimation {
+0% {
+      transform: translate(0, 0);
+}
+50% {
+      transform: translate(0, -20px); /* 慢慢上升一点 */
+      animation-timing-function: ease-in-out; /* 先缓慢 */
+}
+70% {
+      transform: translate(0, -50px); /* 加速上升 */
+      animation-timing-function: ease-in-out;
+}
+100% {
+      transform: translate(0, -120vh); /* 被拔出屏幕 */
+      animation-timing-function: ease-in; /* 最后快速拔出 */
+}
+}
+.leek-fly-out {
+    animation: leek-pullOutAnimation 0.6s ease forwards;
+}
+.leek-drawer {
+.ant-drawer-body {
+      padding: 18px;
+}
+}
+body {
+    overflow-y: scroll !important;
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background-color: rgb(0 0 0 / 5%);
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgb(144 147 147 / 30%);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b6b7b9;
+}
 
      `,
     });
@@ -23276,7 +23396,7 @@
                     }
                 }, setLocal = (key2, json) => {
                     sessionStorage.setItem(key2, JSON.stringify(json));
-                }, appVersion = "1.0.16", defaultSettings = {
+                }, appVersion = "1.0.17", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
