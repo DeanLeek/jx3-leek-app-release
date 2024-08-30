@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.18
+// @version      1.0.20
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -21022,7 +21022,7 @@ body {
             width: 384
         })));
         function getCloseIcon(prefixCls, closeIcon) {
-            return closeIcon || createVNode("span", {
+            return createVNode("span", {
                 class: `${prefixCls}-close-x`
             }, [ createVNode(CloseOutlined, {
                 class: `${prefixCls}-close-icon`
@@ -23395,19 +23395,19 @@ body {
                     setValue: GM_setValue
                 } : {
                     window: window,
-                    getValue: key2 => {
-                        const leekCachesString = sessionStorage.getItem(key2) || "{}";
+                    getValue: (key2, defaultValue) => {
+                        const leekCachesString = sessionStorage.getItem(key2) || `'${defaultValue}'`;
                         try {
                             return JSON.parse(leekCachesString);
                         } catch (error) {
-                            return sessionStorage.removeItem(key2), {};
+                            return sessionStorage.removeItem(key2), defaultValue;
                         }
                     },
                     setValue: (key2, json) => {
                         sessionStorage.setItem(key2, JSON.stringify(json));
                     }
                 };
-                const appVersion = "1.0.18", defaultSettings = {
+                const appVersion = "1.0.20", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23453,7 +23453,7 @@ body {
                 }, onOpen = () => {
                     /(\/buyer.*t=skin)|localhost/.test(window.location.href) ? (check(), openRef.value = !0) : api$1.error('只能在"买外观"页面使用');
                 }, loadCaches = () => {
-                    let leekSetting = sandbox.getValue("leekSetting");
+                    let leekSetting = sandbox.getValue("leekSetting", {});
                     const {historyItems: historyItems = [], ...leekCachesWithoutHistory} = leekSetting;
                     historyTagsAdd(historyItems), Object.assign(setting, {
                         ...defaultSettings,
@@ -23571,222 +23571,230 @@ body {
                         }), selectedItemsInfo.value.options.push(...options);
                     })), formInfo.push(...info), sandboxSelect([]), loadCaches();
                 };
-                return init(), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
-                createBlock(Teleport, {
-                    to: "body"
-                }, [ createBaseVNode("div", {
-                    class: normalizeClass([ "leek-btn-start", {
-                        "leek-fly-out": openRef.value,
-                        "leek-growing": !openRef.value
-                    } ]),
-                    onClick: onOpen
-                }, [ createVNode(IconLeek) ], 2) ])), createVNode(unref(Drawer$1), {
-                    width: 480,
-                    open: openRef.value,
-                    onClose: onClose,
-                    class: "leek-drawer",
-                    mask: isAutoMode(),
-                    autofocus: ""
+                return init(), (_ctx, _cache) => (openBlock(), createBlock(unref(ConfigProvider), {
+                    theme: {
+                        token: {
+                            colorPrimary: "#149ea8"
+                        }
+                    }
                 }, {
-                    title: withCtx((() => [ createTextVNode(" 外观可选数量 "), withDirectives(createBaseVNode("span", {
-                        class: "leek-count"
-                    }, "(" + toDisplayString(remainingMaxCount.value) + ")", 513), [ [ vShow, !isSingleMode() ] ]) ])),
-                    footer: withCtx((() => [ createBaseVNode("div", _hoisted_1, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
-                    extra: withCtx((() => [ createVNode(unref(Space), null, {
-                        default: withCtx((() => [ createVNode(unref(Button), {
-                            onClick: onReset
-                        }, {
-                            default: withCtx((() => [ createTextVNode("重置") ])),
-                            _: 1
-                        }), createVNode(unref(Button), {
-                            type: "primary",
-                            onClick: onUpdate,
-                            loading: isLoading.value
-                        }, {
-                            default: withCtx((() => [ createTextVNode("更新物品数据") ])),
-                            _: 1
-                        }, 8, [ "loading" ]) ])),
-                        _: 1
-                    }) ])),
-                    default: withCtx((() => [ createBaseVNode("section", _hoisted_2, [ createVNode(unref(Form), {
-                        ref_key: "formRef",
-                        ref: formRef,
-                        model: formModel
+                    default: withCtx((() => [ (openBlock(), createBlock(Teleport, {
+                        to: "body"
+                    }, [ createBaseVNode("div", {
+                        class: normalizeClass([ "leek-btn-start", {
+                            "leek-fly-out": openRef.value,
+                            "leek-growing": !openRef.value
+                        } ]),
+                        onClick: onOpen
+                    }, [ createVNode(IconLeek) ], 2) ])), createVNode(unref(Drawer$1), {
+                        width: 480,
+                        open: openRef.value,
+                        onClose: onClose,
+                        class: "leek-drawer",
+                        mask: isAutoMode(),
+                        autofocus: ""
                     }, {
-                        default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ (openBlock(), createBlock(unref(FormItem), {
-                            key: "弹窗模式",
-                            label: "弹窗模式",
-                            name: "showMode"
-                        }, {
-                            default: withCtx((() => [ createVNode(unref(RadioGroup), {
-                                value: setting.showMode,
-                                "onUpdate:value": _cache[0] || (_cache[0] = $event => setting.showMode = $event),
-                                "button-style": "solid"
+                        title: withCtx((() => [ createTextVNode(" 外观可选数量 "), withDirectives(createBaseVNode("span", {
+                            class: "leek-count"
+                        }, "(" + toDisplayString(remainingMaxCount.value) + ")", 513), [ [ vShow, !isSingleMode() ] ]) ])),
+                        footer: withCtx((() => [ createBaseVNode("div", _hoisted_1, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
+                        extra: withCtx((() => [ createVNode(unref(Space), null, {
+                            default: withCtx((() => [ createVNode(unref(Button), {
+                                onClick: onReset
                             }, {
-                                default: withCtx((() => [ createVNode(unref(RadioButton), {
-                                    value: "auto"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode(" 自动 "), createVNode(unref(SyncOutlined)) ])),
-                                    _: 1
-                                }), createVNode(unref(RadioButton), {
-                                    value: "always"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode(" 常驻 "), createVNode(unref(BorderOutlined)) ])),
-                                    _: 1
-                                }) ])),
+                                default: withCtx((() => [ createTextVNode("重置") ])),
                                 _: 1
-                            }, 8, [ "value" ]) ])),
-                            _: 1
-                        })), (openBlock(), createBlock(unref(FormItem), {
-                            key: "运行模式",
-                            label: "运行模式",
-                            name: "runMode"
-                        }, {
-                            default: withCtx((() => [ createVNode(unref(RadioGroup), {
-                                value: setting.runMode,
-                                "onUpdate:value": _cache[1] || (_cache[1] = $event => setting.runMode = $event),
-                                "button-style": "solid"
+                            }), createVNode(unref(Button), {
+                                type: "primary",
+                                onClick: onUpdate,
+                                loading: isLoading.value
                             }, {
-                                default: withCtx((() => [ createVNode(unref(RadioButton), {
-                                    value: "single"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode(" 单选 "), createVNode(unref(CheckCircleOutlined)) ])),
-                                    _: 1
-                                }), createVNode(unref(RadioButton), {
-                                    value: "multiple"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode(" 多选 "), createVNode(unref(CheckSquareOutlined)) ])),
-                                    _: 1
-                                }) ])),
+                                default: withCtx((() => [ createTextVNode("更新物品数据") ])),
                                 _: 1
-                            }, 8, [ "value" ]) ])),
+                            }, 8, [ "loading" ]) ])),
                             _: 1
-                        })), (openBlock(), createBlock(unref(FormItem), {
-                            key: "排序方式",
-                            label: "排序方式",
-                            name: "order"
+                        }) ])),
+                        default: withCtx((() => [ createBaseVNode("section", _hoisted_2, [ createVNode(unref(Form), {
+                            ref_key: "formRef",
+                            ref: formRef,
+                            model: formModel
                         }, {
-                            default: withCtx((() => [ createVNode(unref(RadioGroup), {
-                                value: setting.order,
-                                "onUpdate:value": _cache[2] || (_cache[2] = $event => setting.order = $event),
-                                "button-style": "solid"
+                            default: withCtx((() => [ createBaseVNode("div", _hoisted_3, [ (openBlock(), createBlock(unref(FormItem), {
+                                key: "弹窗模式",
+                                label: "弹窗模式",
+                                name: "showMode"
                             }, {
-                                default: withCtx((() => [ createVNode(unref(RadioButton), {
-                                    value: "price-1"
+                                default: withCtx((() => [ createVNode(unref(RadioGroup), {
+                                    value: setting.showMode,
+                                    "onUpdate:value": _cache[0] || (_cache[0] = $event => setting.showMode = $event),
+                                    "button-style": "solid"
                                 }, {
-                                    default: withCtx((() => [ createTextVNode(" 价格 "), createVNode(unref(ArrowUpOutlined)) ])),
+                                    default: withCtx((() => [ createVNode(unref(RadioButton), {
+                                        value: "auto"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(" 自动 "), createVNode(unref(SyncOutlined)) ])),
+                                        _: 1
+                                    }), createVNode(unref(RadioButton), {
+                                        value: "always"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(" 常驻 "), createVNode(unref(BorderOutlined)) ])),
+                                        _: 1
+                                    }) ])),
                                     _: 1
-                                }), createVNode(unref(RadioButton), {
-                                    value: "price-0"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode("价格 "), createVNode(unref(ArrowDownOutlined)) ])),
-                                    _: 1
-                                }), createVNode(unref(RadioButton), {
-                                    value: "followed_num-1"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode("关注 "), createVNode(unref(ArrowUpOutlined)) ])),
-                                    _: 1
-                                }), createVNode(unref(RadioButton), {
-                                    value: "followed_num-0"
-                                }, {
-                                    default: withCtx((() => [ createTextVNode("关注 "), createVNode(unref(ArrowDownOutlined)) ])),
-                                    _: 1
-                                }) ])),
+                                }, 8, [ "value" ]) ])),
                                 _: 1
-                            }, 8, [ "value" ]) ])),
-                            _: 1
-                        })), (openBlock(), createBlock(unref(FormItem), {
-                            key: "更多搜索",
-                            label: "更多搜索",
-                            name: "extra"
-                        }, {
-                            default: withCtx((() => [ createVNode(unref(Switch$1), {
-                                checked: setting.extra,
-                                "onUpdate:checked": _cache[3] || (_cache[3] = $event => setting.extra = $event)
-                            }, null, 8, [ "checked" ]) ])),
-                            _: 1
-                        })), (openBlock(), createBlock(unref(FormItem), {
-                            key: selectedItemsInfo.value.label,
-                            label: selectedItemsInfo.value.label,
-                            name: "selectedItemsInfo.label"
-                        }, {
-                            default: withCtx((() => [ createVNode(unref(Select), {
-                                class: "leek-search-select",
-                                "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[4] || (_cache[4] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
-                                onSelect: selectSelect,
-                                options: selectedItemsInfo.value.options,
-                                mode: isSingleMode() ? void 0 : "multiple",
-                                "show-search": "",
-                                "allow-clear": "",
-                                "filter-option": selectFilter,
-                                value: setting.selectedItems,
-                                "onUpdate:value": _cache[5] || (_cache[5] = $event => setting.selectedItems = $event),
-                                "max-tag-count": 10
+                            })), (openBlock(), createBlock(unref(FormItem), {
+                                key: "运行模式",
+                                label: "运行模式",
+                                name: "runMode"
                             }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
-                                    class: "leek-select-item-tag",
-                                    color: "default"
+                                default: withCtx((() => [ createVNode(unref(RadioGroup), {
+                                    value: setting.runMode,
+                                    "onUpdate:value": _cache[1] || (_cache[1] = $event => setting.runMode = $event),
+                                    "button-style": "solid"
                                 }, {
-                                    default: withCtx((() => [ createTextVNode(toDisplayString(searchDescType), 1) ])),
+                                    default: withCtx((() => [ createVNode(unref(RadioButton), {
+                                        value: "single"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(" 单选 "), createVNode(unref(CheckCircleOutlined)) ])),
+                                        _: 1
+                                    }), createVNode(unref(RadioButton), {
+                                        value: "multiple"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(" 多选 "), createVNode(unref(CheckSquareOutlined)) ])),
+                                        _: 1
+                                    }) ])),
+                                    _: 1
+                                }, 8, [ "value" ]) ])),
+                                _: 1
+                            })), (openBlock(), createBlock(unref(FormItem), {
+                                key: "排序方式",
+                                label: "排序方式",
+                                name: "order"
+                            }, {
+                                default: withCtx((() => [ createVNode(unref(RadioGroup), {
+                                    value: setting.order,
+                                    "onUpdate:value": _cache[2] || (_cache[2] = $event => setting.order = $event),
+                                    "button-style": "solid"
+                                }, {
+                                    default: withCtx((() => [ createVNode(unref(RadioButton), {
+                                        value: "price-1"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(" 价格 "), createVNode(unref(ArrowUpOutlined)) ])),
+                                        _: 1
+                                    }), createVNode(unref(RadioButton), {
+                                        value: "price-0"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode("价格 "), createVNode(unref(ArrowDownOutlined)) ])),
+                                        _: 1
+                                    }), createVNode(unref(RadioButton), {
+                                        value: "followed_num-1"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode("关注 "), createVNode(unref(ArrowUpOutlined)) ])),
+                                        _: 1
+                                    }), createVNode(unref(RadioButton), {
+                                        value: "followed_num-0"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode("关注 "), createVNode(unref(ArrowDownOutlined)) ])),
+                                        _: 1
+                                    }) ])),
+                                    _: 1
+                                }, 8, [ "value" ]) ])),
+                                _: 1
+                            })), (openBlock(), createBlock(unref(FormItem), {
+                                key: "更多搜索",
+                                label: "更多搜索",
+                                name: "extra"
+                            }, {
+                                default: withCtx((() => [ createVNode(unref(Switch$1), {
+                                    checked: setting.extra,
+                                    "onUpdate:checked": _cache[3] || (_cache[3] = $event => setting.extra = $event)
+                                }, null, 8, [ "checked" ]) ])),
+                                _: 1
+                            })), (openBlock(), createBlock(unref(FormItem), {
+                                key: selectedItemsInfo.value.label,
+                                label: selectedItemsInfo.value.label,
+                                name: "selectedItemsInfo.label"
+                            }, {
+                                default: withCtx((() => [ createVNode(unref(Select), {
+                                    class: "leek-search-select",
+                                    "popup-class-name": "leek-search-select-popup",
+                                    onChange: _cache[4] || (_cache[4] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
+                                    onSelect: selectSelect,
+                                    options: selectedItemsInfo.value.options,
+                                    mode: isSingleMode() ? void 0 : "multiple",
+                                    "show-search": "",
+                                    "allow-clear": "",
+                                    "filter-option": selectFilter,
+                                    value: setting.selectedItems,
+                                    "onUpdate:value": _cache[5] || (_cache[5] = $event => setting.selectedItems = $event),
+                                    "max-tag-count": 10
+                                }, {
+                                    option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_4, [ createBaseVNode("span", _hoisted_5, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                        class: "leek-select-item-tag",
+                                        color: "default"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(toDisplayString(searchDescType), 1) ])),
+                                        _: 2
+                                    }, 1024) ]) ])),
+                                    _: 1
+                                }, 8, [ "options", "mode", "value" ]) ])),
+                                _: 1
+                            }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_6, [ createBaseVNode("div", _hoisted_7, [ _hoisted_8, createBaseVNode("div", _hoisted_9, [ createVNode(unref(DeleteOutlined), {
+                                onClick: historyTagsClear
+                            }) ]) ]), createBaseVNode("div", _hoisted_10, [ createVNode(unref(Space), {
+                                size: [ 0, "small" ],
+                                wrap: ""
+                            }, {
+                                default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON(), (tag => (openBlock(), 
+                                createBlock(unref(Tag), {
+                                    class: "leek-search-history-tag",
+                                    key: tag,
+                                    bordered: !1,
+                                    closable: "",
+                                    onClick: $event => historyTagsClick(tag),
+                                    onClose: $event => historyTagsClose(tag)
+                                }, {
+                                    default: withCtx((() => [ createTextVNode(toDisplayString(historyTagTransform(tag)), 1) ])),
                                     _: 2
-                                }, 1024) ]) ])),
+                                }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
                                 _: 1
-                            }, 8, [ "options", "mode", "value" ]) ])),
-                            _: 1
-                        }, 8, [ "label" ])), withDirectives(createBaseVNode("div", _hoisted_6, [ createBaseVNode("div", _hoisted_7, [ _hoisted_8, createBaseVNode("div", _hoisted_9, [ createVNode(unref(DeleteOutlined), {
-                            onClick: historyTagsClear
-                        }) ]) ]), createBaseVNode("div", _hoisted_10, [ createVNode(unref(Space), {
-                            size: [ 0, "small" ],
-                            wrap: ""
-                        }, {
-                            default: withCtx((() => [ (openBlock(!0), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON(), (tag => (openBlock(), 
-                            createBlock(unref(Tag), {
-                                class: "leek-search-history-tag",
-                                key: tag,
-                                bordered: !1,
-                                closable: "",
-                                onClick: $event => historyTagsClick(tag),
-                                onClose: $event => historyTagsClose(tag)
+                            }) ]) ], 512), [ [ vShow, setting.historyItems.size() ] ]) ]), withDirectives(createBaseVNode("div", _hoisted_11, [ (openBlock(!0), 
+                            createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), createBlock(unref(FormItem), {
+                                key: item.label,
+                                label: item.label,
+                                name: item.label
                             }, {
-                                default: withCtx((() => [ createTextVNode(toDisplayString(historyTagTransform(tag)), 1) ])),
-                                _: 2
-                            }, 1032, [ "onClick", "onClose" ])))), 128)) ])),
-                            _: 1
-                        }) ]) ], 512), [ [ vShow, setting.historyItems.size() ] ]) ]), withDirectives(createBaseVNode("div", _hoisted_11, [ (openBlock(!0), 
-                        createElementBlock(Fragment, null, renderList(formInfo, (item => (openBlock(), createBlock(unref(FormItem), {
-                            key: item.label,
-                            label: item.label,
-                            name: item.label
-                        }, {
-                            default: withCtx((() => [ createVNode(unref(Select), {
-                                class: "leek-search-select",
-                                "popup-class-name": "leek-search-select-popup",
-                                onChange: (value, options) => onChange(item.label)(value, options),
-                                onSelect: selectSelect,
-                                options: item.options,
-                                mode: isSingleMode() ? void 0 : "multiple",
-                                "show-search": "",
-                                "allow-clear": "",
-                                "filter-option": selectFilter,
-                                value: formModel[item.label],
-                                "onUpdate:value": $event => formModel[item.label] = $event
-                            }, {
-                                option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_12, [ createBaseVNode("span", _hoisted_13, toDisplayString(label), 1), createVNode(unref(Tag), {
-                                    class: "leek-select-item-tag",
-                                    color: "default"
+                                default: withCtx((() => [ createVNode(unref(Select), {
+                                    class: "leek-search-select",
+                                    "popup-class-name": "leek-search-select-popup",
+                                    onChange: (value, options) => onChange(item.label)(value, options),
+                                    onSelect: selectSelect,
+                                    options: item.options,
+                                    mode: isSingleMode() ? void 0 : "multiple",
+                                    "show-search": "",
+                                    "allow-clear": "",
+                                    "filter-option": selectFilter,
+                                    value: formModel[item.label],
+                                    "onUpdate:value": $event => formModel[item.label] = $event
                                 }, {
-                                    default: withCtx((() => [ createTextVNode(toDisplayString(searchDescType), 1) ])),
+                                    option: withCtx((({label: label, searchDescType: searchDescType}) => [ createBaseVNode("div", _hoisted_12, [ createBaseVNode("span", _hoisted_13, toDisplayString(label), 1), createVNode(unref(Tag), {
+                                        class: "leek-select-item-tag",
+                                        color: "default"
+                                    }, {
+                                        default: withCtx((() => [ createTextVNode(toDisplayString(searchDescType), 1) ])),
+                                        _: 2
+                                    }, 1024) ]) ])),
                                     _: 2
-                                }, 1024) ]) ])),
+                                }, 1032, [ "onChange", "options", "mode", "value", "onUpdate:value" ]) ])),
                                 _: 2
-                            }, 1032, [ "onChange", "options", "mode", "value", "onUpdate:value" ]) ])),
-                            _: 2
-                        }, 1032, [ "label", "name" ])))), 128)) ], 512), [ [ vShow, setting.extra ] ]) ])),
+                            }, 1032, [ "label", "name" ])))), 128)) ], 512), [ [ vShow, setting.extra ] ]) ])),
+                            _: 1
+                        }, 8, [ "model" ]) ]) ])),
                         _: 1
-                    }, 8, [ "model" ]) ]) ])),
+                    }, 8, [ "open", "mask" ]) ])),
                     _: 1
-                }, 8, [ "open", "mask" ]) ], 64));
+                }));
             }
         })).mount("#leek-app");
     }
