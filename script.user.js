@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.17
+// @version      1.0.18
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -10,6 +10,8 @@
 // @connect      aijx3.cn
 // @grant        unsafeWindow
 // @grant        GM_addElement
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @run-at       document-start
 // ==/UserScript==
 
@@ -23380,23 +23382,32 @@ body {
             class: "leek-select-item"
         }, _hoisted_13 = {
             class: "leek-select-item-label"
-        }, MaxSelectCount = 5, selectedItemsInfoLabel = "所有外观";
+        }, maxSelectCount = 5;
         createApp(defineComponent({
             __name: "App",
             setup(__props) {
+                let sandbox;
                 ConfigProvider.config({
                     prefixCls: "antVue"
-                });
-                const sandboxWindow = "undefined" != typeof unsafeWindow ? unsafeWindow : window, getLocal = key2 => {
-                    const leekCachesString = sessionStorage.getItem(key2) || "{}";
-                    try {
-                        return JSON.parse(leekCachesString);
-                    } catch (error) {
-                        return sessionStorage.removeItem(key2), {};
+                }), sandbox = "undefined" != typeof unsafeWindow ? {
+                    window: unsafeWindow,
+                    getValue: GM_getValue,
+                    setValue: GM_setValue
+                } : {
+                    window: window,
+                    getValue: key2 => {
+                        const leekCachesString = sessionStorage.getItem(key2) || "{}";
+                        try {
+                            return JSON.parse(leekCachesString);
+                        } catch (error) {
+                            return sessionStorage.removeItem(key2), {};
+                        }
+                    },
+                    setValue: (key2, json) => {
+                        sessionStorage.setItem(key2, JSON.stringify(json));
                     }
-                }, setLocal = (key2, json) => {
-                    sessionStorage.setItem(key2, JSON.stringify(json));
-                }, appVersion = "1.0.17", defaultSettings = {
+                };
+                const appVersion = "1.0.18", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23435,52 +23446,33 @@ body {
                         }
                     })
                 }), formRef = ref(null), formModel = reactive({}), formInfo = reactive([]), selectedItemsInfo = ref({
-                    label: selectedItemsInfoLabel,
+                    label: "所有外观",
                     options: []
                 }), dataMap = {}, openRef = ref(!1), isSingleMode = () => "single" === setting.runMode, isAutoMode = () => "auto" === setting.showMode, onClose = () => {
                     openRef.value = !1;
                 }, onOpen = () => {
                     /(\/buyer.*t=skin)|localhost/.test(window.location.href) ? (check(), openRef.value = !0) : api$1.error('只能在"买外观"页面使用');
                 }, loadCaches = () => {
-                    let leekSetting = getLocal("leekSetting");
+                    let leekSetting = sandbox.getValue("leekSetting");
                     const {historyItems: historyItems = [], ...leekCachesWithoutHistory} = leekSetting;
                     historyTagsAdd(historyItems), Object.assign(setting, {
                         ...defaultSettings,
                         ...leekCachesWithoutHistory
                     });
-                };
-                (() => {
-                    fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
-                        method: "POST"
-                    }).then((response => {
+                }, fetchItems = async () => {
+                    let data;
+                    try {
+                        const response = await fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
+                            method: "POST"
+                        });
                         if (!response.ok) throw new Error("Network response was not ok " + response.statusText);
-                        return response.json();
-                    })).then((data => {
-                        const itemCategory = data.data;
-                        let info = [];
-                        itemCategory.map((item => {
-                            formModel[item.typeName] || (formModel[item.typeName] = []);
-                            const options = item.dataModels.map((i2 => {
-                                let {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = i2;
-                                return "其他成衣" !== typeName || "盒子成衣" !== searchDescType || showName.includes("·衣") || (showName = `${showName}·衣`), 
-                                dataMap[showName] = {
-                                    ...i2,
-                                    showName: showName
-                                }, {
-                                    label: `${name}(${showName})`,
-                                    value: showName,
-                                    typeName: typeName,
-                                    searchDescType: searchDescType,
-                                    searchId: searchId
-                                };
-                            }));
-                            info.push({
-                                label: item.typeName,
-                                options: options
-                            }), selectedItemsInfo.value.options.push(...options);
-                        })), formInfo.push(...info), sandboxSelect([]), loadCaches();
-                    })).catch((error => {}));
-                })(), watch((() => setting.runMode), (() => {
+                        data = await response.json();
+                    } catch (error) {
+                        return [];
+                    }
+                    return (null == data ? void 0 : data.data) || [];
+                };
+                watch((() => setting.runMode), (() => {
                     onReset(!1);
                 }));
                 const onChange = name => (value, options) => {
@@ -23489,8 +23481,8 @@ body {
                         Object.keys(formModel).map((key2 => {
                             key2 !== typeName && (formModel[key2] = "");
                         }));
-                    } else setting.selectedItems.length > MaxSelectCount && (api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`), 
-                    name !== selectedItemsInfoLabel ? formModel[name] = value.slice(0, value.length - 1) : setting.selectedItems = value.slice(0, value.length - 1));
+                    } else setting.selectedItems.length > maxSelectCount && (api$1.error(`同时最大可选物品数量 ${maxSelectCount}`), 
+                    name !== selectedItemsInfo.value.label ? formModel[name] = value.slice(0, value.length - 1) : setting.selectedItems = value.slice(0, value.length - 1));
                 }, onReset = (force = !0) => {
                     force && Object.assign(setting, {
                         ...defaultSettings
@@ -23498,8 +23490,10 @@ body {
                         formModel[key2] = isSingleMode() ? "" : [];
                     }));
                 }, onSearch = () => {
-                    var _a, _b;
-                    isAutoMode() && (openRef.value = !1), null == (_b = null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.searchButton) ? void 0 : _a.props) || _b.onClick();
+                    var _a, _b, _c;
+                    isAutoMode() && (openRef.value = !1), null == (_c = null == (_b = null == (_a = sandbox.window) ? void 0 : _a.searchButton) ? void 0 : _b.props) || _c.onClick();
+                }, onUpdate = () => {
+                    init(!0);
                 };
                 watch(formModel, (() => {
                     check(), onSearch();
@@ -23508,12 +23502,12 @@ body {
                 });
                 const check = () => {
                     syncSort(), sandboxSelect(setting.selectedItems);
-                }, remainingMaxCount = computed((() => isSingleMode() ? "" : MaxSelectCount - setting.selectedItems.length)), sandboxSelect = values => {
-                    var _a, _b, _c;
+                }, remainingMaxCount = computed((() => isSingleMode() ? "" : maxSelectCount - setting.selectedItems.length)), sandboxSelect = values => {
+                    var _a, _b, _c, _d, _e;
                     let arrayValues = castArray(values);
-                    (null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _a.selectedList) && (sandboxWindow.buyerFilter.selectedList = arrayValues.map((name => ({
+                    (null == (_b = null == (_a = sandbox.window) ? void 0 : _a.buyerFilter) ? void 0 : _b.selectedList) && (sandbox.window.buyerFilter.selectedList = arrayValues.map((name => ({
                         name: name
-                    })))), null == (_c = null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerFilter) ? void 0 : _b.roleFilterStore) || _c.setCurrentAppearance(arrayValues, !1);
+                    })))), null == (_e = null == (_d = null == (_c = sandbox.window) ? void 0 : _c.buyerFilter) ? void 0 : _d.roleFilterStore) || _e.setCurrentAppearance(arrayValues, !1);
                 }, selectFilter = (inputValue, option) => (option.search = inputValue, option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0), selectSelect = value => {
                     historyTagsAdd(value);
                 };
@@ -23521,16 +23515,16 @@ body {
                     syncSort();
                 }), {});
                 const syncSort = () => {
-                    var _a, _b;
+                    var _a, _b, _c, _d;
                     const [sortType, sortOrder] = setting.order.split("-");
-                    null == (_a = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _a.setSortType(sortType), 
-                    null == (_b = null == sandboxWindow ? void 0 : sandboxWindow.buyerStore) || _b.setSortOrder(sortOrder);
+                    null == (_b = null == (_a = sandbox.window) ? void 0 : _a.buyerStore) || _b.setSortType(sortType), 
+                    null == (_d = null == (_c = sandbox.window) ? void 0 : _c.buyerStore) || _d.setSortOrder(sortOrder);
                 }, historyTagsAdd = value => {
                     setting.historyItems.add(...castArray(value));
                 }, historyTagsClose = text => {
                     setting.historyItems.delete(text);
                 }, historyTagsClick = text => {
-                    if (isSingleMode()) setting.selectedItems = text; else if (setting.selectedItems.includes(text)) api$1.error(`${text} 已存在`); else if (setting.selectedItems.length >= MaxSelectCount) api$1.error(`同时最大可选物品数量 ${MaxSelectCount}`); else {
+                    if (isSingleMode()) setting.selectedItems = text; else if (setting.selectedItems.includes(text)) api$1.error(`${text} 已存在`); else if (setting.selectedItems.length >= maxSelectCount) api$1.error(`同时最大可选物品数量 ${maxSelectCount}`); else {
                         const items = [ ...setting.selectedItems ];
                         items.push(text), setting.selectedItems = items;
                     }
@@ -23540,11 +23534,44 @@ body {
                     const {name: name, showName: showName} = dataMap[tag];
                     return `${name}(${showName})`;
                 };
-                return watch((() => setting), (() => {
-                    setLocal("leekSetting", setting);
+                watch((() => setting), (() => {
+                    sandbox.setValue("leekSetting", setting);
                 }), {
                     deep: !0
-                }), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
+                });
+                const updateItems = (version2, data) => {
+                    sandbox.setValue("leekItemData", data), sandbox.setValue("leekItemVersion", version2);
+                }, isLoading = ref(!0), init = async (force = !1) => {
+                    isLoading.value = !0;
+                    const itemVersion = sandbox.getValue("leekItemVersion");
+                    let itemData = sandbox.getValue("leekItemData");
+                    const now2 = (new Date).getTime();
+                    (force || !itemVersion || now2 - itemVersion > 864e5 || !itemData || isEmpty(itemData)) && (itemData = await fetchItems(), 
+                    updateItems(now2, itemData)), isLoading.value = !1;
+                    let info = [];
+                    itemData.forEach((cat => {
+                        formModel[cat.typeName] || (formModel[cat.typeName] = []);
+                        const options = cat.dataModels.map((item => {
+                            let {name: name, showName: showName, typeName: typeName, searchDescType: searchDescType, searchId: searchId} = item;
+                            return "其他成衣" !== typeName || "盒子成衣" !== searchDescType || showName.includes("·衣") || (showName = `${showName}·衣`), 
+                            dataMap[showName] = {
+                                ...item,
+                                showName: showName
+                            }, {
+                                label: `${name}(${showName})`,
+                                value: showName,
+                                typeName: typeName,
+                                searchDescType: searchDescType,
+                                searchId: searchId
+                            };
+                        }));
+                        info.push({
+                            label: cat.typeName,
+                            options: options
+                        }), selectedItemsInfo.value.options.push(...options);
+                    })), formInfo.push(...info), sandboxSelect([]), loadCaches();
+                };
+                return init(), (_ctx, _cache) => (openBlock(), createElementBlock(Fragment, null, [ (openBlock(), 
                 createBlock(Teleport, {
                     to: "body"
                 }, [ createBaseVNode("div", {
@@ -23573,11 +23600,12 @@ body {
                             _: 1
                         }), createVNode(unref(Button), {
                             type: "primary",
-                            onClick: onSearch
+                            onClick: onUpdate,
+                            loading: isLoading.value
                         }, {
-                            default: withCtx((() => [ createTextVNode("查询") ])),
+                            default: withCtx((() => [ createTextVNode("更新物品数据") ])),
                             _: 1
-                        }) ])),
+                        }, 8, [ "loading" ]) ])),
                         _: 1
                     }) ])),
                     default: withCtx((() => [ createBaseVNode("section", _hoisted_2, [ createVNode(unref(Form), {
