@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.21
+// @version      1.0.22
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -23407,7 +23407,7 @@ body {
                         sessionStorage.setItem(key2, JSON.stringify(json));
                     }
                 };
-                const appVersion = "1.0.21", defaultSettings = {
+                const appVersion = "1.0.22", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23595,7 +23595,7 @@ body {
                         mask: isAutoMode(),
                         autofocus: ""
                     }, {
-                        title: withCtx((() => [ createTextVNode(" 外观可选数量 "), withDirectives(createBaseVNode("span", {
+                        title: withCtx((() => [ createTextVNode(toDisplayString(isSingleMode() ? "选择外观" : "外观可选数量") + " ", 1), withDirectives(createBaseVNode("span", {
                             class: "leek-count"
                         }, "(" + toDisplayString(remainingMaxCount.value) + ")", 513), [ [ vShow, !isSingleMode() ] ]) ])),
                         footer: withCtx((() => [ createBaseVNode("div", _hoisted_1, "Version: " + toDisplayString(unref(appVersion)), 1) ])),
@@ -23610,7 +23610,7 @@ body {
                                 onClick: onUpdate,
                                 loading: isLoading.value
                             }, {
-                                default: withCtx((() => [ createTextVNode("更新物品数据") ])),
+                                default: withCtx((() => [ createTextVNode("更新外观数据") ])),
                                 _: 1
                             }, 8, [ "loading" ]) ])),
                             _: 1
@@ -23703,8 +23703,8 @@ body {
                                 }, 8, [ "value" ]) ])),
                                 _: 1
                             })), (openBlock(), createBlock(unref(FormItem), {
-                                key: "更多搜索",
-                                label: "更多搜索",
+                                key: "分类搜索",
+                                label: "分类搜索",
                                 name: "extra"
                             }, {
                                 default: withCtx((() => [ createVNode(unref(Switch$1), {
