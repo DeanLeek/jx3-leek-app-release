@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.20
+// @version      1.0.21
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -142,7 +142,7 @@ h4 {
     display: flex;
     justify-content: space-between;
 }
-.leek-search-select-popup .ant-select-item-option-state {
+.leek-search-select-popup .antVue-select-item-option-state {
     display: none;
 }
 .leek-btn-start {
@@ -191,7 +191,7 @@ h4 {
     animation: leek-pullOutAnimation 0.6s ease forwards;
 }
 .leek-drawer {
-.ant-drawer-body {
+.antVue-drawer-body {
       padding: 18px;
 }
 }
@@ -23407,7 +23407,7 @@ body {
                         sessionStorage.setItem(key2, JSON.stringify(json));
                     }
                 };
-                const appVersion = "1.0.20", defaultSettings = {
+                const appVersion = "1.0.21", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23572,6 +23572,7 @@ body {
                     })), formInfo.push(...info), sandboxSelect([]), loadCaches();
                 };
                 return init(), (_ctx, _cache) => (openBlock(), createBlock(unref(ConfigProvider), {
+                    "prefix-cls": "antVue",
                     theme: {
                         token: {
                             colorPrimary: "#149ea8"
