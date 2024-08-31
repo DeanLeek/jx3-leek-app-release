@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.0.22
+// @version      1.0.23
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -23407,7 +23407,7 @@ body {
                         sessionStorage.setItem(key2, JSON.stringify(json));
                     }
                 };
-                const appVersion = "1.0.22", defaultSettings = {
+                const appVersion = "1.0.23", defaultSettings = {
                     runMode: "single",
                     showMode: "always",
                     order: "price-1",
@@ -23535,7 +23535,7 @@ body {
                     return `${name}(${showName})`;
                 };
                 watch((() => setting), (() => {
-                    sandbox.setValue("leekSetting", setting);
+                    sandbox.setValue("leekSetting", JSON.parse(JSON.stringify(setting)));
                 }), {
                     deep: !0
                 });
