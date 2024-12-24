@@ -1,17 +1,19 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.1
+// @version      1.1.2
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
 // @match        https://jx3.seasunwbl.com/*
 // @icon         https://jx3.seasunwbl.com/favicon.ico
 // @connect      aijx3.cn
+// @connect      xoyocdn.com
 // @grant        unsafeWindow
 // @grant        GM_addElement
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_xmlhttpRequest
 // @run-at       document-start
 // ==/UserScript==
 
@@ -36,13 +38,13 @@
       ];
 
       const scriptUrl = scriptNode.src;
-      const response = await fetch(scriptUrl);
-      if (!response.ok) {
+      const response = await GM.xmlHttpRequest({ url: scriptUrl }).catch(e => console.error(e));;
+      if (response.status !== 200) {
         console.error(`Failed to fetch script: ${response.statusText}`);
         return;
       }
 
-      let scriptCode = await response.text();
+      let scriptCode = await response.responseText;
       let modifiedCount = 0;
       let expectedModifications = replacements.length;
 
@@ -36106,7 +36108,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.1";
+        const appVersion = "1.1.2";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
