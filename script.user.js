@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.2
+// @version      1.1.3
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -110,9 +110,12 @@
       top: 0;
       z-index: 10;
       background-color: #fff;
+      display: flex;
+      flex-direction: column;
 }
 .leek-search-history {
       display: flex;
+      flex: 1;
       flex-direction: column;
       padding-block-end: 32px;
 .leek-search-history-title {
@@ -134,8 +137,16 @@ h4 {
 }
 .leek-search-history-content {
         display: flex;
+        height: calc(100vh - 380px);
+        overflow-y: auto;
+        justify-content: start;
+        align-content: start;
+        flex-wrap: wrap;
+        row-gap: 12px;
 .leek-search-history-tag {
           cursor: pointer;
+          display: block;
+          height: 20px;
 }
 }
 }
@@ -8739,7 +8750,7 @@ var require_index = __commonJS({
       var i2 = toPrimitive(t2, "string");
       return "symbol" == _typeof$1(i2) ? i2 : i2 + "";
     }
-    function _defineProperty$o(e2, r2, t2) {
+    function _defineProperty$n(e2, r2, t2) {
       return (r2 = toPropertyKey(r2)) in e2 ? Object.defineProperty(e2, r2, {
         value: t2,
         enumerable: true,
@@ -8761,7 +8772,7 @@ var require_index = __commonJS({
       for (var r2 = 1; r2 < arguments.length; r2++) {
         var t2 = null != arguments[r2] ? arguments[r2] : {};
         r2 % 2 ? ownKeys$1(Object(t2), true).forEach(function(r3) {
-          _defineProperty$o(e2, r3, t2[r3]);
+          _defineProperty$n(e2, r3, t2[r3]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(t2)) : ownKeys$1(Object(t2)).forEach(function(r3) {
           Object.defineProperty(e2, r3, Object.getOwnPropertyDescriptor(t2, r3));
         });
@@ -13447,7 +13458,7 @@ var require_index = __commonJS({
         }
       };
     };
-    const useStyle$c = genComponentStyleHook("Empty", (token2) => {
+    const useStyle$b = genComponentStyleHook("Empty", (token2) => {
       const {
         componentCls,
         controlHeightLG
@@ -13492,7 +13503,7 @@ var require_index = __commonJS({
           direction,
           prefixCls: prefixClsRef
         } = useConfigInject("empty", props2);
-        const [wrapSSR, hashId] = useStyle$c(prefixClsRef);
+        const [wrapSSR, hashId] = useStyle$b(prefixClsRef);
         return () => {
           var _a, _b;
           const prefixCls = prefixClsRef.value;
@@ -14592,7 +14603,7 @@ var require_index = __commonJS({
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = null != arguments[i2] ? arguments[i2] : {};
         i2 % 2 ? ownKeys(Object(source), true).forEach(function(key2) {
-          _defineProperty$n(target, key2, source[key2]);
+          _defineProperty$m(target, key2, source[key2]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key2) {
           Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
@@ -14607,7 +14618,7 @@ var require_index = __commonJS({
         return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       }, _typeof(obj);
     }
-    function _defineProperty$n(obj, key2, value) {
+    function _defineProperty$m(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, {
           value,
@@ -22226,7 +22237,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       newNode.setAttribute(getMark(option), key2);
       return newNode;
     }
-    function _objectSpread$m(target) {
+    function _objectSpread$l(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22236,12 +22247,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$m(target, key2, source[key2]);
+          _defineProperty$l(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$m(obj, key2, value) {
+    function _defineProperty$l(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22256,13 +22267,13 @@ summary tabindex target title type usemap value width wmode wrap`;
     }
     function generate(node2, key2, rootProps) {
       if (!rootProps) {
-        return h$1(node2.tag, _objectSpread$m({
+        return h$1(node2.tag, _objectSpread$l({
           key: key2
         }, node2.attrs), (node2.children || []).map(function(child, index2) {
           return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
         }));
       }
-      return h$1(node2.tag, _objectSpread$m({
+      return h$1(node2.tag, _objectSpread$l({
         key: key2
       }, rootProps, node2.attrs), (node2.children || []).map(function(child, index2) {
         return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
@@ -22338,7 +22349,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return target;
     }
-    function _objectSpread$l(target) {
+    function _objectSpread$k(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22348,12 +22359,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$l(target, key2, source[key2]);
+          _defineProperty$k(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$l(obj, key2, value) {
+    function _defineProperty$k(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22373,10 +22384,10 @@ summary tabindex target title type usemap value width wmode wrap`;
       twoToneColorPalette.calculated = !!secondaryColor;
     }
     function getTwoToneColors() {
-      return _objectSpread$l({}, twoToneColorPalette);
+      return _objectSpread$k({}, twoToneColorPalette);
     }
     var IconBase = function IconBase2(props2, context) {
-      var _props$context$attrs = _objectSpread$l({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
+      var _props$context$attrs = _objectSpread$k({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
       var colors = twoToneColorPalette;
       if (primaryColor) {
         colors = {
@@ -22390,11 +22401,11 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       var target = icon;
       if (target && typeof target.icon === "function") {
-        target = _objectSpread$l({}, target, {
+        target = _objectSpread$k({}, target, {
           icon: target.icon(colors.primaryColor, colors.secondaryColor)
         });
       }
-      return generate(target.icon, "svg-".concat(target.name), _objectSpread$l({}, restProps, {
+      return generate(target.icon, "svg-".concat(target.name), _objectSpread$k({}, restProps, {
         "data-icon": target.name,
         width: "1em",
         height: "1em",
@@ -22532,7 +22543,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     function _arrayWithHoles(arr) {
       if (Array.isArray(arr)) return arr;
     }
-    function _objectSpread$k(target) {
+    function _objectSpread$j(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22542,12 +22553,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$k(target, key2, source[key2]);
+          _defineProperty$j(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$k(obj, key2, value) {
+    function _defineProperty$j(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22585,9 +22596,9 @@ summary tabindex target title type usemap value width wmode wrap`;
     setTwoToneColor(blue.primary);
     var Icon = function Icon2(props2, context) {
       var _classObj;
-      var _props$context$attrs = _objectSpread$k({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
+      var _props$context$attrs = _objectSpread$j({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
       var _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName;
-      var classObj = (_classObj = {}, _defineProperty$k(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$k(_classObj, prefixCls.value, true), _defineProperty$k(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$k(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
+      var classObj = (_classObj = {}, _defineProperty$j(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$j(_classObj, prefixCls.value, true), _defineProperty$j(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$j(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
       var iconTabIndex = tabindex;
       if (iconTabIndex === void 0 && onClick) {
         iconTabIndex = -1;
@@ -22597,7 +22608,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         transform: "rotate(".concat(rotate, "deg)")
       } : void 0;
       var _normalizeTwoToneColo = normalizeTwoToneColors(twoToneColor), _normalizeTwoToneColo2 = _slicedToArray(_normalizeTwoToneColo, 2), primaryColor = _normalizeTwoToneColo2[0], secondaryColor = _normalizeTwoToneColo2[1];
-      return createVNode("span", _objectSpread$k({
+      return createVNode("span", _objectSpread$j({
         "role": "img",
         "aria-label": icon.name
       }, restProps, {
@@ -22621,38 +22632,6 @@ summary tabindex target title type usemap value width wmode wrap`;
     Icon.inheritAttrs = false;
     Icon.getTwoToneColor = getTwoToneColor;
     Icon.setTwoToneColor = setTwoToneColor;
-    function _objectSpread$j(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$j(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$j(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var DownOutlined = function DownOutlined2(props2, context) {
-      var p2 = _objectSpread$j({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$j({}, p2, {
-        "icon": DownOutlined$1
-      }), null);
-    };
-    DownOutlined.displayName = "DownOutlined";
-    DownOutlined.inheritAttrs = false;
-    var LoadingOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z" } }] }, "name": "loading", "theme": "outlined" };
     function _objectSpread$i(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22676,15 +22655,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var LoadingOutlined = function LoadingOutlined2(props2, context) {
+    var DownOutlined = function DownOutlined2(props2, context) {
       var p2 = _objectSpread$i({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$i({}, p2, {
-        "icon": LoadingOutlined$1
+        "icon": DownOutlined$1
       }), null);
     };
-    LoadingOutlined.displayName = "LoadingOutlined";
-    LoadingOutlined.inheritAttrs = false;
-    var CheckOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z" } }] }, "name": "check", "theme": "outlined" };
+    DownOutlined.displayName = "DownOutlined";
+    DownOutlined.inheritAttrs = false;
+    var LoadingOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z" } }] }, "name": "loading", "theme": "outlined" };
     function _objectSpread$h(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22708,15 +22687,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckOutlined = function CheckOutlined2(props2, context) {
+    var LoadingOutlined = function LoadingOutlined2(props2, context) {
       var p2 = _objectSpread$h({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$h({}, p2, {
-        "icon": CheckOutlined$1
+        "icon": LoadingOutlined$1
       }), null);
     };
-    CheckOutlined.displayName = "CheckOutlined";
-    CheckOutlined.inheritAttrs = false;
-    var CloseOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z" } }] }, "name": "close", "theme": "outlined" };
+    LoadingOutlined.displayName = "LoadingOutlined";
+    LoadingOutlined.inheritAttrs = false;
+    var CheckOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z" } }] }, "name": "check", "theme": "outlined" };
     function _objectSpread$g(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22740,15 +22719,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CloseOutlined = function CloseOutlined2(props2, context) {
+    var CheckOutlined = function CheckOutlined2(props2, context) {
       var p2 = _objectSpread$g({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$g({}, p2, {
-        "icon": CloseOutlined$1
+        "icon": CheckOutlined$1
       }), null);
     };
-    CloseOutlined.displayName = "CloseOutlined";
-    CloseOutlined.inheritAttrs = false;
-    var CloseCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z" } }] }, "name": "close-circle", "theme": "filled" };
+    CheckOutlined.displayName = "CheckOutlined";
+    CheckOutlined.inheritAttrs = false;
+    var CloseOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z" } }] }, "name": "close", "theme": "outlined" };
     function _objectSpread$f(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22772,15 +22751,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
+    var CloseOutlined = function CloseOutlined2(props2, context) {
       var p2 = _objectSpread$f({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$f({}, p2, {
-        "icon": CloseCircleFilled$1
+        "icon": CloseOutlined$1
       }), null);
     };
-    CloseCircleFilled.displayName = "CloseCircleFilled";
-    CloseCircleFilled.inheritAttrs = false;
-    var SearchOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" } }] }, "name": "search", "theme": "outlined" };
+    CloseOutlined.displayName = "CloseOutlined";
+    CloseOutlined.inheritAttrs = false;
+    var CloseCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z" } }] }, "name": "close-circle", "theme": "filled" };
     function _objectSpread$e(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22804,9 +22783,41 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var SearchOutlined = function SearchOutlined2(props2, context) {
+    var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
       var p2 = _objectSpread$e({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$e({}, p2, {
+        "icon": CloseCircleFilled$1
+      }), null);
+    };
+    CloseCircleFilled.displayName = "CloseCircleFilled";
+    CloseCircleFilled.inheritAttrs = false;
+    var SearchOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" } }] }, "name": "search", "theme": "outlined" };
+    function _objectSpread$d(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$d(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$d(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var SearchOutlined = function SearchOutlined2(props2, context) {
+      var p2 = _objectSpread$d({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$d({}, p2, {
         "icon": SearchOutlined$1
       }), null);
     };
@@ -23020,7 +23031,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$b = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
+    const useStyle$a = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
     const spaceCompactItemProps = () => ({
       compactSize: String,
       compactDirection: PropTypes.oneOf(tuple("horizontal", "vertical")).def("horizontal"),
@@ -23104,7 +23115,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction: directionConfig
         } = useConfigInject("space-compact", props2);
         const compactItemContext = SpaceCompactItemContext.useInject();
-        const [wrapSSR, hashId] = useStyle$b(prefixCls);
+        const [wrapSSR, hashId] = useStyle$a(prefixCls);
         const clx = computed(() => {
           return classNames(prefixCls.value, hashId.value, {
             [`${prefixCls.value}-rtl`]: directionConfig.value === "rtl",
@@ -24663,38 +24674,6 @@ summary tabindex target title type usemap value width wmode wrap`;
     Select.Option;
     Select.OptGroup;
     var CheckCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z" } }, { "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }] }, "name": "check-circle", "theme": "outlined" };
-    function _objectSpread$d(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$d(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$d(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$d({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$d({}, p2, {
-        "icon": CheckCircleOutlined$1
-      }), null);
-    };
-    CheckCircleOutlined.displayName = "CheckCircleOutlined";
-    CheckCircleOutlined.inheritAttrs = false;
-    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
     function _objectSpread$c(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24718,15 +24697,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
+    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
       var p2 = _objectSpread$c({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$c({}, p2, {
-        "icon": ExclamationCircleOutlined$1
+        "icon": CheckCircleOutlined$1
       }), null);
     };
-    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
-    ExclamationCircleOutlined.inheritAttrs = false;
-    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
+    CheckCircleOutlined.displayName = "CheckCircleOutlined";
+    CheckCircleOutlined.inheritAttrs = false;
+    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
     function _objectSpread$b(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24750,15 +24729,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
+    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
       var p2 = _objectSpread$b({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$b({}, p2, {
-        "icon": InfoCircleOutlined$1
+        "icon": ExclamationCircleOutlined$1
       }), null);
     };
-    InfoCircleOutlined.displayName = "InfoCircleOutlined";
-    InfoCircleOutlined.inheritAttrs = false;
-    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
+    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
+    ExclamationCircleOutlined.inheritAttrs = false;
+    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
     function _objectSpread$a(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24782,15 +24761,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
+    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
       var p2 = _objectSpread$a({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$a({}, p2, {
-        "icon": CloseCircleOutlined$1
+        "icon": InfoCircleOutlined$1
       }), null);
     };
-    CloseCircleOutlined.displayName = "CloseCircleOutlined";
-    CloseCircleOutlined.inheritAttrs = false;
-    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
+    InfoCircleOutlined.displayName = "InfoCircleOutlined";
+    InfoCircleOutlined.inheritAttrs = false;
+    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
     function _objectSpread$9(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24814,15 +24793,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
+    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
       var p2 = _objectSpread$9({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$9({}, p2, {
-        "icon": CheckCircleFilled$1
+        "icon": CloseCircleOutlined$1
       }), null);
     };
-    CheckCircleFilled.displayName = "CheckCircleFilled";
-    CheckCircleFilled.inheritAttrs = false;
-    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
+    CloseCircleOutlined.displayName = "CloseCircleOutlined";
+    CloseCircleOutlined.inheritAttrs = false;
+    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
     function _objectSpread$8(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24846,15 +24825,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
+    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
       var p2 = _objectSpread$8({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$8({}, p2, {
-        "icon": ExclamationCircleFilled$1
+        "icon": CheckCircleFilled$1
       }), null);
     };
-    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
-    ExclamationCircleFilled.inheritAttrs = false;
-    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
+    CheckCircleFilled.displayName = "CheckCircleFilled";
+    CheckCircleFilled.inheritAttrs = false;
+    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
     function _objectSpread$7(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24878,9 +24857,41 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
+    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
       var p2 = _objectSpread$7({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$7({}, p2, {
+        "icon": ExclamationCircleFilled$1
+      }), null);
+    };
+    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
+    ExclamationCircleFilled.inheritAttrs = false;
+    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
+    function _objectSpread$6(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$6(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$6(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
+      var p2 = _objectSpread$6({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$6({}, p2, {
         "icon": InfoCircleFilled$1
       }), null);
     };
@@ -25663,7 +25674,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$a = (prefixCls, injectStyle) => {
+    const useStyle$9 = (prefixCls, injectStyle) => {
       const useOriginHook = genComponentStyleHook("Tooltip", (token2) => {
         if ((injectStyle === null || injectStyle === void 0 ? void 0 : injectStyle.value) === false) {
           return [];
@@ -25863,7 +25874,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
         const colorInfo = computed(() => parseColor(prefixCls.value, props2.color));
         const injectFromPopover = computed(() => attrs["data-popover-inject"]);
-        const [wrapSSR, hashId] = useStyle$a(prefixCls, computed(() => !injectFromPopover.value));
+        const [wrapSSR, hashId] = useStyle$9(prefixCls, computed(() => !injectFromPopover.value));
         return () => {
           var _a, _b;
           const {
@@ -25946,7 +25957,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$9 = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
+    const useStyle$8 = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
     function isNotGrey(color) {
       const match2 = (color || "").match(/rgba?\((\d*), (\d*), (\d*)(, [\d.]*)?\)/);
       if (match2 && match2[1] && match2[2] && match2[3]) {
@@ -26130,7 +26141,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           wave
         } = useConfigInject("wave", props2);
-        const [, hashId] = useStyle$9(prefixCls);
+        const [, hashId] = useStyle$8(prefixCls);
         const showWave = useWave(instance, computed(() => classNames(prefixCls.value, hashId.value)), wave);
         let onClick;
         const clear2 = () => {
@@ -26705,7 +26716,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$8 = genComponentStyleHook("Button", (token2) => {
+    const useStyle$7 = genComponentStyleHook("Button", (token2) => {
       const {
         controlTmpOutline,
         paddingContentHorizontal
@@ -26822,7 +26833,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("btn", props2);
-        const [wrapSSR, hashId] = useStyle$8(prefixCls);
+        const [wrapSSR, hashId] = useStyle$7(prefixCls);
         const groupSizeContext = GroupSizeContext.useInject();
         const disabledContext = useInjectDisabled();
         const mergedDisabled = computed(() => {
@@ -27632,7 +27643,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$7 = genComponentStyleHook("Radio", (token2) => {
+    const useStyle$6 = genComponentStyleHook("Radio", (token2) => {
       const {
         padding,
         lineWidth,
@@ -27739,7 +27750,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         } = useConfigInject("radio", props2);
         const prefixCls = computed(() => (radioGroupContext === null || radioGroupContext === void 0 ? void 0 : radioGroupContext.optionType.value) === "button" || radioOptionTypeContext === "button" ? `${radioPrefixCls.value}-button` : radioPrefixCls.value);
         const contextDisabled = useInjectDisabled();
-        const [wrapSSR, hashId] = useStyle$7(radioPrefixCls);
+        const [wrapSSR, hashId] = useStyle$6(radioPrefixCls);
         const focus = () => {
           vcCheckbox.value.focus();
         };
@@ -27833,7 +27844,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("radio", props2);
-        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const [wrapSSR, hashId] = useStyle$6(prefixCls);
         const stateValue = ref(props2.value);
         const updatingValue = ref(false);
         watch(() => props2.value, (val) => {
@@ -29811,7 +29822,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     var QuestionCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z" } }] }, "name": "question-circle", "theme": "outlined" };
-    function _objectSpread$6(target) {
+    function _objectSpread$5(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -29821,12 +29832,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$6(target, key2, source[key2]);
+          _defineProperty$5(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$6(obj, key2, value) {
+    function _defineProperty$5(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -29835,8 +29846,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var QuestionCircleOutlined = function QuestionCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$6({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$6({}, p2, {
+      var p2 = _objectSpread$5({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$5({}, p2, {
         "icon": QuestionCircleOutlined$1
       }), null);
     };
@@ -30355,7 +30366,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$6 = genComponentStyleHook("Form", (token2, _ref) => {
+    const useStyle$5 = genComponentStyleHook("Form", (token2, _ref) => {
       let {
         rootPrefixCls
       } = _ref;
@@ -30383,7 +30394,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const baseClassName = computed(() => `${prefixCls.value}-item-explain`);
         const visible = computed(() => !!(props2.errors && props2.errors.length));
         const innerStatus = ref(status.value);
-        const [, hashId] = useStyle$6(prefixCls);
+        const [, hashId] = useStyle$5(prefixCls);
         watch([visible, status], () => {
           if (visible.value) {
             innerStatus.value = status.value;
@@ -30602,7 +30613,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("form", props2);
-        const [wrapSSR, hashId] = useStyle$6(prefixCls);
+        const [wrapSSR, hashId] = useStyle$5(prefixCls);
         const itemRef = shallowRef();
         const formContext = useInjectForm();
         const fieldName = computed(() => props2.name || props2.prop);
@@ -31312,7 +31323,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const validateMessages = computed(() => {
           return _extends$1(_extends$1(_extends$1({}, defaultValidateMessages), globalValidateMessages.value), props2.validateMessages);
         });
-        const [wrapSSR, hashId] = useStyle$6(prefixCls);
+        const [wrapSSR, hashId] = useStyle$5(prefixCls);
         const formClassName = computed(() => classNames(prefixCls.value, {
           [`${prefixCls.value}-${props2.layout}`]: true,
           [`${prefixCls.value}-hide-required-mark`]: mergedRequiredMark.value === false,
@@ -32360,7 +32371,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$5 = genComponentStyleHook("Message", (token2) => {
+    const useStyle$4 = genComponentStyleHook("Message", (token2) => {
       const combinedToken = merge(token2, {
         messageNoticeContentPadding: `${(token2.controlHeightLG - token2.fontSize * token2.lineHeight) / 2}px ${token2.paddingSM}px`
       });
@@ -32416,7 +32427,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer
         } = useConfigInject("message", props2);
         const prefixCls = computed(() => getPrefixCls("message", props2.prefixCls));
-        const [, hashId] = useStyle$5(prefixCls);
+        const [, hashId] = useStyle$4(prefixCls);
         const getStyles = () => {
           var _a2;
           const top = (_a2 = props2.top) !== null && _a2 !== void 0 ? _a2 : DEFAULT_OFFSET$1;
@@ -32626,7 +32637,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         getContainer: getContainer || args.getPopupContainer,
         maxCount: maxCount$1,
         name: "message",
-        useStyle: useStyle$5
+        useStyle: useStyle$4
       }, (instance) => {
         if (messageInstance) {
           callback(messageInstance);
@@ -32999,7 +33010,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$4 = genComponentStyleHook("Notification", (token2) => {
+    const useStyle$3 = genComponentStyleHook("Notification", (token2) => {
       const notificationPaddingVertical = token2.paddingMD;
       const notificationPaddingHorizontal = token2.paddingLG;
       const notificationToken = merge(token2, {
@@ -33159,7 +33170,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           return getPlacementStyle(placement, (_a = props2.top) !== null && _a !== void 0 ? _a : DEFAULT_OFFSET, (_b = props2.bottom) !== null && _b !== void 0 ? _b : DEFAULT_OFFSET);
         };
-        const [, hashId] = useStyle$4(prefixCls);
+        const [, hashId] = useStyle$3(prefixCls);
         const getClassName = () => classNames(hashId.value, {
           [`${prefixCls.value}-rtl`]: props2.rtl
         });
@@ -33326,7 +33337,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       Notification$1.newInstance({
         name: "notification",
         prefixCls: customizePrefixCls || defaultPrefixCls$1,
-        useStyle: useStyle$4,
+        useStyle: useStyle$3,
         class: notificationClass,
         style: getPlacementStyle(placement, top !== null && top !== void 0 ? top : defaultTop, bottom !== null && bottom !== void 0 ? bottom : defaultBottom),
         appContext,
@@ -33489,7 +33500,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         updateCSS$1(style, `${dynamicStyleMark}-dynamic-theme`);
       }
     }
-    const useStyle$3 = (iconPrefixCls) => {
+    const useStyle$2 = (iconPrefixCls) => {
       const [theme, token2] = useToken();
       return useStyleRegister(computed(() => ({
         theme: theme.value,
@@ -33606,7 +33617,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a;
           return props2.csp || ((_a = parentContext.csp) === null || _a === void 0 ? void 0 : _a.value);
         });
-        const wrapSSR = useStyle$3(iconPrefixCls);
+        const wrapSSR = useStyle$2(iconPrefixCls);
         const mergedTheme = useTheme(computed(() => props2.theme), computed(() => {
           var _a;
           return (_a = parentContext.theme) === null || _a === void 0 ? void 0 : _a.value;
@@ -33892,7 +33903,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$2 = genComponentStyleHook("Tag", (token2) => {
+    const useStyle$1 = genComponentStyleHook("Tag", (token2) => {
       const {
         fontSize,
         lineHeight,
@@ -33946,7 +33957,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$2(prefixCls);
+        const [wrapSSR, hashId] = useStyle$1(prefixCls);
         const handleClick = (e2) => {
           const {
             checked
@@ -34013,7 +34024,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           direction
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$2(prefixCls);
+        const [wrapSSR, hashId] = useStyle$1(prefixCls);
         const visible = shallowRef(true);
         watchEffect(() => {
           if (props2.visible !== void 0) {
@@ -34779,7 +34790,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$1 = genComponentStyleHook("Drawer", (token2) => {
+    const useStyle = genComponentStyleHook("Drawer", (token2) => {
       const drawerToken = merge(token2, {
         drawerFooterPaddingVertical: token2.paddingXS,
         drawerFooterPaddingHorizontal: token2.padding
@@ -34937,7 +34948,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer,
           direction
         } = useConfigInject("drawer", props2);
-        const [wrapSSR, hashId] = useStyle$1(prefixCls);
+        const [wrapSSR, hashId] = useStyle(prefixCls);
         const getContainer2 = computed(() => (
           // 有可能为 false，所以不能直接判断
           props2.getContainer === void 0 && (getPopupContainer === null || getPopupContainer === void 0 ? void 0 : getPopupContainer.value) ? () => getPopupContainer.value(document.body) : props2.getContainer
@@ -35203,7 +35214,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           space,
           direction: directionConfig
         } = useConfigInject("space", props2);
-        const [wrapSSR, hashId] = useStyle$b(prefixCls);
+        const [wrapSSR, hashId] = useStyle$a(prefixCls);
         const supportFlexGap = useFlexGapSupport();
         const size2 = computed(() => {
           var _a, _b, _c;
@@ -35294,478 +35305,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       app.component(Compact.name, Compact);
       return app;
     };
-    const genSwitchSmallStyle = (token2) => {
-      const {
-        componentCls
-      } = token2;
-      const switchInnerCls = `${componentCls}-inner`;
-      return {
-        [componentCls]: {
-          [`&${componentCls}-small`]: {
-            minWidth: token2.switchMinWidthSM,
-            height: token2.switchHeightSM,
-            lineHeight: `${token2.switchHeightSM}px`,
-            [`${componentCls}-inner`]: {
-              paddingInlineStart: token2.switchInnerMarginMaxSM,
-              paddingInlineEnd: token2.switchInnerMarginMinSM,
-              [`${switchInnerCls}-checked`]: {
-                marginInlineStart: `calc(-100% + ${token2.switchPinSizeSM + token2.switchPadding * 2}px - ${token2.switchInnerMarginMaxSM * 2}px)`,
-                marginInlineEnd: `calc(100% - ${token2.switchPinSizeSM + token2.switchPadding * 2}px + ${token2.switchInnerMarginMaxSM * 2}px)`
-              },
-              [`${switchInnerCls}-unchecked`]: {
-                marginTop: -token2.switchHeightSM,
-                marginInlineStart: 0,
-                marginInlineEnd: 0
-              }
-            },
-            [`${componentCls}-handle`]: {
-              width: token2.switchPinSizeSM,
-              height: token2.switchPinSizeSM
-            },
-            [`${componentCls}-loading-icon`]: {
-              top: (token2.switchPinSizeSM - token2.switchLoadingIconSize) / 2,
-              fontSize: token2.switchLoadingIconSize
-            },
-            [`&${componentCls}-checked`]: {
-              [`${componentCls}-inner`]: {
-                paddingInlineStart: token2.switchInnerMarginMinSM,
-                paddingInlineEnd: token2.switchInnerMarginMaxSM,
-                [`${switchInnerCls}-checked`]: {
-                  marginInlineStart: 0,
-                  marginInlineEnd: 0
-                },
-                [`${switchInnerCls}-unchecked`]: {
-                  marginInlineStart: `calc(100% - ${token2.switchPinSizeSM + token2.switchPadding * 2}px + ${token2.switchInnerMarginMaxSM * 2}px)`,
-                  marginInlineEnd: `calc(-100% + ${token2.switchPinSizeSM + token2.switchPadding * 2}px - ${token2.switchInnerMarginMaxSM * 2}px)`
-                }
-              },
-              [`${componentCls}-handle`]: {
-                insetInlineStart: `calc(100% - ${token2.switchPinSizeSM + token2.switchPadding}px)`
-              }
-            },
-            [`&:not(${componentCls}-disabled):active`]: {
-              [`&:not(${componentCls}-checked) ${switchInnerCls}`]: {
-                [`${switchInnerCls}-unchecked`]: {
-                  marginInlineStart: token2.marginXXS / 2,
-                  marginInlineEnd: -token2.marginXXS / 2
-                }
-              },
-              [`&${componentCls}-checked ${switchInnerCls}`]: {
-                [`${switchInnerCls}-checked`]: {
-                  marginInlineStart: -token2.marginXXS / 2,
-                  marginInlineEnd: token2.marginXXS / 2
-                }
-              }
-            }
-          }
-        }
-      };
-    };
-    const genSwitchLoadingStyle = (token2) => {
-      const {
-        componentCls
-      } = token2;
-      return {
-        [componentCls]: {
-          [`${componentCls}-loading-icon${token2.iconCls}`]: {
-            position: "relative",
-            top: (token2.switchPinSize - token2.fontSize) / 2,
-            color: token2.switchLoadingIconColor,
-            verticalAlign: "top"
-          },
-          [`&${componentCls}-checked ${componentCls}-loading-icon`]: {
-            color: token2.switchColor
-          }
-        }
-      };
-    };
-    const genSwitchHandleStyle = (token2) => {
-      const {
-        componentCls
-      } = token2;
-      const switchHandleCls = `${componentCls}-handle`;
-      return {
-        [componentCls]: {
-          [switchHandleCls]: {
-            position: "absolute",
-            top: token2.switchPadding,
-            insetInlineStart: token2.switchPadding,
-            width: token2.switchPinSize,
-            height: token2.switchPinSize,
-            transition: `all ${token2.switchDuration} ease-in-out`,
-            "&::before": {
-              position: "absolute",
-              top: 0,
-              insetInlineEnd: 0,
-              bottom: 0,
-              insetInlineStart: 0,
-              backgroundColor: token2.colorWhite,
-              borderRadius: token2.switchPinSize / 2,
-              boxShadow: token2.switchHandleShadow,
-              transition: `all ${token2.switchDuration} ease-in-out`,
-              content: '""'
-            }
-          },
-          [`&${componentCls}-checked ${switchHandleCls}`]: {
-            insetInlineStart: `calc(100% - ${token2.switchPinSize + token2.switchPadding}px)`
-          },
-          [`&:not(${componentCls}-disabled):active`]: {
-            [`${switchHandleCls}::before`]: {
-              insetInlineEnd: token2.switchHandleActiveInset,
-              insetInlineStart: 0
-            },
-            [`&${componentCls}-checked ${switchHandleCls}::before`]: {
-              insetInlineEnd: 0,
-              insetInlineStart: token2.switchHandleActiveInset
-            }
-          }
-        }
-      };
-    };
-    const genSwitchInnerStyle = (token2) => {
-      const {
-        componentCls
-      } = token2;
-      const switchInnerCls = `${componentCls}-inner`;
-      return {
-        [componentCls]: {
-          [switchInnerCls]: {
-            display: "block",
-            overflow: "hidden",
-            borderRadius: 100,
-            height: "100%",
-            paddingInlineStart: token2.switchInnerMarginMax,
-            paddingInlineEnd: token2.switchInnerMarginMin,
-            transition: `padding-inline-start ${token2.switchDuration} ease-in-out, padding-inline-end ${token2.switchDuration} ease-in-out`,
-            [`${switchInnerCls}-checked, ${switchInnerCls}-unchecked`]: {
-              display: "block",
-              color: token2.colorTextLightSolid,
-              fontSize: token2.fontSizeSM,
-              transition: `margin-inline-start ${token2.switchDuration} ease-in-out, margin-inline-end ${token2.switchDuration} ease-in-out`,
-              pointerEvents: "none"
-            },
-            [`${switchInnerCls}-checked`]: {
-              marginInlineStart: `calc(-100% + ${token2.switchPinSize + token2.switchPadding * 2}px - ${token2.switchInnerMarginMax * 2}px)`,
-              marginInlineEnd: `calc(100% - ${token2.switchPinSize + token2.switchPadding * 2}px + ${token2.switchInnerMarginMax * 2}px)`
-            },
-            [`${switchInnerCls}-unchecked`]: {
-              marginTop: -token2.switchHeight,
-              marginInlineStart: 0,
-              marginInlineEnd: 0
-            }
-          },
-          [`&${componentCls}-checked ${switchInnerCls}`]: {
-            paddingInlineStart: token2.switchInnerMarginMin,
-            paddingInlineEnd: token2.switchInnerMarginMax,
-            [`${switchInnerCls}-checked`]: {
-              marginInlineStart: 0,
-              marginInlineEnd: 0
-            },
-            [`${switchInnerCls}-unchecked`]: {
-              marginInlineStart: `calc(100% - ${token2.switchPinSize + token2.switchPadding * 2}px + ${token2.switchInnerMarginMax * 2}px)`,
-              marginInlineEnd: `calc(-100% + ${token2.switchPinSize + token2.switchPadding * 2}px - ${token2.switchInnerMarginMax * 2}px)`
-            }
-          },
-          [`&:not(${componentCls}-disabled):active`]: {
-            [`&:not(${componentCls}-checked) ${switchInnerCls}`]: {
-              [`${switchInnerCls}-unchecked`]: {
-                marginInlineStart: token2.switchPadding * 2,
-                marginInlineEnd: -token2.switchPadding * 2
-              }
-            },
-            [`&${componentCls}-checked ${switchInnerCls}`]: {
-              [`${switchInnerCls}-checked`]: {
-                marginInlineStart: -token2.switchPadding * 2,
-                marginInlineEnd: token2.switchPadding * 2
-              }
-            }
-          }
-        }
-      };
-    };
-    const genSwitchStyle = (token2) => {
-      const {
-        componentCls
-      } = token2;
-      return {
-        [componentCls]: _extends$1(_extends$1(_extends$1(_extends$1({}, resetComponent(token2)), {
-          position: "relative",
-          display: "inline-block",
-          boxSizing: "border-box",
-          minWidth: token2.switchMinWidth,
-          height: token2.switchHeight,
-          lineHeight: `${token2.switchHeight}px`,
-          verticalAlign: "middle",
-          background: token2.colorTextQuaternary,
-          border: "0",
-          borderRadius: 100,
-          cursor: "pointer",
-          transition: `all ${token2.motionDurationMid}`,
-          userSelect: "none",
-          [`&:hover:not(${componentCls}-disabled)`]: {
-            background: token2.colorTextTertiary
-          }
-        }), genFocusStyle(token2)), {
-          [`&${componentCls}-checked`]: {
-            background: token2.switchColor,
-            [`&:hover:not(${componentCls}-disabled)`]: {
-              background: token2.colorPrimaryHover
-            }
-          },
-          [`&${componentCls}-loading, &${componentCls}-disabled`]: {
-            cursor: "not-allowed",
-            opacity: token2.switchDisabledOpacity,
-            "*": {
-              boxShadow: "none",
-              cursor: "not-allowed"
-            }
-          },
-          // rtl style
-          [`&${componentCls}-rtl`]: {
-            direction: "rtl"
-          }
-        })
-      };
-    };
-    const useStyle = genComponentStyleHook("Switch", (token2) => {
-      const switchHeight = token2.fontSize * token2.lineHeight;
-      const switchHeightSM = token2.controlHeight / 2;
-      const switchPadding = 2;
-      const switchPinSize = switchHeight - switchPadding * 2;
-      const switchPinSizeSM = switchHeightSM - switchPadding * 2;
-      const switchToken = merge(token2, {
-        switchMinWidth: switchPinSize * 2 + switchPadding * 4,
-        switchHeight,
-        switchDuration: token2.motionDurationMid,
-        switchColor: token2.colorPrimary,
-        switchDisabledOpacity: token2.opacityLoading,
-        switchInnerMarginMin: switchPinSize / 2,
-        switchInnerMarginMax: switchPinSize + switchPadding + switchPadding * 2,
-        switchPadding,
-        switchPinSize,
-        switchBg: token2.colorBgContainer,
-        switchMinWidthSM: switchPinSizeSM * 2 + switchPadding * 2,
-        switchHeightSM,
-        switchInnerMarginMinSM: switchPinSizeSM / 2,
-        switchInnerMarginMaxSM: switchPinSizeSM + switchPadding + switchPadding * 2,
-        switchPinSizeSM,
-        switchHandleShadow: `0 2px 4px 0 ${new TinyColor("#00230b").setAlpha(0.2).toRgbString()}`,
-        switchLoadingIconSize: token2.fontSizeIcon * 0.75,
-        switchLoadingIconColor: `rgba(0, 0, 0, ${token2.opacityLoading})`,
-        switchHandleActiveInset: "-30%"
-      });
-      return [
-        genSwitchStyle(switchToken),
-        // inner style
-        genSwitchInnerStyle(switchToken),
-        // handle style
-        genSwitchHandleStyle(switchToken),
-        // loading style
-        genSwitchLoadingStyle(switchToken),
-        // small style
-        genSwitchSmallStyle(switchToken)
-      ];
-    });
-    const SwitchSizes = tuple("small", "default");
-    const switchProps = () => ({
-      id: String,
-      prefixCls: String,
-      size: PropTypes.oneOf(SwitchSizes),
-      disabled: {
-        type: Boolean,
-        default: void 0
-      },
-      checkedChildren: PropTypes.any,
-      unCheckedChildren: PropTypes.any,
-      tabindex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      autofocus: {
-        type: Boolean,
-        default: void 0
-      },
-      loading: {
-        type: Boolean,
-        default: void 0
-      },
-      checked: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.looseBool]),
-      checkedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.looseBool]).def(true),
-      unCheckedValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.looseBool]).def(false),
-      onChange: {
-        type: Function
-      },
-      onClick: {
-        type: Function
-      },
-      onKeydown: {
-        type: Function
-      },
-      onMouseup: {
-        type: Function
-      },
-      "onUpdate:checked": {
-        type: Function
-      },
-      onBlur: Function,
-      onFocus: Function
-    });
-    const Switch = /* @__PURE__ */ defineComponent({
-      compatConfig: {
-        MODE: 3
-      },
-      name: "ASwitch",
-      __ANT_SWITCH: true,
-      inheritAttrs: false,
-      props: switchProps(),
-      slots: Object,
-      // emits: ['update:checked', 'mouseup', 'change', 'click', 'keydown', 'blur'],
-      setup(props2, _ref) {
-        let {
-          attrs,
-          slots,
-          expose,
-          emit: emit2
-        } = _ref;
-        const formItemContext = useInjectFormItemContext();
-        const disabledContext = useInjectDisabled();
-        const mergedDisabled = computed(() => {
-          var _a;
-          return (_a = props2.disabled) !== null && _a !== void 0 ? _a : disabledContext.value;
-        });
-        onBeforeMount(() => {
-        });
-        const checked = ref(props2.checked !== void 0 ? props2.checked : attrs.defaultChecked);
-        const checkedStatus = computed(() => checked.value === props2.checkedValue);
-        watch(() => props2.checked, () => {
-          checked.value = props2.checked;
-        });
-        const {
-          prefixCls,
-          direction,
-          size: size2
-        } = useConfigInject("switch", props2);
-        const [wrapSSR, hashId] = useStyle(prefixCls);
-        const refSwitchNode = ref();
-        const focus = () => {
-          var _a;
-          (_a = refSwitchNode.value) === null || _a === void 0 ? void 0 : _a.focus();
-        };
-        const blur = () => {
-          var _a;
-          (_a = refSwitchNode.value) === null || _a === void 0 ? void 0 : _a.blur();
-        };
-        expose({
-          focus,
-          blur
-        });
-        onMounted(() => {
-          nextTick(() => {
-            if (props2.autofocus && !mergedDisabled.value) {
-              refSwitchNode.value.focus();
-            }
-          });
-        });
-        const setChecked = (check, e2) => {
-          if (mergedDisabled.value) {
-            return;
-          }
-          emit2("update:checked", check);
-          emit2("change", check, e2);
-          formItemContext.onFieldChange();
-        };
-        const handleBlur = (e2) => {
-          emit2("blur", e2);
-        };
-        const handleClick = (e2) => {
-          focus();
-          const newChecked = checkedStatus.value ? props2.unCheckedValue : props2.checkedValue;
-          setChecked(newChecked, e2);
-          emit2("click", newChecked, e2);
-        };
-        const handleKeyDown = (e2) => {
-          if (e2.keyCode === KeyCode.LEFT) {
-            setChecked(props2.unCheckedValue, e2);
-          } else if (e2.keyCode === KeyCode.RIGHT) {
-            setChecked(props2.checkedValue, e2);
-          }
-          emit2("keydown", e2);
-        };
-        const handleMouseUp = (e2) => {
-          var _a;
-          (_a = refSwitchNode.value) === null || _a === void 0 ? void 0 : _a.blur();
-          emit2("mouseup", e2);
-        };
-        const classNames2 = computed(() => ({
-          [`${prefixCls.value}-small`]: size2.value === "small",
-          [`${prefixCls.value}-loading`]: props2.loading,
-          [`${prefixCls.value}-checked`]: checkedStatus.value,
-          [`${prefixCls.value}-disabled`]: mergedDisabled.value,
-          [prefixCls.value]: true,
-          [`${prefixCls.value}-rtl`]: direction.value === "rtl",
-          [hashId.value]: true
-        }));
-        return () => {
-          var _a;
-          return wrapSSR(createVNode(Wave, null, {
-            default: () => [createVNode("button", _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, omit(props2, ["prefixCls", "checkedChildren", "unCheckedChildren", "checked", "autofocus", "checkedValue", "unCheckedValue", "id", "onChange", "onUpdate:checked"])), attrs), {}, {
-              "id": (_a = props2.id) !== null && _a !== void 0 ? _a : formItemContext.id.value,
-              "onKeydown": handleKeyDown,
-              "onClick": handleClick,
-              "onBlur": handleBlur,
-              "onMouseup": handleMouseUp,
-              "type": "button",
-              "role": "switch",
-              "aria-checked": checked.value,
-              "disabled": mergedDisabled.value || props2.loading,
-              "class": [attrs.class, classNames2.value],
-              "ref": refSwitchNode
-            }), [createVNode("div", {
-              "class": `${prefixCls.value}-handle`
-            }, [props2.loading ? createVNode(LoadingOutlined, {
-              "class": `${prefixCls.value}-loading-icon`
-            }, null) : null]), createVNode("span", {
-              "class": `${prefixCls.value}-inner`
-            }, [createVNode("span", {
-              "class": `${prefixCls.value}-inner-checked`
-            }, [getPropsSlot(slots, props2, "checkedChildren")]), createVNode("span", {
-              "class": `${prefixCls.value}-inner-unchecked`
-            }, [getPropsSlot(slots, props2, "unCheckedChildren")])])])]
-          }));
-        };
-      }
-    });
-    const Switch$1 = withInstall(Switch);
     var DeleteOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z" } }] }, "name": "delete", "theme": "outlined" };
-    function _objectSpread$5(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$5(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$5(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var DeleteOutlined = function DeleteOutlined2(props2, context) {
-      var p2 = _objectSpread$5({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$5({}, p2, {
-        "icon": DeleteOutlined$1
-      }), null);
-    };
-    DeleteOutlined.displayName = "DeleteOutlined";
-    DeleteOutlined.inheritAttrs = false;
-    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
     function _objectSpread$4(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35789,15 +35329,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
+    var DeleteOutlined = function DeleteOutlined2(props2, context) {
       var p2 = _objectSpread$4({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$4({}, p2, {
-        "icon": ArrowDownOutlined$1
+        "icon": DeleteOutlined$1
       }), null);
     };
-    ArrowDownOutlined.displayName = "ArrowDownOutlined";
-    ArrowDownOutlined.inheritAttrs = false;
-    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
+    DeleteOutlined.displayName = "DeleteOutlined";
+    DeleteOutlined.inheritAttrs = false;
+    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
     function _objectSpread$3(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35821,15 +35361,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
       var p2 = _objectSpread$3({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$3({}, p2, {
-        "icon": ArrowUpOutlined$1
+        "icon": ArrowDownOutlined$1
       }), null);
     };
-    ArrowUpOutlined.displayName = "ArrowUpOutlined";
-    ArrowUpOutlined.inheritAttrs = false;
-    var BorderOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "border", "theme": "outlined" };
+    ArrowDownOutlined.displayName = "ArrowDownOutlined";
+    ArrowDownOutlined.inheritAttrs = false;
+    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
     function _objectSpread$2(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35853,15 +35393,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var BorderOutlined = function BorderOutlined2(props2, context) {
+    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
       var p2 = _objectSpread$2({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$2({}, p2, {
-        "icon": BorderOutlined$1
+        "icon": ArrowUpOutlined$1
       }), null);
     };
-    BorderOutlined.displayName = "BorderOutlined";
-    BorderOutlined.inheritAttrs = false;
-    var CheckSquareOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M433.1 657.7a31.8 31.8 0 0051.7 0l210.6-292c3.8-5.3 0-12.7-6.5-12.7H642c-10.2 0-19.9 4.9-25.9 13.3L459 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H315c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8z" } }, { "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "check-square", "theme": "outlined" };
+    ArrowUpOutlined.displayName = "ArrowUpOutlined";
+    ArrowUpOutlined.inheritAttrs = false;
+    var BorderOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "border", "theme": "outlined" };
     function _objectSpread$1(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35885,14 +35425,14 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckSquareOutlined = function CheckSquareOutlined2(props2, context) {
+    var BorderOutlined = function BorderOutlined2(props2, context) {
       var p2 = _objectSpread$1({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$1({}, p2, {
-        "icon": CheckSquareOutlined$1
+        "icon": BorderOutlined$1
       }), null);
     };
-    CheckSquareOutlined.displayName = "CheckSquareOutlined";
-    CheckSquareOutlined.inheritAttrs = false;
+    BorderOutlined.displayName = "BorderOutlined";
+    BorderOutlined.inheritAttrs = false;
     var SyncOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z" } }] }, "name": "sync", "theme": "outlined" };
     function _objectSpread(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
@@ -36108,7 +35648,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.2";
+        const appVersion = "1.1.3";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
@@ -36117,7 +35657,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
         const setting = reactive({
           ...defaultSettings,
-          historyItems: new LimitedSet([], 10),
+          historyItems: new LimitedSet([], 1e3),
           selectedItems: computed({
             get: () => {
               if (isSingleMode()) {
@@ -36284,8 +35824,9 @@ summary tabindex target title type usemap value width wmode wrap`;
           (_e = (_d = (_c = sandbox.window) == null ? void 0 : _c.buyerFilter) == null ? void 0 : _d.roleFilterStore) == null ? void 0 : _e.setCurrentAppearance(arrayValues, false);
         };
         const selectFilter = (inputValue, option) => {
-          option.search = inputValue;
-          return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
+          const _inputValue = inputValue.replace(/[\[\]\s]/g, "");
+          option.search = _inputValue;
+          return option.label.toLowerCase().indexOf(_inputValue.toLowerCase()) >= 0;
         };
         const selectSelect = (value) => {
           historyTagsAdd(value);
@@ -36347,7 +35888,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const isLoading = ref(true);
         const init = async (force = false) => {
           isLoading.value = true;
-          const itemVersion = sandbox.getValue("leekItemVersion");
+          const itemVersion = sandbox.getValue("leekItemVersion", "1.00");
           let itemData = sandbox.getValue("leekItemData");
           const now2 = (/* @__PURE__ */ new Date()).getTime();
           if (force || !itemVersion || now2 - itemVersion > 24 * 60 * 60 * 1e3 || !itemData || isEmpty(itemData)) {
@@ -36487,38 +36028,6 @@ summary tabindex target title type usemap value width wmode wrap`;
                             _: 1
                           })),
                           (openBlock(), createBlock(unref(FormItem), {
-                            key: "运行模式",
-                            label: "运行模式",
-                            name: "runMode"
-                          }, {
-                            default: withCtx(() => [
-                              createVNode(unref(RadioGroup), {
-                                value: setting.runMode,
-                                "onUpdate:value": _cache[1] || (_cache[1] = ($event) => setting.runMode = $event),
-                                "button-style": "solid"
-                              }, {
-                                default: withCtx(() => [
-                                  createVNode(unref(RadioButton), { value: "single" }, {
-                                    default: withCtx(() => [
-                                      createTextVNode(" 单选 "),
-                                      createVNode(unref(CheckCircleOutlined))
-                                    ]),
-                                    _: 1
-                                  }),
-                                  createVNode(unref(RadioButton), { value: "multiple" }, {
-                                    default: withCtx(() => [
-                                      createTextVNode(" 多选 "),
-                                      createVNode(unref(CheckSquareOutlined))
-                                    ]),
-                                    _: 1
-                                  })
-                                ]),
-                                _: 1
-                              }, 8, ["value"])
-                            ]),
-                            _: 1
-                          })),
-                          (openBlock(), createBlock(unref(FormItem), {
                             key: "排序方式",
                             label: "排序方式",
                             name: "order"
@@ -36526,7 +36035,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             default: withCtx(() => [
                               createVNode(unref(RadioGroup), {
                                 value: setting.order,
-                                "onUpdate:value": _cache[2] || (_cache[2] = ($event) => setting.order = $event),
+                                "onUpdate:value": _cache[1] || (_cache[1] = ($event) => setting.order = $event),
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
@@ -36565,19 +36074,6 @@ summary tabindex target title type usemap value width wmode wrap`;
                             _: 1
                           })),
                           (openBlock(), createBlock(unref(FormItem), {
-                            key: "分类搜索",
-                            label: "分类搜索",
-                            name: "extra"
-                          }, {
-                            default: withCtx(() => [
-                              createVNode(unref(Switch$1), {
-                                checked: setting.extra,
-                                "onUpdate:checked": _cache[3] || (_cache[3] = ($event) => setting.extra = $event)
-                              }, null, 8, ["checked"])
-                            ]),
-                            _: 1
-                          })),
-                          (openBlock(), createBlock(unref(FormItem), {
                             key: selectedItemsInfo.value.label,
                             label: selectedItemsInfo.value.label,
                             name: "selectedItemsInfo.label"
@@ -36586,7 +36082,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                               createVNode(unref(Select), {
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[4] || (_cache[4] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
+                                onChange: _cache[2] || (_cache[2] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
                                 onSelect: selectSelect,
                                 options: selectedItemsInfo.value.options,
                                 mode: isSingleMode() ? void 0 : "multiple",
@@ -36594,7 +36090,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
                                 value: setting.selectedItems,
-                                "onUpdate:value": _cache[5] || (_cache[5] = ($event) => setting.selectedItems = $event),
+                                "onUpdate:value": _cache[3] || (_cache[3] = ($event) => setting.selectedItems = $event),
                                 "max-tag-count": 10,
                                 "get-popup-container": getPopupContainer
                               }, {
@@ -36625,29 +36121,21 @@ summary tabindex target title type usemap value width wmode wrap`;
                               ])
                             ]),
                             createBaseVNode("div", _hoisted_10, [
-                              createVNode(unref(Space), {
-                                size: [0, "small"],
-                                wrap: ""
-                              }, {
-                                default: withCtx(() => [
-                                  (openBlock(true), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON().reverse(), (tag) => {
-                                    return openBlock(), createBlock(unref(Tag), {
-                                      class: "leek-search-history-tag",
-                                      key: tag,
-                                      bordered: false,
-                                      closable: "",
-                                      onClick: ($event) => historyTagsClick(tag),
-                                      onClose: ($event) => historyTagsClose(tag)
-                                    }, {
-                                      default: withCtx(() => [
-                                        createTextVNode(toDisplayString(historyTagTransform(tag)), 1)
-                                      ]),
-                                      _: 2
-                                    }, 1032, ["onClick", "onClose"]);
-                                  }), 128))
-                                ]),
-                                _: 1
-                              })
+                              (openBlock(true), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON().reverse(), (tag) => {
+                                return openBlock(), createBlock(unref(Tag), {
+                                  class: "leek-search-history-tag",
+                                  key: tag,
+                                  bordered: false,
+                                  closable: "",
+                                  onClick: ($event) => historyTagsClick(tag),
+                                  onClose: ($event) => historyTagsClose(tag)
+                                }, {
+                                  default: withCtx(() => [
+                                    createTextVNode(toDisplayString(historyTagTransform(tag)), 1)
+                                  ]),
+                                  _: 2
+                                }, 1032, ["onClick", "onClose"]);
+                              }), 128))
                             ])
                           ], 512), [
                             [vShow, setting.historyItems.size()]
