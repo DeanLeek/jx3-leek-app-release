@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.4
+// @version      1.1.5
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -39954,7 +39954,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       fill: "#E0F2D1",
       "p-id": "782"
     }, null, -1);
-    const _hoisted_15 = /* @__PURE__ */ createBaseVNode("path", {
+    const _hoisted_15$1 = /* @__PURE__ */ createBaseVNode("path", {
       d: "M745.6 83.2z m-92.8 259.2C579.2 531.2 520 736 491.2 924.8c-1.6 8 4.8 17.6 12.8 17.6 8 1.6 17.6-4.8 17.6-12.8 0-4.8 1.6-8 1.6-12.8 20.8-134.4 54.4-276.8 97.6-430.4 25.6-91.2 44.8-152 86.4-280-16 40-35.2 86.4-54.4 136z m-99.2 592c-4.8 25.6-28.8 44.8-54.4 40-25.6-4.8-44.8-28.8-40-54.4 28.8-192 89.6-396.8 163.2-588.8 28.8-73.6 57.6-140.8 83.2-190.4 11.2-22.4 20.8-40 28.8-52.8 3.2-6.4 8-11.2 9.6-14.4l6.4-6.4c6.4-3.2 12.8-4.8 19.2 0 11.2 8 11.2 14.4 0 51.2-4.8 17.6-12.8 40-27.2 86.4-43.2 136-62.4 196.8-89.6 289.6-43.2 152-76.8 292.8-97.6 425.6 0 4.8 0 9.6-1.6 14.4z",
       fill: "#333333",
       "p-id": "783"
@@ -39973,7 +39973,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       _hoisted_12$1,
       _hoisted_13$1,
       _hoisted_14$1,
-      _hoisted_15
+      _hoisted_15$1
     ];
     function _sfc_render(_ctx, _cache) {
       return openBlock(), createElementBlock("svg", _hoisted_1$1, _hoisted_16);
@@ -40020,15 +40020,16 @@ summary tabindex target title type usemap value width wmode wrap`;
     const _hoisted_3 = { class: "leek-search-sticky" };
     const _hoisted_4 = { class: "leek-select-item" };
     const _hoisted_5 = { class: "leek-select-item-label" };
-    const _hoisted_6 = ["onClick"];
-    const _hoisted_7 = { class: "leek-search-history" };
-    const _hoisted_8 = { class: "leek-search-history-title" };
-    const _hoisted_9 = /* @__PURE__ */ createBaseVNode("h4", null, "历史搜索", -1);
-    const _hoisted_10 = { class: "leek-search-history-clear" };
-    const _hoisted_11 = { class: "leek-search-history-content" };
-    const _hoisted_12 = { class: "leek-search-main" };
-    const _hoisted_13 = { class: "leek-select-item" };
-    const _hoisted_14 = { class: "leek-select-item-label" };
+    const _hoisted_6 = { class: "leek-select-item-state" };
+    const _hoisted_7 = ["onClick"];
+    const _hoisted_8 = { class: "leek-search-history" };
+    const _hoisted_9 = { class: "leek-search-history-title" };
+    const _hoisted_10 = /* @__PURE__ */ createBaseVNode("h4", null, "历史搜索", -1);
+    const _hoisted_11 = { class: "leek-search-history-clear" };
+    const _hoisted_12 = { class: "leek-search-history-content" };
+    const _hoisted_13 = { class: "leek-search-main" };
+    const _hoisted_14 = { class: "leek-select-item" };
+    const _hoisted_15 = { class: "leek-select-item-label" };
     const maxSelectCount = 5;
     const _sfc_main = /* @__PURE__ */ defineComponent({
       __name: "App",
@@ -40062,7 +40063,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.4";
+        const appVersion = "1.1.5";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
@@ -40615,21 +40616,23 @@ summary tabindex target title type usemap value width wmode wrap`;
                                 option: withCtx(({ searchDescType, item }) => [
                                   createBaseVNode("div", _hoisted_4, [
                                     createBaseVNode("span", _hoisted_5, toDisplayString(getDisplayLabel(item)), 1),
-                                    createVNode(unref(Tag), {
-                                      class: "leek-select-item-tag",
-                                      color: "default"
-                                    }, {
-                                      default: withCtx(() => [
-                                        createTextVNode(toDisplayString(searchDescType), 1)
-                                      ]),
-                                      _: 2
-                                    }, 1024),
-                                    createBaseVNode("span", {
-                                      class: "leek-select-item-edit",
-                                      onClick: withModifiers(($event) => editCustomName(item), ["stop"])
-                                    }, [
-                                      createVNode(unref(EditFilled))
-                                    ], 8, _hoisted_6)
+                                    createBaseVNode("span", _hoisted_6, [
+                                      createVNode(unref(Tag), {
+                                        class: "leek-select-item-tag",
+                                        color: "default"
+                                      }, {
+                                        default: withCtx(() => [
+                                          createTextVNode(toDisplayString(searchDescType), 1)
+                                        ]),
+                                        _: 2
+                                      }, 1024),
+                                      createBaseVNode("span", {
+                                        class: "leek-select-item-edit",
+                                        onClick: withModifiers(($event) => editCustomName(item), ["stop"])
+                                      }, [
+                                        createVNode(unref(EditFilled))
+                                      ], 8, _hoisted_7)
+                                    ])
                                   ])
                                 ]),
                                 _: 1
@@ -40637,14 +40640,14 @@ summary tabindex target title type usemap value width wmode wrap`;
                             ]),
                             _: 1
                           }, 8, ["label"])),
-                          withDirectives(createBaseVNode("div", _hoisted_7, [
-                            createBaseVNode("div", _hoisted_8, [
-                              _hoisted_9,
-                              createBaseVNode("div", _hoisted_10, [
+                          withDirectives(createBaseVNode("div", _hoisted_8, [
+                            createBaseVNode("div", _hoisted_9, [
+                              _hoisted_10,
+                              createBaseVNode("div", _hoisted_11, [
                                 createVNode(unref(DeleteOutlined), { onClick: historyTagsClear })
                               ])
                             ]),
-                            createBaseVNode("div", _hoisted_11, [
+                            createBaseVNode("div", _hoisted_12, [
                               (openBlock(true), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON().reverse(), (tag) => {
                                 return openBlock(), createBlock(unref(Tag), {
                                   class: "leek-search-history-tag",
@@ -40665,7 +40668,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             [vShow, setting.historyItems.size()]
                           ])
                         ]),
-                        withDirectives(createBaseVNode("div", _hoisted_12, [
+                        withDirectives(createBaseVNode("div", _hoisted_13, [
                           (openBlock(true), createElementBlock(Fragment, null, renderList(formInfo, (item) => {
                             return openBlock(), createBlock(unref(FormItem), {
                               key: item.label,
@@ -40688,8 +40691,8 @@ summary tabindex target title type usemap value width wmode wrap`;
                                   "onUpdate:value": ($event) => formModel[item.label] = $event
                                 }, {
                                   option: withCtx(({ label, searchDescType }) => [
-                                    createBaseVNode("div", _hoisted_13, [
-                                      createBaseVNode("span", _hoisted_14, toDisplayString(label), 1),
+                                    createBaseVNode("div", _hoisted_14, [
+                                      createBaseVNode("span", _hoisted_15, toDisplayString(label), 1),
                                       createVNode(unref(Tag), {
                                         class: "leek-select-item-tag",
                                         color: "default"
