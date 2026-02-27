@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.3
+// @version      1.1.4
 // @author       吴彦祖
 // @description  万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -34,6 +34,11 @@
         {
           pattern: ',this.setOrderType=',
           inject: ',window.buyerStore=this,this.setOrderType=',
+        },
+        {
+          pattern: /(\w)=(\w+)\(n\((["'])\.\/app\/web\/components\/search-filter\/store\.js\3\)\),([\s\S]*?)(\w)=new \1\.default(?:\(\))?/,
+          inject: (_, storeVar, interop, quote, middle, assignVar) =>
+            `${storeVar}=${interop}(n(${quote}./app/web/components/search-filter/store.js${quote})),${middle}${assignVar}=window.searchFilterStore=new ${storeVar}.default`,
         },
       ];
 
@@ -137,7 +142,7 @@ h4 {
 }
 .leek-search-history-content {
         display: flex;
-        height: calc(100vh - 380px);
+        height: calc(100vh - 450px);
         overflow-y: auto;
         justify-content: start;
         align-content: start;
@@ -154,6 +159,16 @@ h4 {
 .leek-select-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+.leek-select-item-edit {
+      margin-left: 8px;
+      cursor: pointer;
+      color: #149ea8;
+      opacity: 0.7;
+&:hover {
+        opacity: 1;
+}
+}
 }
 .leek-search-select-popup .antVue-select-item-option-state {
     display: none;
@@ -7804,9 +7819,9 @@ var require_index = __commonJS({
       return result === void 0 ? defaultValue : result;
     }
     function arrayPush(array, values) {
-      var index2 = -1, length2 = values.length, offset = array.length;
+      var index2 = -1, length2 = values.length, offset2 = array.length;
       while (++index2 < length2) {
-        array[offset + index2] = values[index2];
+        array[offset2 + index2] = values[index2];
       }
       return array;
     }
@@ -8750,7 +8765,7 @@ var require_index = __commonJS({
       var i2 = toPrimitive(t2, "string");
       return "symbol" == _typeof$1(i2) ? i2 : i2 + "";
     }
-    function _defineProperty$n(e2, r2, t2) {
+    function _defineProperty$t(e2, r2, t2) {
       return (r2 = toPropertyKey(r2)) in e2 ? Object.defineProperty(e2, r2, {
         value: t2,
         enumerable: true,
@@ -8772,7 +8787,7 @@ var require_index = __commonJS({
       for (var r2 = 1; r2 < arguments.length; r2++) {
         var t2 = null != arguments[r2] ? arguments[r2] : {};
         r2 % 2 ? ownKeys$1(Object(t2), true).forEach(function(r3) {
-          _defineProperty$n(e2, r3, t2[r3]);
+          _defineProperty$t(e2, r3, t2[r3]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(t2)) : ownKeys$1(Object(t2)).forEach(function(r3) {
           Object.defineProperty(e2, r3, Object.getOwnPropertyDescriptor(t2, r3));
         });
@@ -9370,7 +9385,7 @@ var require_index = __commonJS({
       }
       return ResizeObserver$2;
     }();
-    const isValid = (value) => {
+    const isValid$2 = (value) => {
       return value !== void 0 && value !== null && value !== "";
     };
     const initDefaultProps = (types2, defaultProps) => {
@@ -9456,7 +9471,7 @@ var require_index = __commonJS({
           } else if (!filterEmpty2) {
             res.push(child);
           }
-        } else if (isValid(child)) {
+        } else if (isValid$2(child)) {
           res.push(child);
         }
       });
@@ -10163,8 +10178,8 @@ var require_index = __commonJS({
         const {
           antLocale
         } = localeData;
-        const locale2 = unref(defaultLocale) || localeValues[componentName];
-        const localeFromContext = antLocale ? antLocale[componentName] : {};
+        const locale2 = unref(defaultLocale) || localeValues[componentName || "global"];
+        const localeFromContext = componentName && antLocale ? antLocale[componentName] : {};
         return _extends$1(_extends$1(_extends$1({}, typeof locale2 === "function" ? locale2() : locale2), localeFromContext || {}), unref(propsLocale) || {});
       });
       return [componentLocale];
@@ -10618,15 +10633,15 @@ var require_index = __commonJS({
     function noop$3() {
     }
     let warning$2 = noop$3;
-    let uuid$2 = 0;
+    let uuid$4 = 0;
     class Theme {
       constructor(derivatives) {
         this.derivatives = Array.isArray(derivatives) ? derivatives : [derivatives];
-        this.id = uuid$2;
+        this.id = uuid$4;
         if (derivatives.length === 0) {
           warning$2(derivatives.length > 0);
         }
-        uuid$2 += 1;
+        uuid$4 += 1;
       }
       getDerivativeToken(token2) {
         return this.derivatives.reduce((result, derivative2) => derivative2(token2, result), void 0);
@@ -10965,7 +10980,7 @@ var require_index = __commonJS({
     }
     function parse(value, root2, parent2, rule, rules2, rulesets, pseudo, points, declarations) {
       var index2 = 0;
-      var offset = 0;
+      var offset2 = 0;
       var length2 = pseudo;
       var atrule = 0;
       var property2 = 0;
@@ -11020,7 +11035,7 @@ var require_index = __commonJS({
               case 0:
               case 125:
                 scanning = 0;
-              case 59 + offset:
+              case 59 + offset2:
                 if (ampersand == -1) characters2 = replace(characters2, /\f/g, "");
                 if (property2 > 0 && strlen(characters2) - length2)
                   append(property2 > 32 ? declaration(characters2 + ";", rule, parent2, length2 - 1, declarations) : declaration(replace(characters2, " ", "") + ";", rule, parent2, length2 - 2, declarations), declarations);
@@ -11028,9 +11043,9 @@ var require_index = __commonJS({
               case 59:
                 characters2 += ";";
               default:
-                append(reference = ruleset(characters2, root2, parent2, index2, offset, rules2, points, type, props2 = [], children = [], length2, rulesets), rulesets);
+                append(reference = ruleset(characters2, root2, parent2, index2, offset2, rules2, points, type, props2 = [], children = [], length2, rulesets), rulesets);
                 if (character2 === 123)
-                  if (offset === 0)
+                  if (offset2 === 0)
                     parse(characters2, root2, reference, reference, props2, rulesets, length2, points, children);
                   else
                     switch (atrule === 99 && charat(characters2, 3) === 110 ? 100 : atrule) {
@@ -11044,7 +11059,7 @@ var require_index = __commonJS({
                         parse(characters2, reference, reference, reference, [""], children, 0, points, children);
                     }
             }
-            index2 = offset = property2 = 0, variable = ampersand = 1, type = characters2 = "", length2 = pseudo;
+            index2 = offset2 = property2 = 0, variable = ampersand = 1, type = characters2 = "", length2 = pseudo;
             break;
           case 58:
             length2 = 1 + strlen(characters2), property2 = previous;
@@ -11057,7 +11072,7 @@ var require_index = __commonJS({
             }
             switch (characters2 += from(character2), character2 * variable) {
               case 38:
-                ampersand = offset > 0 ? 1 : (characters2 += "\f", -1);
+                ampersand = offset2 > 0 ? 1 : (characters2 += "\f", -1);
                 break;
               case 44:
                 points[index2++] = (strlen(characters2) - 1) * ampersand, ampersand = 1;
@@ -11065,7 +11080,7 @@ var require_index = __commonJS({
               case 64:
                 if (peek() === 45)
                   characters2 += delimit(next());
-                atrule = peek(), offset = length2 = strlen(type = characters2 += identifier(caret())), character2++;
+                atrule = peek(), offset2 = length2 = strlen(type = characters2 += identifier(caret())), character2++;
                 break;
               case 45:
                 if (previous === 45 && strlen(characters2) == 2)
@@ -11074,15 +11089,15 @@ var require_index = __commonJS({
         }
       return rulesets;
     }
-    function ruleset(value, root2, parent2, index2, offset, rules2, points, type, props2, children, length2, siblings) {
-      var post = offset - 1;
-      var rule = offset === 0 ? rules2 : [""];
+    function ruleset(value, root2, parent2, index2, offset2, rules2, points, type, props2, children, length2, siblings) {
+      var post = offset2 - 1;
+      var rule = offset2 === 0 ? rules2 : [""];
       var size2 = sizeof(rule);
       for (var i2 = 0, j2 = 0, k2 = 0; i2 < index2; ++i2)
         for (var x2 = 0, y2 = substr(value, post + 1, post = abs(j2 = points[i2])), z2 = value; x2 < size2; ++x2)
           if (z2 = trim(j2 > 0 ? rule[x2] + " " + y2 : replace(y2, /&\f/g, rule[x2])))
             props2[k2++] = z2;
-      return node(value, root2, parent2, offset === 0 ? RULESET : type, props2, children, length2, siblings);
+      return node(value, root2, parent2, offset2 === 0 ? RULESET : type, props2, children, length2, siblings);
     }
     function comment(value, root2, parent2, siblings) {
       return node(value, root2, parent2, COMMENT, from(char()), substr(value, 2, -2), 0, siblings);
@@ -12816,7 +12831,7 @@ var require_index = __commonJS({
         a: 1
       }).toRgbString();
     }
-    var __rest$m = function(s2, e2) {
+    var __rest$r = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -12827,7 +12842,7 @@ var require_index = __commonJS({
     function formatToken(derivativeToken) {
       const {
         override
-      } = derivativeToken, restToken = __rest$m(derivativeToken, ["override"]);
+      } = derivativeToken, restToken = __rest$r(derivativeToken, ["override"]);
       const overrideTokens = _extends$1({}, override);
       Object.keys(seedToken).forEach((token2) => {
         delete overrideTokens[token2];
@@ -13083,6 +13098,19 @@ var require_index = __commonJS({
       },
       svg: {
         display: "inline-block"
+      }
+    });
+    const clearFix = () => ({
+      // https://github.com/ant-design/ant-design/issues/21301#issuecomment-583955229
+      "&::before": {
+        display: "table",
+        content: '""'
+      },
+      "&::after": {
+        // https://github.com/ant-design/ant-design/issues/21864
+        display: "table",
+        clear: "both",
+        content: '""'
       }
     });
     const genLinkStyle = (token2) => ({
@@ -13458,7 +13486,7 @@ var require_index = __commonJS({
         }
       };
     };
-    const useStyle$b = genComponentStyleHook("Empty", (token2) => {
+    const useStyle$d = genComponentStyleHook("Empty", (token2) => {
       const {
         componentCls,
         controlHeightLG
@@ -13471,7 +13499,7 @@ var require_index = __commonJS({
       });
       return [genSharedEmptyStyle(emptyToken)];
     });
-    var __rest$l = function(s2, e2) {
+    var __rest$q = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -13503,7 +13531,7 @@ var require_index = __commonJS({
           direction,
           prefixCls: prefixClsRef
         } = useConfigInject("empty", props2);
-        const [wrapSSR, hashId] = useStyle$b(prefixClsRef);
+        const [wrapSSR, hashId] = useStyle$d(prefixClsRef);
         return () => {
           var _a, _b;
           const prefixCls = prefixClsRef.value;
@@ -13512,7 +13540,7 @@ var require_index = __commonJS({
             description = ((_b = slots.description) === null || _b === void 0 ? void 0 : _b.call(slots)) || void 0,
             imageStyle,
             class: className = ""
-          } = _c, restProps = __rest$l(_c, ["image", "description", "imageStyle", "class"]);
+          } = _c, restProps = __rest$q(_c, ["image", "description", "imageStyle", "class"]);
           return wrapSSR(createVNode(LocaleReceiver, {
             "componentName": "Empty",
             "children": (locale2) => {
@@ -14379,7 +14407,7 @@ var require_index = __commonJS({
       }
       return {};
     }
-    function Mask(props2) {
+    function Mask$1(props2) {
       const {
         prefixCls,
         visible,
@@ -14410,7 +14438,7 @@ var require_index = __commonJS({
         }, null), [[resolveDirective("if"), visible]])]
       });
     }
-    Mask.displayName = "Mask";
+    Mask$1.displayName = "Mask";
     const MobilePopupInner = /* @__PURE__ */ defineComponent({
       compatConfig: {
         MODE: 3
@@ -14603,7 +14631,7 @@ var require_index = __commonJS({
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = null != arguments[i2] ? arguments[i2] : {};
         i2 % 2 ? ownKeys(Object(source), true).forEach(function(key2) {
-          _defineProperty$m(target, key2, source[key2]);
+          _defineProperty$s(target, key2, source[key2]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key2) {
           Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
@@ -14618,7 +14646,7 @@ var require_index = __commonJS({
         return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       }, _typeof(obj);
     }
-    function _defineProperty$m(obj, key2, value) {
+    function _defineProperty$s(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, {
           value,
@@ -14752,15 +14780,15 @@ var require_index = __commonJS({
       return getComputedStyleX(el, name);
     }
     function getClientPosition(elem) {
-      var box;
+      var box2;
       var x2;
       var y2;
       var doc2 = elem.ownerDocument;
       var body = doc2.body;
       var docElem = doc2 && doc2.documentElement;
-      box = elem.getBoundingClientRect();
-      x2 = Math.floor(box.left);
-      y2 = Math.floor(box.top);
+      box2 = elem.getBoundingClientRect();
+      x2 = Math.floor(box2.left);
+      y2 = Math.floor(box2.top);
       x2 -= docElem.clientLeft || body.clientLeft || 0;
       y2 -= docElem.clientTop || body.clientTop || 0;
       return {
@@ -14768,7 +14796,7 @@ var require_index = __commonJS({
         top: y2
       };
     }
-    function getScroll(w2, top) {
+    function getScroll$1(w2, top) {
       var ret = w2["page".concat(top ? "Y" : "X", "Offset")];
       var method = "scroll".concat(top ? "Top" : "Left");
       if (typeof ret !== "number") {
@@ -14781,10 +14809,10 @@ var require_index = __commonJS({
       return ret;
     }
     function getScrollLeft(w2) {
-      return getScroll(w2);
+      return getScroll$1(w2);
     }
     function getScrollTop(w2) {
-      return getScroll(w2, true);
+      return getScroll$1(w2, true);
     }
     function getOffset(el) {
       var pos = getClientPosition(el);
@@ -14856,7 +14884,7 @@ var require_index = __commonJS({
         return "top";
       }
     }
-    function setLeftTop(elem, offset, option) {
+    function setLeftTop(elem, offset2, option) {
       if (css(elem, "position") === "static") {
         elem.style.position = "relative";
       }
@@ -14874,23 +14902,23 @@ var require_index = __commonJS({
       }
       var originalTransition = "";
       var originalOffset = getOffset(elem);
-      if ("left" in offset || "top" in offset) {
+      if ("left" in offset2 || "top" in offset2) {
         originalTransition = getTransitionProperty(elem) || "";
         setTransitionProperty(elem, "none");
       }
-      if ("left" in offset) {
+      if ("left" in offset2) {
         elem.style[oppositeHorizontalProperty] = "";
         elem.style[horizontalProperty] = "".concat(presetH, "px");
       }
-      if ("top" in offset) {
+      if ("top" in offset2) {
         elem.style[oppositeVerticalProperty] = "";
         elem.style[verticalProperty] = "".concat(presetV, "px");
       }
       forceRelayout(elem);
       var old = getOffset(elem);
       var originalStyle = {};
-      for (var key2 in offset) {
-        if (offset.hasOwnProperty(key2)) {
+      for (var key2 in offset2) {
+        if (offset2.hasOwnProperty(key2)) {
           var dir = getOffsetDirection(key2, option);
           var preset = key2 === "left" ? presetH : presetV;
           var off = originalOffset[key2] - old[key2];
@@ -14903,14 +14931,14 @@ var require_index = __commonJS({
       }
       css(elem, originalStyle);
       forceRelayout(elem);
-      if ("left" in offset || "top" in offset) {
+      if ("left" in offset2 || "top" in offset2) {
         setTransitionProperty(elem, originalTransition);
       }
       var ret = {};
-      for (var _key in offset) {
-        if (offset.hasOwnProperty(_key)) {
+      for (var _key in offset2) {
+        if (offset2.hasOwnProperty(_key)) {
           var _dir = getOffsetDirection(_key, option);
-          var _off = offset[_key] - originalOffset[_key];
+          var _off = offset2[_key] - originalOffset[_key];
           if (_key === _dir) {
             ret[_dir] = originalStyle[_dir] + _off;
           } else {
@@ -14920,38 +14948,38 @@ var require_index = __commonJS({
       }
       css(elem, ret);
     }
-    function setTransform$1(elem, offset) {
+    function setTransform$1(elem, offset2) {
       var originalOffset = getOffset(elem);
       var originalXY = getTransformXY(elem);
       var resultXY = {
         x: originalXY.x,
         y: originalXY.y
       };
-      if ("left" in offset) {
-        resultXY.x = originalXY.x + offset.left - originalOffset.left;
+      if ("left" in offset2) {
+        resultXY.x = originalXY.x + offset2.left - originalOffset.left;
       }
-      if ("top" in offset) {
-        resultXY.y = originalXY.y + offset.top - originalOffset.top;
+      if ("top" in offset2) {
+        resultXY.y = originalXY.y + offset2.top - originalOffset.top;
       }
       setTransformXY(elem, resultXY);
     }
-    function setOffset(elem, offset, option) {
+    function setOffset(elem, offset2, option) {
       if (option.ignoreShake) {
         var oriOffset = getOffset(elem);
         var oLeft = oriOffset.left.toFixed(0);
         var oTop = oriOffset.top.toFixed(0);
-        var tLeft = offset.left.toFixed(0);
-        var tTop = offset.top.toFixed(0);
+        var tLeft = offset2.left.toFixed(0);
+        var tTop = offset2.top.toFixed(0);
         if (oLeft === tLeft && oTop === tTop) {
           return;
         }
       }
       if (option.useCssRight || option.useCssBottom) {
-        setLeftTop(elem, offset, option);
+        setLeftTop(elem, offset2, option);
       } else if (option.useCssTransform && getTransformName() in document.body.style) {
-        setTransform$1(elem, offset);
+        setTransform$1(elem, offset2);
       } else {
-        setLeftTop(elem, offset, option);
+        setLeftTop(elem, offset2, option);
       }
     }
     function each(arr, fn) {
@@ -15134,7 +15162,7 @@ var require_index = __commonJS({
         return doc2.defaultView || doc2.parentWindow;
       },
       getDocument,
-      offset: function offset(el, value, option) {
+      offset: function offset2(el, value, option) {
         if (typeof value !== "undefined") {
           setOffset(el, value, option || {});
         } else {
@@ -15319,25 +15347,25 @@ var require_index = __commonJS({
       return utils.mix(pos, size2);
     }
     function getRegion(node2) {
-      var offset;
+      var offset2;
       var w2;
       var h2;
       if (!utils.isWindow(node2) && node2.nodeType !== 9) {
-        offset = utils.offset(node2);
+        offset2 = utils.offset(node2);
         w2 = utils.outerWidth(node2);
         h2 = utils.outerHeight(node2);
       } else {
         var win = utils.getWindow(node2);
-        offset = {
+        offset2 = {
           left: utils.getWindowScrollLeft(win),
           top: utils.getWindowScrollTop(win)
         };
         w2 = utils.viewportWidth(win);
         h2 = utils.viewportHeight(win);
       }
-      offset.width = w2;
-      offset.height = h2;
-      return offset;
+      offset2.width = w2;
+      offset2.height = h2;
+      return offset2;
     }
     function getAlignOffset(region, align) {
       var V2 = align.charAt(0);
@@ -15361,13 +15389,13 @@ var require_index = __commonJS({
         top: y2
       };
     }
-    function getElFuturePos(elRegion, refNodeRegion, points, offset, targetOffset2) {
+    function getElFuturePos(elRegion, refNodeRegion, points, offset2, targetOffset2) {
       var p1 = getAlignOffset(refNodeRegion, points[1]);
       var p2 = getAlignOffset(elRegion, points[0]);
       var diff = [p2.left - p1.left, p2.top - p1.top];
       return {
-        left: Math.round(elRegion.left - diff[0] + offset[0] - targetOffset2[0]),
-        top: Math.round(elRegion.top - diff[1] + offset[1] - targetOffset2[1])
+        left: Math.round(elRegion.left - diff[0] + offset2[0] - targetOffset2[0]),
+        top: Math.round(elRegion.top - diff[1] + offset2[1] - targetOffset2[1])
       };
     }
     function isFailX(elFuturePos, elRegion, visibleRect) {
@@ -15391,9 +15419,9 @@ var require_index = __commonJS({
       });
       return ret;
     }
-    function flipOffset(offset, index2) {
-      offset[index2] = -offset[index2];
-      return offset;
+    function flipOffset(offset2, index2) {
+      offset2[index2] = -offset2[index2];
+      return offset2;
     }
     function convertOffset(str, offsetLen) {
       var n2;
@@ -15404,17 +15432,17 @@ var require_index = __commonJS({
       }
       return n2 || 0;
     }
-    function normalizeOffset(offset, el) {
-      offset[0] = convertOffset(offset[0], el.width);
-      offset[1] = convertOffset(offset[1], el.height);
+    function normalizeOffset(offset2, el) {
+      offset2[0] = convertOffset(offset2[0], el.width);
+      offset2[1] = convertOffset(offset2[1], el.height);
     }
     function doAlign(el, tgtRegion, align, isTgtRegionVisible) {
       var points = align.points;
-      var offset = align.offset || [0, 0];
+      var offset2 = align.offset || [0, 0];
       var targetOffset2 = align.targetOffset || [0, 0];
       var overflow = align.overflow;
       var source = align.source || el;
-      offset = [].concat(offset);
+      offset2 = [].concat(offset2);
       targetOffset2 = [].concat(targetOffset2);
       overflow = overflow || {};
       var newOverflowCfg = {};
@@ -15422,9 +15450,9 @@ var require_index = __commonJS({
       var alwaysByViewport = !!(overflow && overflow.alwaysByViewport);
       var visibleRect = getVisibleRectForElement(source, alwaysByViewport);
       var elRegion = getRegion(source);
-      normalizeOffset(offset, elRegion);
+      normalizeOffset(offset2, elRegion);
       normalizeOffset(targetOffset2, tgtRegion);
-      var elFuturePos = getElFuturePos(elRegion, tgtRegion, points, offset, targetOffset2);
+      var elFuturePos = getElFuturePos(elRegion, tgtRegion, points, offset2, targetOffset2);
       var newElRegion = utils.merge(elRegion, elFuturePos);
       if (visibleRect && (overflow.adjustX || overflow.adjustY) && isTgtRegionVisible) {
         if (overflow.adjustX) {
@@ -15433,13 +15461,13 @@ var require_index = __commonJS({
               l: "r",
               r: "l"
             });
-            var newOffset = flipOffset(offset, 0);
+            var newOffset = flipOffset(offset2, 0);
             var newTargetOffset = flipOffset(targetOffset2, 0);
             var newElFuturePos = getElFuturePos(elRegion, tgtRegion, newPoints, newOffset, newTargetOffset);
             if (!isCompleteFailX(newElFuturePos, elRegion, visibleRect)) {
               fail = 1;
               points = newPoints;
-              offset = newOffset;
+              offset2 = newOffset;
               targetOffset2 = newTargetOffset;
             }
           }
@@ -15450,19 +15478,19 @@ var require_index = __commonJS({
               t: "b",
               b: "t"
             });
-            var _newOffset = flipOffset(offset, 1);
+            var _newOffset = flipOffset(offset2, 1);
             var _newTargetOffset = flipOffset(targetOffset2, 1);
             var _newElFuturePos = getElFuturePos(elRegion, tgtRegion, _newPoints, _newOffset, _newTargetOffset);
             if (!isCompleteFailY(_newElFuturePos, elRegion, visibleRect)) {
               fail = 1;
               points = _newPoints;
-              offset = _newOffset;
+              offset2 = _newOffset;
               targetOffset2 = _newTargetOffset;
             }
           }
         }
         if (fail) {
-          elFuturePos = getElFuturePos(elRegion, tgtRegion, points, offset, targetOffset2);
+          elFuturePos = getElFuturePos(elRegion, tgtRegion, points, offset2, targetOffset2);
           utils.mix(newElRegion, elFuturePos);
         }
         var isStillFailX = isFailX(elFuturePos, elRegion, visibleRect);
@@ -15482,7 +15510,7 @@ var require_index = __commonJS({
             });
           }
           points = _newPoints2;
-          offset = align.offset || [0, 0];
+          offset2 = align.offset || [0, 0];
           targetOffset2 = align.targetOffset || [0, 0];
         }
         newOverflowCfg.adjustX = overflow.adjustX && isStillFailX;
@@ -15508,7 +15536,7 @@ var require_index = __commonJS({
       });
       return {
         points,
-        offset,
+        offset: offset2,
         targetOffset: targetOffset2,
         overflow: newOverflowCfg
       };
@@ -15573,6 +15601,9 @@ var require_index = __commonJS({
       warning$2(typeof node2.props.class !== "object");
       return node2;
     }
+    function triggerVNodeUpdate(vm, attrs, dom) {
+      render(cloneVNode(vm, _extends$1({}, attrs)), dom);
+    }
     const isVisible = (element) => {
       if (!element) {
         return false;
@@ -15581,14 +15612,14 @@ var require_index = __commonJS({
         return true;
       }
       if (element.getBBox) {
-        const box = element.getBBox();
-        if (box.width || box.height) {
+        const box2 = element.getBBox();
+        if (box2.width || box2.height) {
           return true;
         }
       }
       if (element.getBoundingClientRect) {
-        const box = element.getBoundingClientRect();
-        if (box.width || box.height) {
+        const box2 = element.getBoundingClientRect();
+        if (box2.width || box2.height) {
           return true;
         }
       }
@@ -16082,7 +16113,7 @@ var require_index = __commonJS({
           });
           return createVNode("div", {
             "ref": rootRef
-          }, [createVNode(Mask, cloneProps, null), popupNode]);
+          }, [createVNode(Mask$1, cloneProps, null), popupNode]);
         };
       }
     });
@@ -16278,14 +16309,14 @@ var require_index = __commonJS({
       return cached;
     }
     const UNIQUE_ID = `vc-util-locker-${Date.now()}`;
-    let uuid$1 = 0;
+    let uuid$3 = 0;
     function isBodyOverflowing() {
       return document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight) && window.innerWidth > document.body.offsetWidth;
     }
     function useScrollLocker(lock) {
       const mergedLock = computed(() => !!lock && !!lock.value);
-      uuid$1 += 1;
-      const id = `${UNIQUE_ID}_${uuid$1}`;
+      uuid$3 += 1;
+      const id = `${UNIQUE_ID}_${uuid$3}`;
       watchEffect((onClear) => {
         if (!canUseDom$1()) {
           return;
@@ -17112,7 +17143,7 @@ html body {
         return createVNode(Fragment, null, [trigger2, portal]);
       }
     });
-    var __rest$k = function(s2, e2) {
+    var __rest$p = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -17214,7 +17245,7 @@ html body {
         return () => {
           const _a = _extends$1(_extends$1({}, props2), attrs), {
             empty = false
-          } = _a, restProps = __rest$k(_a, ["empty"]);
+          } = _a, restProps = __rest$p(_a, ["empty"]);
           const {
             visible,
             dropdownAlign,
@@ -17829,7 +17860,7 @@ html body {
       onMousedown: Function,
       onClick: Function
     };
-    var __rest$j = function(s2, e2) {
+    var __rest$o = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -17909,7 +17940,7 @@ html body {
           const {
             tag: Tag2,
             value
-          } = props2, restProps = __rest$j(props2, ["tag", "value"]);
+          } = props2, restProps = __rest$o(props2, ["tag", "value"]);
           return createVNode(Tag2, _objectSpread2$1(_objectSpread2$1({}, restProps), {}, {
             "ref": inputRef,
             "value": value
@@ -17927,7 +17958,7 @@ html body {
         return acc;
       }, "");
     }
-    var __rest$i = function(s2, e2) {
+    var __rest$n = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -17935,7 +17966,7 @@ html body {
       }
       return t2;
     };
-    const BaseInput = /* @__PURE__ */ defineComponent({
+    const BaseInput$1 = /* @__PURE__ */ defineComponent({
       compatConfig: {
         MODE: 3
       },
@@ -18055,7 +18086,7 @@ html body {
           return props2.style && typeof props2.style !== "string" ? styleObjectToString(props2.style) : props2.style;
         });
         return () => {
-          const restProps = __rest$i(props2, ["style", "lazy"]);
+          const restProps = __rest$n(props2, ["style", "lazy"]);
           return createVNode(BaseInputInner, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, restProps), attrs), {}, {
             "style": styleString.value,
             "onInput": handleInput,
@@ -18074,7 +18105,7 @@ html body {
         };
       }
     });
-    const inputProps = {
+    const inputProps$2 = {
       inputRef: PropTypes.any,
       prefixCls: String,
       id: String,
@@ -18126,13 +18157,13 @@ html body {
         type: Function
       }
     };
-    const Input = /* @__PURE__ */ defineComponent({
+    const Input$1 = /* @__PURE__ */ defineComponent({
       compatConfig: {
         MODE: 3
       },
       name: "SelectInput",
       inheritAttrs: false,
-      props: inputProps,
+      props: inputProps$2,
       setup(props2) {
         let blurTimeout = null;
         const VCSelectContainerEvent = inject("VCSelectContainerEvent");
@@ -18161,7 +18192,7 @@ html body {
             inputRef,
             attrs
           } = props2;
-          let inputNode = inputElement || createVNode(BaseInput, null, null);
+          let inputNode = inputElement || createVNode(BaseInput$1, null, null);
           const inputProps2 = inputNode.props || {};
           const {
             onKeydown: onOriginKeyDown,
@@ -18332,7 +18363,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     const useInjectOverflowContext = () => {
       return inject(OverflowContextProviderKey, computed(() => null));
     };
-    var __rest$h = function(s2, e2) {
+    var __rest$m = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18389,7 +18420,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             display,
             order,
             component: Component = "div"
-          } = props2, restProps = __rest$h(props2, ["prefixCls", "invalidate", "item", "renderItem", "responsive", "registerSize", "itemKey", "display", "order", "component"]);
+          } = props2, restProps = __rest$m(props2, ["prefixCls", "invalidate", "item", "renderItem", "responsive", "registerSize", "itemKey", "display", "order", "component"]);
           const children = (_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots);
           const childNode = renderItem && item !== UNDEFINED ? renderItem(item) : children;
           let overflowStyle;
@@ -18428,7 +18459,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$g = function(s2, e2) {
+    var __rest$l = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18475,17 +18506,17 @@ summary tabindex target title type usemap value width wmode wrap`;
           if (!context.value) {
             const {
               component: Component = "div"
-            } = props2, restProps2 = __rest$g(props2, ["component"]);
+            } = props2, restProps2 = __rest$l(props2, ["component"]);
             return createVNode(Component, _objectSpread2$1(_objectSpread2$1({}, restProps2), attrs), {
               default: () => [(_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots)]
             });
           }
           const _b = context.value, {
             className: contextClassName
-          } = _b, restContext = __rest$g(_b, ["className"]);
+          } = _b, restContext = __rest$l(_b, ["className"]);
           const {
             class: className
-          } = attrs, restProps = __rest$g(attrs, ["class"]);
+          } = attrs, restProps = __rest$l(attrs, ["class"]);
           return createVNode(OverflowContextProvider, {
             "value": null
           }, {
@@ -18496,7 +18527,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$f = function(s2, e2) {
+    var __rest$k = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18677,7 +18708,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             class: className,
             style
-          } = attrs, restAttrs = __rest$f(attrs, ["class", "style"]);
+          } = attrs, restAttrs = __rest$k(attrs, ["class", "style"]);
           let suffixStyle = {};
           if (suffixFixedStart.value !== null && isResponsive.value) {
             suffixStyle = {
@@ -18948,7 +18979,7 @@ summary tabindex target title type usemap value width wmode wrap`;
               width: inputWidth.value + "px"
             },
             "key": "input"
-          }, [createVNode(Input, {
+          }, [createVNode(Input$1, {
             "inputRef": inputRef,
             "open": open2,
             "prefixCls": prefixCls,
@@ -19116,7 +19147,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           }
           return createVNode(Fragment, null, [createVNode("span", {
             "class": `${prefixCls}-selection-search`
-          }, [createVNode(Input, {
+          }, [createVNode(Input$1, {
             "inputRef": inputRef,
             "prefixCls": prefixCls,
             "id": id,
@@ -19472,7 +19503,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return reactive(proxy);
     }
-    var __rest$e = function(s2, e2) {
+    var __rest$j = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -19984,7 +20015,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             activeDescendantId,
             activeValue,
             OptionList: OptionList2
-          } = _a, restProps = __rest$e(_a, ["prefixCls", "id", "open", "defaultOpen", "mode", "showSearch", "searchValue", "onSearch", "allowClear", "clearIcon", "showArrow", "inputIcon", "disabled", "loading", "getInputElement", "getPopupContainer", "placement", "animation", "transitionName", "dropdownStyle", "dropdownClassName", "dropdownMatchSelectWidth", "dropdownRender", "dropdownAlign", "showAction", "direction", "tokenSeparators", "tagRender", "optionLabelRender", "onPopupScroll", "onDropdownVisibleChange", "onFocus", "onBlur", "onKeyup", "onKeydown", "onMousedown", "onClear", "omitDomProps", "getRawInputElement", "displayValues", "onDisplayValuesChange", "emptyOptions", "activeDescendantId", "activeValue", "OptionList"]);
+          } = _a, restProps = __rest$j(_a, ["prefixCls", "id", "open", "defaultOpen", "mode", "showSearch", "searchValue", "onSearch", "allowClear", "clearIcon", "showArrow", "inputIcon", "disabled", "loading", "getInputElement", "getPopupContainer", "placement", "animation", "transitionName", "dropdownStyle", "dropdownClassName", "dropdownMatchSelectWidth", "dropdownRender", "dropdownAlign", "showAction", "direction", "tokenSeparators", "tagRender", "optionLabelRender", "onPopupScroll", "onDropdownVisibleChange", "onFocus", "onBlur", "onKeyup", "onKeydown", "onMousedown", "onClear", "omitDomProps", "getRawInputElement", "displayValues", "onDisplayValuesChange", "emptyOptions", "activeDescendantId", "activeValue", "OptionList"]);
           const customizeInputElement = mode === "combobox" && getInputElement && getInputElement() || null;
           const customizeRawInputElement = typeof getRawInputElement === "function" && getRawInputElement();
           const domProps = _extends$1({}, restProps);
@@ -20136,7 +20167,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     const Filter = (_ref, _ref2) => {
       let {
         height,
-        offset,
+        offset: offset2,
         prefixCls,
         onInnerResize
       } = _ref;
@@ -20149,14 +20180,14 @@ summary tabindex target title type usemap value width wmode wrap`;
         display: "flex",
         flexDirection: "column"
       };
-      if (offset !== void 0) {
+      if (offset2 !== void 0) {
         outerStyle = {
           height: `${height}px`,
           position: "relative",
           overflow: "hidden"
         };
         innerStyle = _extends$1(_extends$1({}, innerStyle), {
-          transform: `translateY(${offset}px)`,
+          transform: `translateY(${offset2}px)`,
           position: "absolute",
           left: 0,
           right: 0,
@@ -20520,7 +20551,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             index2 = data.findIndex((item) => getKey2(item) === arg.key);
           }
           const {
-            offset = 0
+            offset: offset2 = 0
           } = arg;
           const syncScroll = (times, targetAlign) => {
             if (times < 0 || !containerRef.value) return;
@@ -20547,10 +20578,10 @@ summary tabindex target title type usemap value width wmode wrap`;
               let targetTop = null;
               switch (mergedAlign) {
                 case "top":
-                  targetTop = itemTop - offset;
+                  targetTop = itemTop - offset2;
                   break;
                 case "bottom":
-                  targetTop = itemBottom - height + offset;
+                  targetTop = itemBottom - height + offset2;
                   break;
                 default: {
                   const scrollBottom = scrollTop + height;
@@ -20701,7 +20732,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         document.removeEventListener("touchmove", noop2);
       });
     }
-    var __rest$d = function(s2, e2) {
+    var __rest$i = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21067,14 +21098,14 @@ summary tabindex target title type usemap value width wmode wrap`;
           children = this.$slots.default,
           style,
           class: className
-        } = _a, restProps = __rest$d(_a, ["prefixCls", "height", "itemHeight", "fullHeight", "data", "itemKey", "virtual", "component", "onScroll", "children", "style", "class"]);
+        } = _a, restProps = __rest$i(_a, ["prefixCls", "height", "itemHeight", "fullHeight", "data", "itemKey", "virtual", "component", "onScroll", "children", "style", "class"]);
         const mergedClassName = classNames(prefixCls, className);
         const {
           scrollTop
         } = this.state;
         const {
           scrollHeight,
-          offset,
+          offset: offset2,
           start,
           end
         } = this.calRes;
@@ -21104,7 +21135,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           default: () => [createVNode(Filter, {
             "prefixCls": prefixCls,
             "height": scrollHeight,
-            "offset": offset,
+            "offset": offset2,
             "onInnerResize": collectHeight,
             "ref": "fillerInnerRef"
           }, {
@@ -21150,7 +21181,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     function useSelectProps() {
       return inject(SelectContextKey, {});
     }
-    var __rest$c = function(s2, e2) {
+    var __rest$h = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21188,10 +21219,10 @@ summary tabindex target title type usemap value width wmode wrap`;
           }
         };
         const getEnabledActiveIndex = function(index2) {
-          let offset = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
+          let offset2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 1;
           const len = memoFlattenOptions.value.length;
           for (let i2 = 0; i2 < len; i2 += 1) {
-            const current = (index2 + i2 * offset + len) % len;
+            const current = (index2 + i2 * offset2 + len) % len;
             const {
               group,
               data
@@ -21292,20 +21323,20 @@ summary tabindex target title type usemap value width wmode wrap`;
             case KeyCode.P:
             case KeyCode.UP:
             case KeyCode.DOWN: {
-              let offset = 0;
+              let offset2 = 0;
               if (which === KeyCode.UP) {
-                offset = -1;
+                offset2 = -1;
               } else if (which === KeyCode.DOWN) {
-                offset = 1;
+                offset2 = 1;
               } else if (isPlatformMac() && ctrlKey) {
                 if (which === KeyCode.N) {
-                  offset = 1;
+                  offset2 = 1;
                 } else if (which === KeyCode.P) {
-                  offset = -1;
+                  offset2 = -1;
                 }
               }
-              if (offset !== 0) {
-                const nextActiveIndex = getEnabledActiveIndex(state.activeIndex + offset, offset);
+              if (offset2 !== 0) {
+                const nextActiveIndex = getEnabledActiveIndex(state.activeIndex + offset2, offset2);
                 scrollIntoView2(nextActiveIndex);
                 setActive(nextActiveIndex, true);
               }
@@ -21412,7 +21443,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                 style,
                 class: cls,
                 className
-              } = data, otherProps = __rest$c(data, ["disabled", "title", "children", "style", "class", "className"]);
+              } = data, otherProps = __rest$h(data, ["disabled", "title", "children", "style", "class", "className"]);
               const passedProps = omit(otherProps, omitFieldNameList);
               const selected = isSelected(value);
               const optionPrefixCls = `${itemPrefixCls.value}-option`;
@@ -21467,7 +21498,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$b = function(s2, e2) {
+    var __rest$g = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21482,7 +21513,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       } = _a, _b = _a.props, {
         value,
         disabled
-      } = _b, restProps = __rest$b(_b, ["value", "disabled"]);
+      } = _b, restProps = __rest$g(_b, ["value", "disabled"]);
       const child = children === null || children === void 0 ? void 0 : children.default;
       return _extends$1({
         key: key2,
@@ -21563,13 +21594,13 @@ summary tabindex target title type usemap value width wmode wrap`;
         labelOptions
       };
     }
-    let uuid = 0;
+    let uuid$2 = 0;
     const isBrowserClient = canUseDom$1();
-    function getUUID() {
+    function getUUID$1() {
       let retId;
       if (isBrowserClient) {
-        retId = uuid;
-        uuid += 1;
+        retId = uuid$2;
+        uuid$2 += 1;
       } else {
         retId = "TEST_OR_SSR";
       }
@@ -21577,7 +21608,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     }
     function useId() {
       let id = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : ref("");
-      const innerId = `rc_select_${getUUID()}`;
+      const innerId = `rc_select_${getUUID$1()}`;
       return id.value || innerId;
     }
     function toArray$2(value) {
@@ -22237,7 +22268,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       newNode.setAttribute(getMark(option), key2);
       return newNode;
     }
-    function _objectSpread$l(target) {
+    function _objectSpread$r(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22247,12 +22278,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$l(target, key2, source[key2]);
+          _defineProperty$r(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$l(obj, key2, value) {
+    function _defineProperty$r(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22267,13 +22298,13 @@ summary tabindex target title type usemap value width wmode wrap`;
     }
     function generate(node2, key2, rootProps) {
       if (!rootProps) {
-        return h$1(node2.tag, _objectSpread$l({
+        return h$1(node2.tag, _objectSpread$r({
           key: key2
         }, node2.attrs), (node2.children || []).map(function(child, index2) {
           return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
         }));
       }
-      return h$1(node2.tag, _objectSpread$l({
+      return h$1(node2.tag, _objectSpread$r({
         key: key2
       }, rootProps, node2.attrs), (node2.children || []).map(function(child, index2) {
         return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
@@ -22349,7 +22380,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return target;
     }
-    function _objectSpread$k(target) {
+    function _objectSpread$q(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22359,12 +22390,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$k(target, key2, source[key2]);
+          _defineProperty$q(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$k(obj, key2, value) {
+    function _defineProperty$q(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22384,10 +22415,10 @@ summary tabindex target title type usemap value width wmode wrap`;
       twoToneColorPalette.calculated = !!secondaryColor;
     }
     function getTwoToneColors() {
-      return _objectSpread$k({}, twoToneColorPalette);
+      return _objectSpread$q({}, twoToneColorPalette);
     }
     var IconBase = function IconBase2(props2, context) {
-      var _props$context$attrs = _objectSpread$k({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
+      var _props$context$attrs = _objectSpread$q({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
       var colors = twoToneColorPalette;
       if (primaryColor) {
         colors = {
@@ -22401,11 +22432,11 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       var target = icon;
       if (target && typeof target.icon === "function") {
-        target = _objectSpread$k({}, target, {
+        target = _objectSpread$q({}, target, {
           icon: target.icon(colors.primaryColor, colors.secondaryColor)
         });
       }
-      return generate(target.icon, "svg-".concat(target.name), _objectSpread$k({}, restProps, {
+      return generate(target.icon, "svg-".concat(target.name), _objectSpread$q({}, restProps, {
         "data-icon": target.name,
         width: "1em",
         height: "1em",
@@ -22543,7 +22574,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     function _arrayWithHoles(arr) {
       if (Array.isArray(arr)) return arr;
     }
-    function _objectSpread$j(target) {
+    function _objectSpread$p(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22553,12 +22584,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$j(target, key2, source[key2]);
+          _defineProperty$p(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$j(obj, key2, value) {
+    function _defineProperty$p(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22596,9 +22627,9 @@ summary tabindex target title type usemap value width wmode wrap`;
     setTwoToneColor(blue.primary);
     var Icon = function Icon2(props2, context) {
       var _classObj;
-      var _props$context$attrs = _objectSpread$j({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
+      var _props$context$attrs = _objectSpread$p({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
       var _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName;
-      var classObj = (_classObj = {}, _defineProperty$j(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$j(_classObj, prefixCls.value, true), _defineProperty$j(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$j(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
+      var classObj = (_classObj = {}, _defineProperty$p(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$p(_classObj, prefixCls.value, true), _defineProperty$p(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$p(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
       var iconTabIndex = tabindex;
       if (iconTabIndex === void 0 && onClick) {
         iconTabIndex = -1;
@@ -22608,7 +22639,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         transform: "rotate(".concat(rotate, "deg)")
       } : void 0;
       var _normalizeTwoToneColo = normalizeTwoToneColors(twoToneColor), _normalizeTwoToneColo2 = _slicedToArray(_normalizeTwoToneColo, 2), primaryColor = _normalizeTwoToneColo2[0], secondaryColor = _normalizeTwoToneColo2[1];
-      return createVNode("span", _objectSpread$j({
+      return createVNode("span", _objectSpread$p({
         "role": "img",
         "aria-label": icon.name
       }, restProps, {
@@ -22632,7 +22663,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     Icon.inheritAttrs = false;
     Icon.getTwoToneColor = getTwoToneColor;
     Icon.setTwoToneColor = setTwoToneColor;
-    function _objectSpread$i(target) {
+    function _objectSpread$o(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22642,12 +22673,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$i(target, key2, source[key2]);
+          _defineProperty$o(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$i(obj, key2, value) {
+    function _defineProperty$o(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22656,15 +22687,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var DownOutlined = function DownOutlined2(props2, context) {
-      var p2 = _objectSpread$i({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$i({}, p2, {
+      var p2 = _objectSpread$o({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$o({}, p2, {
         "icon": DownOutlined$1
       }), null);
     };
     DownOutlined.displayName = "DownOutlined";
     DownOutlined.inheritAttrs = false;
     var LoadingOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z" } }] }, "name": "loading", "theme": "outlined" };
-    function _objectSpread$h(target) {
+    function _objectSpread$n(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22674,12 +22705,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$h(target, key2, source[key2]);
+          _defineProperty$n(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$h(obj, key2, value) {
+    function _defineProperty$n(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22688,15 +22719,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var LoadingOutlined = function LoadingOutlined2(props2, context) {
-      var p2 = _objectSpread$h({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$h({}, p2, {
+      var p2 = _objectSpread$n({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$n({}, p2, {
         "icon": LoadingOutlined$1
       }), null);
     };
     LoadingOutlined.displayName = "LoadingOutlined";
     LoadingOutlined.inheritAttrs = false;
     var CheckOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z" } }] }, "name": "check", "theme": "outlined" };
-    function _objectSpread$g(target) {
+    function _objectSpread$m(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22706,12 +22737,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$g(target, key2, source[key2]);
+          _defineProperty$m(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$g(obj, key2, value) {
+    function _defineProperty$m(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22720,15 +22751,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var CheckOutlined = function CheckOutlined2(props2, context) {
-      var p2 = _objectSpread$g({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$g({}, p2, {
+      var p2 = _objectSpread$m({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$m({}, p2, {
         "icon": CheckOutlined$1
       }), null);
     };
     CheckOutlined.displayName = "CheckOutlined";
     CheckOutlined.inheritAttrs = false;
     var CloseOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z" } }] }, "name": "close", "theme": "outlined" };
-    function _objectSpread$f(target) {
+    function _objectSpread$l(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22738,12 +22769,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$f(target, key2, source[key2]);
+          _defineProperty$l(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$f(obj, key2, value) {
+    function _defineProperty$l(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22752,15 +22783,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var CloseOutlined = function CloseOutlined2(props2, context) {
-      var p2 = _objectSpread$f({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$f({}, p2, {
+      var p2 = _objectSpread$l({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$l({}, p2, {
         "icon": CloseOutlined$1
       }), null);
     };
     CloseOutlined.displayName = "CloseOutlined";
     CloseOutlined.inheritAttrs = false;
     var CloseCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z" } }] }, "name": "close-circle", "theme": "filled" };
-    function _objectSpread$e(target) {
+    function _objectSpread$k(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22770,12 +22801,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$e(target, key2, source[key2]);
+          _defineProperty$k(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$e(obj, key2, value) {
+    function _defineProperty$k(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22784,15 +22815,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
-      var p2 = _objectSpread$e({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$e({}, p2, {
+      var p2 = _objectSpread$k({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$k({}, p2, {
         "icon": CloseCircleFilled$1
       }), null);
     };
     CloseCircleFilled.displayName = "CloseCircleFilled";
     CloseCircleFilled.inheritAttrs = false;
     var SearchOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" } }] }, "name": "search", "theme": "outlined" };
-    function _objectSpread$d(target) {
+    function _objectSpread$j(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22802,12 +22833,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$d(target, key2, source[key2]);
+          _defineProperty$j(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$d(obj, key2, value) {
+    function _defineProperty$j(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22816,8 +22847,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var SearchOutlined = function SearchOutlined2(props2, context) {
-      var p2 = _objectSpread$d({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$d({}, p2, {
+      var p2 = _objectSpread$j({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$j({}, p2, {
         "icon": SearchOutlined$1
       }), null);
     };
@@ -22968,6 +22999,19 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     const FormItemInputContext = createContext({});
+    const NoFormStatus = /* @__PURE__ */ defineComponent({
+      name: "NoFormStatus",
+      setup(_2, _ref2) {
+        let {
+          slots
+        } = _ref2;
+        FormItemInputContext.useProvide({});
+        return () => {
+          var _a;
+          return (_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots);
+        };
+      }
+    });
     function getStatusClassNames(prefixCls, status, hasFeedback) {
       return classNames({
         [`${prefixCls}-status-success`]: status === "success",
@@ -23031,7 +23075,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$a = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
+    const useStyle$c = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
     const spaceCompactItemProps = () => ({
       compactSize: String,
       compactDirection: PropTypes.oneOf(tuple("horizontal", "vertical")).def("horizontal"),
@@ -23115,7 +23159,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction: directionConfig
         } = useConfigInject("space-compact", props2);
         const compactItemContext = SpaceCompactItemContext.useInject();
-        const [wrapSSR, hashId] = useStyle$a(prefixCls);
+        const [wrapSSR, hashId] = useStyle$c(prefixCls);
         const clx = computed(() => {
           return classNames(prefixCls.value, hashId.value, {
             [`${prefixCls.value}-rtl`]: directionConfig.value === "rtl",
@@ -23182,6 +23226,42 @@ summary tabindex target title type usemap value width wmode wrap`;
           pointerEvents: "none"
         }
       };
+    };
+    const fadeIn = new Keyframe("antFadeIn", {
+      "0%": {
+        opacity: 0
+      },
+      "100%": {
+        opacity: 1
+      }
+    });
+    const fadeOut = new Keyframe("antFadeOut", {
+      "0%": {
+        opacity: 1
+      },
+      "100%": {
+        opacity: 0
+      }
+    });
+    const initFadeMotion = function(token2) {
+      let sameLevel = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
+      const {
+        antCls
+      } = token2;
+      const motionCls = `${antCls}-fade`;
+      const sameLevelPrefix = sameLevel ? "&" : "";
+      return [initMotion(motionCls, fadeIn, fadeOut, token2.motionDurationMid, sameLevel), {
+        [`
+        ${sameLevelPrefix}${motionCls}-enter,
+        ${sameLevelPrefix}${motionCls}-appear
+      `]: {
+          opacity: 0,
+          animationTimingFunction: "linear"
+        },
+        [`${sameLevelPrefix}${motionCls}-leave`]: {
+          animationTimingFunction: "linear"
+        }
+      }];
     };
     const moveDownIn = new Keyframe("antMoveDownIn", {
       "0%": {
@@ -23622,7 +23702,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         inKeyframes,
         outKeyframes
       } = zoomMotion[motionName];
-      return [initMotion(motionCls, inKeyframes, outKeyframes, token2.motionDurationFast), {
+      return [initMotion(motionCls, inKeyframes, outKeyframes, motionName === "zoom-big-fast" ? token2.motionDurationFast : token2.motionDurationMid), {
         [`
         ${motionCls}-enter,
         ${motionCls}-appear
@@ -24233,7 +24313,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const genStatusStyle = function(rootSelectCls, token2) {
+    const genStatusStyle$1 = function(rootSelectCls, token2) {
       let overwriteDefaultBorder = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : false;
       const {
         componentCls,
@@ -24425,15 +24505,15 @@ summary tabindex target title type usemap value width wmode wrap`;
         // =====================================================
         // ==                     Status                      ==
         // =====================================================
-        genStatusStyle(componentCls, merge(token2, {
+        genStatusStyle$1(componentCls, merge(token2, {
           borderHoverColor: token2.colorPrimaryHover,
           outlineColor: token2.controlOutline
         })),
-        genStatusStyle(`${componentCls}-status-error`, merge(token2, {
+        genStatusStyle$1(`${componentCls}-status-error`, merge(token2, {
           borderHoverColor: token2.colorErrorHover,
           outlineColor: token2.colorErrorOutline
         }), true),
-        genStatusStyle(`${componentCls}-status-warning`, merge(token2, {
+        genStatusStyle$1(`${componentCls}-status-warning`, merge(token2, {
           borderHoverColor: token2.colorWarningHover,
           outlineColor: token2.colorWarningOutline
         }), true),
@@ -24674,6 +24754,198 @@ summary tabindex target title type usemap value width wmode wrap`;
     Select.Option;
     Select.OptGroup;
     var CheckCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z" } }, { "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }] }, "name": "check-circle", "theme": "outlined" };
+    function _objectSpread$i(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$i(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$i(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$i({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$i({}, p2, {
+        "icon": CheckCircleOutlined$1
+      }), null);
+    };
+    CheckCircleOutlined.displayName = "CheckCircleOutlined";
+    CheckCircleOutlined.inheritAttrs = false;
+    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
+    function _objectSpread$h(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$h(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$h(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$h({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$h({}, p2, {
+        "icon": ExclamationCircleOutlined$1
+      }), null);
+    };
+    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
+    ExclamationCircleOutlined.inheritAttrs = false;
+    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
+    function _objectSpread$g(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$g(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$g(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$g({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$g({}, p2, {
+        "icon": InfoCircleOutlined$1
+      }), null);
+    };
+    InfoCircleOutlined.displayName = "InfoCircleOutlined";
+    InfoCircleOutlined.inheritAttrs = false;
+    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
+    function _objectSpread$f(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$f(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$f(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$f({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$f({}, p2, {
+        "icon": CloseCircleOutlined$1
+      }), null);
+    };
+    CloseCircleOutlined.displayName = "CloseCircleOutlined";
+    CloseCircleOutlined.inheritAttrs = false;
+    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
+    function _objectSpread$e(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$e(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$e(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
+      var p2 = _objectSpread$e({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$e({}, p2, {
+        "icon": CheckCircleFilled$1
+      }), null);
+    };
+    CheckCircleFilled.displayName = "CheckCircleFilled";
+    CheckCircleFilled.inheritAttrs = false;
+    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
+    function _objectSpread$d(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$d(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$d(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
+      var p2 = _objectSpread$d({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$d({}, p2, {
+        "icon": ExclamationCircleFilled$1
+      }), null);
+    };
+    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
+    ExclamationCircleFilled.inheritAttrs = false;
+    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
     function _objectSpread$c(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24697,201 +24969,9 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
+    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
       var p2 = _objectSpread$c({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$c({}, p2, {
-        "icon": CheckCircleOutlined$1
-      }), null);
-    };
-    CheckCircleOutlined.displayName = "CheckCircleOutlined";
-    CheckCircleOutlined.inheritAttrs = false;
-    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
-    function _objectSpread$b(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$b(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$b(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$b({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$b({}, p2, {
-        "icon": ExclamationCircleOutlined$1
-      }), null);
-    };
-    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
-    ExclamationCircleOutlined.inheritAttrs = false;
-    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
-    function _objectSpread$a(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$a(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$a(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$a({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$a({}, p2, {
-        "icon": InfoCircleOutlined$1
-      }), null);
-    };
-    InfoCircleOutlined.displayName = "InfoCircleOutlined";
-    InfoCircleOutlined.inheritAttrs = false;
-    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
-    function _objectSpread$9(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$9(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$9(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$9({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$9({}, p2, {
-        "icon": CloseCircleOutlined$1
-      }), null);
-    };
-    CloseCircleOutlined.displayName = "CloseCircleOutlined";
-    CloseCircleOutlined.inheritAttrs = false;
-    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
-    function _objectSpread$8(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$8(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$8(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
-      var p2 = _objectSpread$8({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$8({}, p2, {
-        "icon": CheckCircleFilled$1
-      }), null);
-    };
-    CheckCircleFilled.displayName = "CheckCircleFilled";
-    CheckCircleFilled.inheritAttrs = false;
-    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
-    function _objectSpread$7(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$7(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$7(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
-      var p2 = _objectSpread$7({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$7({}, p2, {
-        "icon": ExclamationCircleFilled$1
-      }), null);
-    };
-    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
-    ExclamationCircleFilled.inheritAttrs = false;
-    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
-    function _objectSpread$6(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$6(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$6(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
-      var p2 = _objectSpread$6({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$6({}, p2, {
         "icon": InfoCircleFilled$1
       }), null);
     };
@@ -25048,7 +25128,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       id: String,
       overlayInnerStyle: PropTypes.any
     };
-    const Content = /* @__PURE__ */ defineComponent({
+    const Content$1 = /* @__PURE__ */ defineComponent({
       compatConfig: {
         MODE: 3
       },
@@ -25069,7 +25149,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$a = function(s2, e2) {
+    var __rest$f = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -25148,7 +25228,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           return [!!props2.arrow ? createVNode("div", {
             "class": `${prefixCls}-arrow`,
             "key": "arrow"
-          }, [getPropsSlot(slots, props2, "arrowContent")]) : null, createVNode(Content, {
+          }, [getPropsSlot(slots, props2, "arrowContent")]) : null, createVNode(Content$1, {
             "key": "content",
             "prefixCls": prefixCls,
             "id": tipId,
@@ -25199,7 +25279,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             align,
             destroyTooltipOnHide,
             defaultVisible
-          } = props2, restProps = __rest$a(props2, ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "afterVisibleChange", "transitionName", "animation", "placement", "align", "destroyTooltipOnHide", "defaultVisible"]);
+          } = props2, restProps = __rest$f(props2, ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "afterVisibleChange", "transitionName", "animation", "placement", "align", "destroyTooltipOnHide", "defaultVisible"]);
           const extraProps = _extends$1({}, restProps);
           if (props2.visible !== void 0) {
             extraProps.popupVisible = props2.visible;
@@ -25674,7 +25754,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$9 = (prefixCls, injectStyle) => {
+    const useStyle$b = (prefixCls, injectStyle) => {
       const useOriginHook = genComponentStyleHook("Tooltip", (token2) => {
         if ((injectStyle === null || injectStyle === void 0 ? void 0 : injectStyle.value) === false) {
           return [];
@@ -25874,7 +25954,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
         const colorInfo = computed(() => parseColor(prefixCls.value, props2.color));
         const injectFromPopover = computed(() => attrs["data-popover-inject"]);
-        const [wrapSSR, hashId] = useStyle$9(prefixCls, computed(() => !injectFromPopover.value));
+        const [wrapSSR, hashId] = useStyle$b(prefixCls, computed(() => !injectFromPopover.value));
         return () => {
           var _a, _b;
           const {
@@ -25957,7 +26037,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$8 = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
+    const useStyle$a = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
     function isNotGrey(color) {
       const match2 = (color || "").match(/rgba?\((\d*), (\d*), (\d*)(, [\d.]*)?\)/);
       if (match2 && match2[1] && match2[2] && match2[3]) {
@@ -26141,7 +26221,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           wave
         } = useConfigInject("wave", props2);
-        const [, hashId] = useStyle$8(prefixCls);
+        const [, hashId] = useStyle$a(prefixCls);
         const showWave = useWave(instance, computed(() => classNames(prefixCls.value, hashId.value)), wave);
         let onClick;
         const clear2 = () => {
@@ -26181,6 +26261,16 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
+    function convertLegacyProps(type) {
+      if (type === "danger") {
+        return {
+          danger: true
+        };
+      }
+      return {
+        type
+      };
+    }
     const buttonProps = () => ({
       prefixCls: String,
       type: String,
@@ -26306,7 +26396,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       }
     });
-    const genGroupStyle = (token2) => {
+    const genGroupStyle$1 = (token2) => {
       const {
         componentCls,
         fontSize,
@@ -26489,7 +26579,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       paddingInlineStart: token2.controlHeight / 2,
       paddingInlineEnd: token2.controlHeight / 2
     });
-    const genDisabledStyle = (token2) => ({
+    const genDisabledStyle$1 = (token2) => ({
       cursor: "not-allowed",
       borderColor: token2.colorBorder,
       color: token2.colorTextDisabled,
@@ -26515,7 +26605,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       })
     });
     const genSolidDisabledButtonStyle = (token2) => ({
-      "&:disabled": _extends$1({}, genDisabledStyle(token2))
+      "&:disabled": _extends$1({}, genDisabledStyle$1(token2))
     });
     const genSolidButtonStyle = (token2) => _extends$1({}, genSolidDisabledButtonStyle(token2));
     const genPureDisabledButtonStyle = (token2) => ({
@@ -26613,8 +26703,8 @@ summary tabindex target title type usemap value width wmode wrap`;
         backgroundColor: token2.colorErrorBg
       }))
     });
-    const genDisabledButtonStyle = (token2) => _extends$1(_extends$1({}, genDisabledStyle(token2)), {
-      [`&${token2.componentCls}:hover`]: _extends$1({}, genDisabledStyle(token2))
+    const genDisabledButtonStyle = (token2) => _extends$1(_extends$1({}, genDisabledStyle$1(token2)), {
+      [`&${token2.componentCls}:hover`]: _extends$1({}, genDisabledStyle$1(token2))
     });
     const genTypeButtonStyle = (token2) => {
       const {
@@ -26716,7 +26806,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$7 = genComponentStyleHook("Button", (token2) => {
+    const useStyle$9 = genComponentStyleHook("Button", (token2) => {
       const {
         controlTmpOutline,
         paddingContentHorizontal
@@ -26737,7 +26827,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         // Group (type, ghost, danger, disabled, loading)
         genTypeButtonStyle(buttonToken),
         // Button Group
-        genGroupStyle(buttonToken),
+        genGroupStyle$1(buttonToken),
         // Space Compact
         genCompactItemStyle(token2, {
           focus: false
@@ -26833,7 +26923,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("btn", props2);
-        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const [wrapSSR, hashId] = useStyle$9(prefixCls);
         const groupSizeContext = GroupSizeContext.useInject();
         const disabledContext = useInjectDisabled();
         const mergedDisabled = computed(() => {
@@ -27086,7 +27176,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    var __rest$9 = function(s2, e2) {
+    var __rest$e = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -27192,7 +27282,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             autofocus,
             value,
             required
-          } = props2, others = __rest$9(props2, ["prefixCls", "name", "id", "type", "disabled", "readonly", "tabindex", "autofocus", "value", "required"]);
+          } = props2, others = __rest$e(props2, ["prefixCls", "name", "id", "type", "disabled", "readonly", "tabindex", "autofocus", "value", "required"]);
           const {
             class: className,
             onFocus,
@@ -27643,7 +27733,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$6 = genComponentStyleHook("Radio", (token2) => {
+    const useStyle$8 = genComponentStyleHook("Radio", (token2) => {
       const {
         padding,
         lineWidth,
@@ -27695,7 +27785,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return [getGroupRadioStyle(radioToken), getRadioBasicStyle(radioToken), getRadioButtonStyle(radioToken)];
     });
-    var __rest$8 = function(s2, e2) {
+    var __rest$d = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -27750,7 +27840,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         } = useConfigInject("radio", props2);
         const prefixCls = computed(() => (radioGroupContext === null || radioGroupContext === void 0 ? void 0 : radioGroupContext.optionType.value) === "button" || radioOptionTypeContext === "button" ? `${radioPrefixCls.value}-button` : radioPrefixCls.value);
         const contextDisabled = useInjectDisabled();
-        const [wrapSSR, hashId] = useStyle$6(radioPrefixCls);
+        const [wrapSSR, hashId] = useStyle$8(radioPrefixCls);
         const focus = () => {
           vcCheckbox.value.focus();
         };
@@ -27780,7 +27870,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             prefixCls: customizePrefixCls,
             id = formItemContext.id.value
-          } = props2, restProps = __rest$8(props2, ["prefixCls", "id"]);
+          } = props2, restProps = __rest$d(props2, ["prefixCls", "id"]);
           const rProps = _extends$1(_extends$1({
             prefixCls: prefixCls.value,
             id
@@ -27844,7 +27934,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("radio", props2);
-        const [wrapSSR, hashId] = useStyle$6(prefixCls);
+        const [wrapSSR, hashId] = useStyle$8(prefixCls);
         const stateValue = ref(props2.value);
         const updatingValue = ref(false);
         watch(() => props2.value, (val) => {
@@ -27961,6 +28051,790 @@ summary tabindex target title type usemap value width wmode wrap`;
       app.component(Radio.Button.name, Radio.Button);
       return app;
     };
+    const genPlaceholderStyle = (color) => ({
+      // Firefox
+      "&::-moz-placeholder": {
+        opacity: 1
+      },
+      "&::placeholder": {
+        color,
+        userSelect: "none"
+        // https://github.com/ant-design/ant-design/pull/32639
+      },
+      "&:placeholder-shown": {
+        textOverflow: "ellipsis"
+      }
+    });
+    const genHoverStyle = (token2) => ({
+      borderColor: token2.inputBorderHoverColor,
+      borderInlineEndWidth: token2.lineWidth
+    });
+    const genActiveStyle = (token2) => ({
+      borderColor: token2.inputBorderHoverColor,
+      boxShadow: `0 0 0 ${token2.controlOutlineWidth}px ${token2.controlOutline}`,
+      borderInlineEndWidth: token2.lineWidth,
+      outline: 0
+    });
+    const genDisabledStyle = (token2) => ({
+      color: token2.colorTextDisabled,
+      backgroundColor: token2.colorBgContainerDisabled,
+      borderColor: token2.colorBorder,
+      boxShadow: "none",
+      cursor: "not-allowed",
+      opacity: 1,
+      "&:hover": _extends$1({}, genHoverStyle(merge(token2, {
+        inputBorderHoverColor: token2.colorBorder
+      })))
+    });
+    const genInputLargeStyle = (token2) => {
+      const {
+        inputPaddingVerticalLG,
+        fontSizeLG,
+        lineHeightLG,
+        borderRadiusLG,
+        inputPaddingHorizontalLG
+      } = token2;
+      return {
+        padding: `${inputPaddingVerticalLG}px ${inputPaddingHorizontalLG}px`,
+        fontSize: fontSizeLG,
+        lineHeight: lineHeightLG,
+        borderRadius: borderRadiusLG
+      };
+    };
+    const genInputSmallStyle = (token2) => ({
+      padding: `${token2.inputPaddingVerticalSM}px ${token2.controlPaddingHorizontalSM - 1}px`,
+      borderRadius: token2.borderRadiusSM
+    });
+    const genStatusStyle = (token2, parentCls) => {
+      const {
+        componentCls,
+        colorError,
+        colorWarning,
+        colorErrorOutline,
+        colorWarningOutline,
+        colorErrorBorderHover,
+        colorWarningBorderHover
+      } = token2;
+      return {
+        [`&-status-error:not(${parentCls}-disabled):not(${parentCls}-borderless)${parentCls}`]: {
+          borderColor: colorError,
+          "&:hover": {
+            borderColor: colorErrorBorderHover
+          },
+          "&:focus, &-focused": _extends$1({}, genActiveStyle(merge(token2, {
+            inputBorderActiveColor: colorError,
+            inputBorderHoverColor: colorError,
+            controlOutline: colorErrorOutline
+          }))),
+          [`${componentCls}-prefix`]: {
+            color: colorError
+          }
+        },
+        [`&-status-warning:not(${parentCls}-disabled):not(${parentCls}-borderless)${parentCls}`]: {
+          borderColor: colorWarning,
+          "&:hover": {
+            borderColor: colorWarningBorderHover
+          },
+          "&:focus, &-focused": _extends$1({}, genActiveStyle(merge(token2, {
+            inputBorderActiveColor: colorWarning,
+            inputBorderHoverColor: colorWarning,
+            controlOutline: colorWarningOutline
+          }))),
+          [`${componentCls}-prefix`]: {
+            color: colorWarning
+          }
+        }
+      };
+    };
+    const genBasicInputStyle = (token2) => _extends$1(_extends$1({
+      position: "relative",
+      display: "inline-block",
+      width: "100%",
+      minWidth: 0,
+      padding: `${token2.inputPaddingVertical}px ${token2.inputPaddingHorizontal}px`,
+      color: token2.colorText,
+      fontSize: token2.fontSize,
+      lineHeight: token2.lineHeight,
+      backgroundColor: token2.colorBgContainer,
+      backgroundImage: "none",
+      borderWidth: token2.lineWidth,
+      borderStyle: token2.lineType,
+      borderColor: token2.colorBorder,
+      borderRadius: token2.borderRadius,
+      transition: `all ${token2.motionDurationMid}`
+    }, genPlaceholderStyle(token2.colorTextPlaceholder)), {
+      "&:hover": _extends$1({}, genHoverStyle(token2)),
+      "&:focus, &-focused": _extends$1({}, genActiveStyle(token2)),
+      "&-disabled, &[disabled]": _extends$1({}, genDisabledStyle(token2)),
+      "&-borderless": {
+        "&, &:hover, &:focus, &-focused, &-disabled, &[disabled]": {
+          backgroundColor: "transparent",
+          border: "none",
+          boxShadow: "none"
+        }
+      },
+      // Reset height for `textarea`s
+      "textarea&": {
+        maxWidth: "100%",
+        height: "auto",
+        minHeight: token2.controlHeight,
+        lineHeight: token2.lineHeight,
+        verticalAlign: "bottom",
+        transition: `all ${token2.motionDurationSlow}, height 0s`,
+        resize: "vertical"
+      },
+      // Size
+      "&-lg": _extends$1({}, genInputLargeStyle(token2)),
+      "&-sm": _extends$1({}, genInputSmallStyle(token2)),
+      // RTL
+      "&-rtl": {
+        direction: "rtl"
+      },
+      "&-textarea-rtl": {
+        direction: "rtl"
+      }
+    });
+    const genInputGroupStyle = (token2) => {
+      const {
+        componentCls,
+        antCls
+      } = token2;
+      return {
+        position: "relative",
+        display: "table",
+        width: "100%",
+        borderCollapse: "separate",
+        borderSpacing: 0,
+        // Undo padding and float of grid classes
+        [`&[class*='col-']`]: {
+          paddingInlineEnd: token2.paddingXS,
+          "&:last-child": {
+            paddingInlineEnd: 0
+          }
+        },
+        // Sizing options
+        [`&-lg ${componentCls}, &-lg > ${componentCls}-group-addon`]: _extends$1({}, genInputLargeStyle(token2)),
+        [`&-sm ${componentCls}, &-sm > ${componentCls}-group-addon`]: _extends$1({}, genInputSmallStyle(token2)),
+        [`> ${componentCls}`]: {
+          display: "table-cell",
+          "&:not(:first-child):not(:last-child)": {
+            borderRadius: 0
+          }
+        },
+        [`${componentCls}-group`]: {
+          [`&-addon, &-wrap`]: {
+            display: "table-cell",
+            width: 1,
+            whiteSpace: "nowrap",
+            verticalAlign: "middle",
+            "&:not(:first-child):not(:last-child)": {
+              borderRadius: 0
+            }
+          },
+          "&-wrap > *": {
+            display: "block !important"
+          },
+          "&-addon": {
+            position: "relative",
+            padding: `0 ${token2.inputPaddingHorizontal}px`,
+            color: token2.colorText,
+            fontWeight: "normal",
+            fontSize: token2.fontSize,
+            textAlign: "center",
+            backgroundColor: token2.colorFillAlter,
+            border: `${token2.lineWidth}px ${token2.lineType} ${token2.colorBorder}`,
+            borderRadius: token2.borderRadius,
+            transition: `all ${token2.motionDurationSlow}`,
+            lineHeight: 1,
+            // Reset Select's style in addon
+            [`${antCls}-select`]: {
+              margin: `-${token2.inputPaddingVertical + 1}px -${token2.inputPaddingHorizontal}px`,
+              [`&${antCls}-select-single:not(${antCls}-select-customize-input)`]: {
+                [`${antCls}-select-selector`]: {
+                  backgroundColor: "inherit",
+                  border: `${token2.lineWidth}px ${token2.lineType} transparent`,
+                  boxShadow: "none"
+                }
+              },
+              "&-open, &-focused": {
+                [`${antCls}-select-selector`]: {
+                  color: token2.colorPrimary
+                }
+              }
+            },
+            // https://github.com/ant-design/ant-design/issues/31333
+            [`${antCls}-cascader-picker`]: {
+              margin: `-9px -${token2.inputPaddingHorizontal}px`,
+              backgroundColor: "transparent",
+              [`${antCls}-cascader-input`]: {
+                textAlign: "start",
+                border: 0,
+                boxShadow: "none"
+              }
+            }
+          },
+          "&-addon:first-child": {
+            borderInlineEnd: 0
+          },
+          "&-addon:last-child": {
+            borderInlineStart: 0
+          }
+        },
+        [`${componentCls}`]: {
+          float: "inline-start",
+          width: "100%",
+          marginBottom: 0,
+          textAlign: "inherit",
+          "&:focus": {
+            zIndex: 1,
+            borderInlineEndWidth: 1
+          },
+          "&:hover": {
+            zIndex: 1,
+            borderInlineEndWidth: 1,
+            [`${componentCls}-search-with-button &`]: {
+              zIndex: 0
+            }
+          }
+        },
+        // Reset rounded corners
+        [`> ${componentCls}:first-child, ${componentCls}-group-addon:first-child`]: {
+          borderStartEndRadius: 0,
+          borderEndEndRadius: 0,
+          // Reset Select's style in addon
+          [`${antCls}-select ${antCls}-select-selector`]: {
+            borderStartEndRadius: 0,
+            borderEndEndRadius: 0
+          }
+        },
+        [`> ${componentCls}-affix-wrapper`]: {
+          [`&:not(:first-child) ${componentCls}`]: {
+            borderStartStartRadius: 0,
+            borderEndStartRadius: 0
+          },
+          [`&:not(:last-child) ${componentCls}`]: {
+            borderStartEndRadius: 0,
+            borderEndEndRadius: 0
+          }
+        },
+        [`> ${componentCls}:last-child, ${componentCls}-group-addon:last-child`]: {
+          borderStartStartRadius: 0,
+          borderEndStartRadius: 0,
+          // Reset Select's style in addon
+          [`${antCls}-select ${antCls}-select-selector`]: {
+            borderStartStartRadius: 0,
+            borderEndStartRadius: 0
+          }
+        },
+        [`${componentCls}-affix-wrapper`]: {
+          "&:not(:last-child)": {
+            borderStartEndRadius: 0,
+            borderEndEndRadius: 0,
+            [`${componentCls}-search &`]: {
+              borderStartStartRadius: token2.borderRadius,
+              borderEndStartRadius: token2.borderRadius
+            }
+          },
+          [`&:not(:first-child), ${componentCls}-search &:not(:first-child)`]: {
+            borderStartStartRadius: 0,
+            borderEndStartRadius: 0
+          }
+        },
+        [`&${componentCls}-group-compact`]: _extends$1(_extends$1({
+          display: "block"
+        }, clearFix()), {
+          [`${componentCls}-group-addon, ${componentCls}-group-wrap, > ${componentCls}`]: {
+            "&:not(:first-child):not(:last-child)": {
+              borderInlineEndWidth: token2.lineWidth,
+              "&:hover": {
+                zIndex: 1
+              },
+              "&:focus": {
+                zIndex: 1
+              }
+            }
+          },
+          "& > *": {
+            display: "inline-block",
+            float: "none",
+            verticalAlign: "top",
+            borderRadius: 0
+          },
+          [`& > ${componentCls}-affix-wrapper`]: {
+            display: "inline-flex"
+          },
+          [`& > ${antCls}-picker-range`]: {
+            display: "inline-flex"
+          },
+          "& > *:not(:last-child)": {
+            marginInlineEnd: -token2.lineWidth,
+            borderInlineEndWidth: token2.lineWidth
+          },
+          // Undo float for .ant-input-group .ant-input
+          [`${componentCls}`]: {
+            float: "none"
+          },
+          // reset border for Select, DatePicker, AutoComplete, Cascader, Mention, TimePicker, Input
+          [`& > ${antCls}-select > ${antCls}-select-selector,
+      & > ${antCls}-select-auto-complete ${componentCls},
+      & > ${antCls}-cascader-picker ${componentCls},
+      & > ${componentCls}-group-wrapper ${componentCls}`]: {
+            borderInlineEndWidth: token2.lineWidth,
+            borderRadius: 0,
+            "&:hover": {
+              zIndex: 1
+            },
+            "&:focus": {
+              zIndex: 1
+            }
+          },
+          [`& > ${antCls}-select-focused`]: {
+            zIndex: 1
+          },
+          // update z-index for arrow icon
+          [`& > ${antCls}-select > ${antCls}-select-arrow`]: {
+            zIndex: 1
+            // https://github.com/ant-design/ant-design/issues/20371
+          },
+          [`& > *:first-child,
+      & > ${antCls}-select:first-child > ${antCls}-select-selector,
+      & > ${antCls}-select-auto-complete:first-child ${componentCls},
+      & > ${antCls}-cascader-picker:first-child ${componentCls}`]: {
+            borderStartStartRadius: token2.borderRadius,
+            borderEndStartRadius: token2.borderRadius
+          },
+          [`& > *:last-child,
+      & > ${antCls}-select:last-child > ${antCls}-select-selector,
+      & > ${antCls}-cascader-picker:last-child ${componentCls},
+      & > ${antCls}-cascader-picker-focused:last-child ${componentCls}`]: {
+            borderInlineEndWidth: token2.lineWidth,
+            borderStartEndRadius: token2.borderRadius,
+            borderEndEndRadius: token2.borderRadius
+          },
+          // https://github.com/ant-design/ant-design/issues/12493
+          [`& > ${antCls}-select-auto-complete ${componentCls}`]: {
+            verticalAlign: "top"
+          },
+          [`${componentCls}-group-wrapper + ${componentCls}-group-wrapper`]: {
+            marginInlineStart: -token2.lineWidth,
+            [`${componentCls}-affix-wrapper`]: {
+              borderRadius: 0
+            }
+          },
+          [`${componentCls}-group-wrapper:not(:last-child)`]: {
+            [`&${componentCls}-search > ${componentCls}-group`]: {
+              [`& > ${componentCls}-group-addon > ${componentCls}-search-button`]: {
+                borderRadius: 0
+              },
+              [`& > ${componentCls}`]: {
+                borderStartStartRadius: token2.borderRadius,
+                borderStartEndRadius: 0,
+                borderEndEndRadius: 0,
+                borderEndStartRadius: token2.borderRadius
+              }
+            }
+          }
+        }),
+        [`&&-sm ${antCls}-btn`]: {
+          fontSize: token2.fontSizeSM,
+          height: token2.controlHeightSM,
+          lineHeight: "normal"
+        },
+        [`&&-lg ${antCls}-btn`]: {
+          fontSize: token2.fontSizeLG,
+          height: token2.controlHeightLG,
+          lineHeight: "normal"
+        },
+        // Fix https://github.com/ant-design/ant-design/issues/5754
+        [`&&-lg ${antCls}-select-single ${antCls}-select-selector`]: {
+          height: `${token2.controlHeightLG}px`,
+          [`${antCls}-select-selection-item, ${antCls}-select-selection-placeholder`]: {
+            // -2 is for the border size & override default
+            lineHeight: `${token2.controlHeightLG - 2}px`
+          },
+          [`${antCls}-select-selection-search-input`]: {
+            height: `${token2.controlHeightLG}px`
+          }
+        },
+        [`&&-sm ${antCls}-select-single ${antCls}-select-selector`]: {
+          height: `${token2.controlHeightSM}px`,
+          [`${antCls}-select-selection-item, ${antCls}-select-selection-placeholder`]: {
+            // -2 is for the border size & override default
+            lineHeight: `${token2.controlHeightSM - 2}px`
+          },
+          [`${antCls}-select-selection-search-input`]: {
+            height: `${token2.controlHeightSM}px`
+          }
+        }
+      };
+    };
+    const genInputStyle = (token2) => {
+      const {
+        componentCls,
+        controlHeightSM,
+        lineWidth
+      } = token2;
+      const FIXED_CHROME_COLOR_HEIGHT = 16;
+      const colorSmallPadding = (controlHeightSM - lineWidth * 2 - FIXED_CHROME_COLOR_HEIGHT) / 2;
+      return {
+        [componentCls]: _extends$1(_extends$1(_extends$1(_extends$1({}, resetComponent(token2)), genBasicInputStyle(token2)), genStatusStyle(token2, componentCls)), {
+          '&[type="color"]': {
+            height: token2.controlHeight,
+            [`&${componentCls}-lg`]: {
+              height: token2.controlHeightLG
+            },
+            [`&${componentCls}-sm`]: {
+              height: controlHeightSM,
+              paddingTop: colorSmallPadding,
+              paddingBottom: colorSmallPadding
+            }
+          }
+        })
+      };
+    };
+    const genAllowClearStyle = (token2) => {
+      const {
+        componentCls
+      } = token2;
+      return {
+        // ========================= Input =========================
+        [`${componentCls}-clear-icon`]: {
+          margin: 0,
+          color: token2.colorTextQuaternary,
+          fontSize: token2.fontSizeIcon,
+          verticalAlign: -1,
+          // https://github.com/ant-design/ant-design/pull/18151
+          // https://codesandbox.io/s/wizardly-sun-u10br
+          cursor: "pointer",
+          transition: `color ${token2.motionDurationSlow}`,
+          "&:hover": {
+            color: token2.colorTextTertiary
+          },
+          "&:active": {
+            color: token2.colorText
+          },
+          "&-hidden": {
+            visibility: "hidden"
+          },
+          "&-has-suffix": {
+            margin: `0 ${token2.inputAffixPadding}px`
+          }
+        },
+        // ======================= TextArea ========================
+        "&-textarea-with-clear-btn": {
+          padding: "0 !important",
+          border: "0 !important",
+          [`${componentCls}-clear-icon`]: {
+            position: "absolute",
+            insetBlockStart: token2.paddingXS,
+            insetInlineEnd: token2.paddingXS,
+            zIndex: 1
+          }
+        }
+      };
+    };
+    const genAffixStyle = (token2) => {
+      const {
+        componentCls,
+        inputAffixPadding,
+        colorTextDescription,
+        motionDurationSlow,
+        colorIcon,
+        colorIconHover,
+        iconCls
+      } = token2;
+      return {
+        [`${componentCls}-affix-wrapper`]: _extends$1(_extends$1(_extends$1(_extends$1(_extends$1({}, genBasicInputStyle(token2)), {
+          display: "inline-flex",
+          [`&:not(${componentCls}-affix-wrapper-disabled):hover`]: _extends$1(_extends$1({}, genHoverStyle(token2)), {
+            zIndex: 1,
+            [`${componentCls}-search-with-button &`]: {
+              zIndex: 0
+            }
+          }),
+          "&-focused, &:focus": {
+            zIndex: 1
+          },
+          "&-disabled": {
+            [`${componentCls}[disabled]`]: {
+              background: "transparent"
+            }
+          },
+          [`> input${componentCls}`]: {
+            padding: 0,
+            fontSize: "inherit",
+            border: "none",
+            borderRadius: 0,
+            outline: "none",
+            "&:focus": {
+              boxShadow: "none !important"
+            }
+          },
+          "&::before": {
+            width: 0,
+            visibility: "hidden",
+            content: '"\\a0"'
+          },
+          [`${componentCls}`]: {
+            "&-prefix, &-suffix": {
+              display: "flex",
+              flex: "none",
+              alignItems: "center",
+              "> *:not(:last-child)": {
+                marginInlineEnd: token2.paddingXS
+              }
+            },
+            "&-show-count-suffix": {
+              color: colorTextDescription
+            },
+            "&-show-count-has-suffix": {
+              marginInlineEnd: token2.paddingXXS
+            },
+            "&-prefix": {
+              marginInlineEnd: inputAffixPadding
+            },
+            "&-suffix": {
+              marginInlineStart: inputAffixPadding
+            }
+          }
+        }), genAllowClearStyle(token2)), {
+          // password
+          [`${iconCls}${componentCls}-password-icon`]: {
+            color: colorIcon,
+            cursor: "pointer",
+            transition: `all ${motionDurationSlow}`,
+            "&:hover": {
+              color: colorIconHover
+            }
+          }
+        }), genStatusStyle(token2, `${componentCls}-affix-wrapper`))
+      };
+    };
+    const genGroupStyle = (token2) => {
+      const {
+        componentCls,
+        colorError,
+        colorSuccess,
+        borderRadiusLG,
+        borderRadiusSM
+      } = token2;
+      return {
+        [`${componentCls}-group`]: _extends$1(_extends$1(_extends$1({}, resetComponent(token2)), genInputGroupStyle(token2)), {
+          "&-rtl": {
+            direction: "rtl"
+          },
+          "&-wrapper": {
+            display: "inline-block",
+            width: "100%",
+            textAlign: "start",
+            verticalAlign: "top",
+            "&-rtl": {
+              direction: "rtl"
+            },
+            // Size
+            "&-lg": {
+              [`${componentCls}-group-addon`]: {
+                borderRadius: borderRadiusLG
+              }
+            },
+            "&-sm": {
+              [`${componentCls}-group-addon`]: {
+                borderRadius: borderRadiusSM
+              }
+            },
+            // Status
+            "&-status-error": {
+              [`${componentCls}-group-addon`]: {
+                color: colorError,
+                borderColor: colorError
+              }
+            },
+            "&-status-warning": {
+              [`${componentCls}-group-addon:last-child`]: {
+                color: colorSuccess,
+                borderColor: colorSuccess
+              }
+            }
+          }
+        })
+      };
+    };
+    const genSearchInputStyle = (token2) => {
+      const {
+        componentCls,
+        antCls
+      } = token2;
+      const searchPrefixCls = `${componentCls}-search`;
+      return {
+        [searchPrefixCls]: {
+          [`${componentCls}`]: {
+            "&:hover, &:focus": {
+              borderColor: token2.colorPrimaryHover,
+              [`+ ${componentCls}-group-addon ${searchPrefixCls}-button:not(${antCls}-btn-primary)`]: {
+                borderInlineStartColor: token2.colorPrimaryHover
+              }
+            }
+          },
+          [`${componentCls}-affix-wrapper`]: {
+            borderRadius: 0
+          },
+          // fix slight height diff in Firefox:
+          // https://ant.design/components/auto-complete-cn/#components-auto-complete-demo-certain-category
+          [`${componentCls}-lg`]: {
+            lineHeight: token2.lineHeightLG - 2e-4
+          },
+          [`> ${componentCls}-group`]: {
+            [`> ${componentCls}-group-addon:last-child`]: {
+              insetInlineStart: -1,
+              padding: 0,
+              border: 0,
+              [`${searchPrefixCls}-button`]: {
+                paddingTop: 0,
+                paddingBottom: 0,
+                borderStartStartRadius: 0,
+                borderStartEndRadius: token2.borderRadius,
+                borderEndEndRadius: token2.borderRadius,
+                borderEndStartRadius: 0
+              },
+              [`${searchPrefixCls}-button:not(${antCls}-btn-primary)`]: {
+                color: token2.colorTextDescription,
+                "&:hover": {
+                  color: token2.colorPrimaryHover
+                },
+                "&:active": {
+                  color: token2.colorPrimaryActive
+                },
+                [`&${antCls}-btn-loading::before`]: {
+                  insetInlineStart: 0,
+                  insetInlineEnd: 0,
+                  insetBlockStart: 0,
+                  insetBlockEnd: 0
+                }
+              }
+            }
+          },
+          [`${searchPrefixCls}-button`]: {
+            height: token2.controlHeight,
+            "&:hover, &:focus": {
+              zIndex: 1
+            }
+          },
+          [`&-large ${searchPrefixCls}-button`]: {
+            height: token2.controlHeightLG
+          },
+          [`&-small ${searchPrefixCls}-button`]: {
+            height: token2.controlHeightSM
+          },
+          "&-rtl": {
+            direction: "rtl"
+          },
+          // ===================== Compact Item Customized Styles =====================
+          [`&${componentCls}-compact-item`]: {
+            [`&:not(${componentCls}-compact-last-item)`]: {
+              [`${componentCls}-group-addon`]: {
+                [`${componentCls}-search-button`]: {
+                  marginInlineEnd: -token2.lineWidth,
+                  borderRadius: 0
+                }
+              }
+            },
+            [`&:not(${componentCls}-compact-first-item)`]: {
+              [`${componentCls},${componentCls}-affix-wrapper`]: {
+                borderRadius: 0
+              }
+            },
+            [`> ${componentCls}-group-addon ${componentCls}-search-button,
+        > ${componentCls},
+        ${componentCls}-affix-wrapper`]: {
+              "&:hover,&:focus,&:active": {
+                zIndex: 2
+              }
+            },
+            [`> ${componentCls}-affix-wrapper-focused`]: {
+              zIndex: 2
+            }
+          }
+        }
+      };
+    };
+    function initInputToken(token2) {
+      return merge(token2, {
+        inputAffixPadding: token2.paddingXXS,
+        inputPaddingVertical: Math.max(Math.round((token2.controlHeight - token2.fontSize * token2.lineHeight) / 2 * 10) / 10 - token2.lineWidth, 3),
+        inputPaddingVerticalLG: Math.ceil((token2.controlHeightLG - token2.fontSizeLG * token2.lineHeightLG) / 2 * 10) / 10 - token2.lineWidth,
+        inputPaddingVerticalSM: Math.max(Math.round((token2.controlHeightSM - token2.fontSize * token2.lineHeight) / 2 * 10) / 10 - token2.lineWidth, 0),
+        inputPaddingHorizontal: token2.paddingSM - token2.lineWidth,
+        inputPaddingHorizontalSM: token2.paddingXS - token2.lineWidth,
+        inputPaddingHorizontalLG: token2.controlPaddingHorizontal - token2.lineWidth,
+        inputBorderHoverColor: token2.colorPrimaryHover,
+        inputBorderActiveColor: token2.colorPrimaryHover
+      });
+    }
+    const genTextAreaStyle = (token2) => {
+      const {
+        componentCls,
+        inputPaddingHorizontal,
+        paddingLG
+      } = token2;
+      const textareaPrefixCls = `${componentCls}-textarea`;
+      return {
+        [textareaPrefixCls]: {
+          position: "relative",
+          [`${textareaPrefixCls}-suffix`]: {
+            position: "absolute",
+            top: 0,
+            insetInlineEnd: inputPaddingHorizontal,
+            bottom: 0,
+            zIndex: 1,
+            display: "inline-flex",
+            alignItems: "center",
+            margin: "auto"
+          },
+          [`&-status-error,
+        &-status-warning,
+        &-status-success,
+        &-status-validating`]: {
+            [`&${textareaPrefixCls}-has-feedback`]: {
+              [`${componentCls}`]: {
+                paddingInlineEnd: paddingLG
+              }
+            }
+          },
+          "&-show-count": {
+            // https://github.com/ant-design/ant-design/issues/33049
+            [`> ${componentCls}`]: {
+              height: "100%"
+            },
+            "&::after": {
+              color: token2.colorTextDescription,
+              whiteSpace: "nowrap",
+              content: "attr(data-count)",
+              pointerEvents: "none",
+              float: "right"
+            }
+          },
+          "&-rtl": {
+            "&::after": {
+              float: "left"
+            }
+          }
+        }
+      };
+    };
+    const useStyle$7 = genComponentStyleHook("Input", (token2) => {
+      const inputToken = initInputToken(token2);
+      return [
+        genInputStyle(inputToken),
+        genTextAreaStyle(inputToken),
+        genAffixStyle(inputToken),
+        genGroupStyle(inputToken),
+        genSearchInputStyle(inputToken),
+        // =====================================================
+        // ==             Space Compact                       ==
+        // =====================================================
+        genCompactItemStyle(inputToken)
+      ];
+    });
     const canUseDocElement = () => canUseDom$1() && window.document.documentElement;
     let flexGapSupported;
     const detectFlexGapSupported = () => {
@@ -29757,7 +30631,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             span,
             order,
-            offset,
+            offset: offset2,
             push,
             pull
           } = props2;
@@ -29783,7 +30657,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           return classNames(pre, {
             [`${pre}-${span}`]: span !== void 0,
             [`${pre}-order-${order}`]: order,
-            [`${pre}-offset-${offset}`]: offset,
+            [`${pre}-offset-${offset2}`]: offset2,
             [`${pre}-push-${push}`]: push,
             [`${pre}-pull-${pull}`]: pull
           }, sizeClassObj, attrs.class, hashId.value);
@@ -29822,7 +30696,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     var QuestionCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z" } }] }, "name": "question-circle", "theme": "outlined" };
-    function _objectSpread$5(target) {
+    function _objectSpread$b(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -29832,12 +30706,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$5(target, key2, source[key2]);
+          _defineProperty$b(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$5(obj, key2, value) {
+    function _defineProperty$b(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -29846,8 +30720,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var QuestionCircleOutlined = function QuestionCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$5({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$5({}, p2, {
+      var p2 = _objectSpread$b({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$b({}, p2, {
         "icon": QuestionCircleOutlined$1
       }), null);
     };
@@ -30366,7 +31240,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$5 = genComponentStyleHook("Form", (token2, _ref) => {
+    const useStyle$6 = genComponentStyleHook("Form", (token2, _ref) => {
       let {
         rootPrefixCls
       } = _ref;
@@ -30394,7 +31268,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const baseClassName = computed(() => `${prefixCls.value}-item-explain`);
         const visible = computed(() => !!(props2.errors && props2.errors.length));
         const innerStatus = ref(status.value);
-        const [, hashId] = useStyle$5(prefixCls);
+        const [, hashId] = useStyle$6(prefixCls);
         watch([visible, status], () => {
           if (visible.value) {
             innerStatus.value = status.value;
@@ -30613,7 +31487,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("form", props2);
-        const [wrapSSR, hashId] = useStyle$5(prefixCls);
+        const [wrapSSR, hashId] = useStyle$6(prefixCls);
         const itemRef = shallowRef();
         const formContext = useInjectForm();
         const fieldName = computed(() => props2.name || props2.prop);
@@ -31323,7 +32197,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const validateMessages = computed(() => {
           return _extends$1(_extends$1(_extends$1({}, defaultValidateMessages), globalValidateMessages.value), props2.validateMessages);
         });
-        const [wrapSSR, hashId] = useStyle$5(prefixCls);
+        const [wrapSSR, hashId] = useStyle$6(prefixCls);
         const formClassName = computed(() => classNames(prefixCls.value, {
           [`${prefixCls.value}-${props2.layout}`]: true,
           [`${prefixCls.value}-hide-required-mark`]: mergedRequiredMark.value === false,
@@ -31551,6 +32425,9 @@ summary tabindex target title type usemap value width wmode wrap`;
         runtimeLocale = _extends$1({}, localeValues.Modal);
       }
     }
+    function getConfirmLocale() {
+      return runtimeLocale;
+    }
     const ANT_MARK = "internalMark";
     const LocaleProvider = /* @__PURE__ */ defineComponent({
       compatConfig: {
@@ -31700,7 +32577,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$7 = function(s2, e2) {
+    var __rest$c = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -31875,7 +32752,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         transitionName: customTransitionName,
         hasTransitionName: hasTransitionName2,
         useStyle: useStyle2
-      } = _a, props2 = __rest$7(_a, ["name", "getContainer", "appContext", "prefixCls", "rootPrefixCls", "transitionName", "hasTransitionName", "useStyle"]);
+      } = _a, props2 = __rest$c(_a, ["name", "getContainer", "appContext", "prefixCls", "rootPrefixCls", "transitionName", "hasTransitionName", "useStyle"]);
       const div = document.createElement("div");
       if (getContainer2) {
         const root2 = getContainer2();
@@ -32099,7 +32976,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     const HookNotification = Notification;
-    var __rest$6 = function(s2, e2) {
+    var __rest$b = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -32136,7 +33013,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         getClassName,
         getStyles,
         onAllRemoved
-      } = rootConfig, shareConfig = __rest$6(rootConfig, ["getContainer", "motion", "prefixCls", "maxCount", "getClassName", "getStyles", "onAllRemoved"]);
+      } = rootConfig, shareConfig = __rest$b(rootConfig, ["getContainer", "motion", "prefixCls", "maxCount", "getClassName", "getStyles", "onAllRemoved"]);
       const notices = shallowRef([]);
       const notificationsRef = shallowRef();
       const add2 = (originNotice, holderCallback) => {
@@ -32371,7 +33248,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$4 = genComponentStyleHook("Message", (token2) => {
+    const useStyle$5 = genComponentStyleHook("Message", (token2) => {
       const combinedToken = merge(token2, {
         messageNoticeContentPadding: `${(token2.controlHeightLG - token2.fontSize * token2.lineHeight) / 2}px ${token2.paddingSM}px`
       });
@@ -32403,7 +33280,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$5 = function(s2, e2) {
+    var __rest$a = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -32427,7 +33304,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer
         } = useConfigInject("message", props2);
         const prefixCls = computed(() => getPrefixCls("message", props2.prefixCls));
-        const [, hashId] = useStyle$4(prefixCls);
+        const [, hashId] = useStyle$5(prefixCls);
         const getStyles = () => {
           var _a2;
           const top = (_a2 = props2.top) !== null && _a2 !== void 0 ? _a2 : DEFAULT_OFFSET$1;
@@ -32500,7 +33377,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           key: key2,
           class: className,
           onClose
-        } = config, restConfig = __rest$5(config, ["content", "icon", "type", "key", "class", "onClose"]);
+        } = config, restConfig = __rest$a(config, ["content", "icon", "type", "key", "class", "onClose"]);
         let mergedKey = key2;
         if (mergedKey === void 0 || mergedKey === null) {
           keyIndex += 1;
@@ -32637,7 +33514,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         getContainer: getContainer || args.getPopupContainer,
         maxCount: maxCount$1,
         name: "message",
-        useStyle: useStyle$4
+        useStyle: useStyle$5
       }, (instance) => {
         if (messageInstance) {
           callback(messageInstance);
@@ -33010,7 +33887,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$3 = genComponentStyleHook("Notification", (token2) => {
+    const useStyle$4 = genComponentStyleHook("Notification", (token2) => {
       const notificationPaddingVertical = token2.paddingMD;
       const notificationPaddingHorizontal = token2.paddingLG;
       const notificationToken = merge(token2, {
@@ -33143,7 +34020,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         name: `${prefixCls}-fade`
       };
     }
-    var __rest$4 = function(s2, e2) {
+    var __rest$9 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -33170,7 +34047,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           return getPlacementStyle(placement, (_a = props2.top) !== null && _a !== void 0 ? _a : DEFAULT_OFFSET, (_b = props2.bottom) !== null && _b !== void 0 ? _b : DEFAULT_OFFSET);
         };
-        const [, hashId] = useStyle$3(prefixCls);
+        const [, hashId] = useStyle$4(prefixCls);
         const getClassName = () => classNames(hashId.value, {
           [`${prefixCls.value}-rtl`]: props2.rtl
         });
@@ -33218,7 +34095,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           type,
           btn,
           class: className
-        } = config, restConfig = __rest$4(config, ["message", "description", "icon", "type", "btn", "class"]);
+        } = config, restConfig = __rest$9(config, ["message", "description", "icon", "type", "btn", "class"]);
         return originOpen(_extends$1(_extends$1({
           placement: "topRight"
         }, restConfig), {
@@ -33337,7 +34214,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       Notification$1.newInstance({
         name: "notification",
         prefixCls: customizePrefixCls || defaultPrefixCls$1,
-        useStyle: useStyle$3,
+        useStyle: useStyle$4,
         class: notificationClass,
         style: getPlacementStyle(placement, top !== null && top !== void 0 ? top : defaultTop, bottom !== null && bottom !== void 0 ? bottom : defaultBottom),
         appContext,
@@ -33500,7 +34377,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         updateCSS$1(style, `${dynamicStyleMark}-dynamic-theme`);
       }
     }
-    const useStyle$2 = (iconPrefixCls) => {
+    const useStyle$3 = (iconPrefixCls) => {
       const [theme, token2] = useToken();
       return useStyleRegister(computed(() => ({
         theme: theme.value,
@@ -33533,7 +34410,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return mergedTheme;
     }
-    var __rest$3 = function(s2, e2) {
+    var __rest$8 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -33617,7 +34494,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a;
           return props2.csp || ((_a = parentContext.csp) === null || _a === void 0 ? void 0 : _a.value);
         });
-        const wrapSSR = useStyle$2(iconPrefixCls);
+        const wrapSSR = useStyle$3(iconPrefixCls);
         const mergedTheme = useTheme(computed(() => props2.theme), computed(() => {
           var _a;
           return (_a = parentContext.theme) === null || _a === void 0 ? void 0 : _a.value;
@@ -33720,7 +34597,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const _a = mergedTheme.value || {}, {
             algorithm,
             token: token2
-          } = _a, rest = __rest$3(_a, ["algorithm", "token"]);
+          } = _a, rest = __rest$8(_a, ["algorithm", "token"]);
           const themeObj = algorithm && (!Array.isArray(algorithm) || algorithm.length > 0) ? createTheme(algorithm) : void 0;
           return _extends$1(_extends$1({}, rest), {
             theme: themeObj,
@@ -33903,7 +34780,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$1 = genComponentStyleHook("Tag", (token2) => {
+    const useStyle$2 = genComponentStyleHook("Tag", (token2) => {
       const {
         fontSize,
         lineHeight,
@@ -33957,7 +34834,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$1(prefixCls);
+        const [wrapSSR, hashId] = useStyle$2(prefixCls);
         const handleClick = (e2) => {
           const {
             checked
@@ -34024,7 +34901,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           direction
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$1(prefixCls);
+        const [wrapSSR, hashId] = useStyle$2(prefixCls);
         const visible = shallowRef(true);
         watchEffect(() => {
           if (props2.visible !== void 0) {
@@ -34097,6 +34974,38 @@ summary tabindex target title type usemap value width wmode wrap`;
       app.component(CheckableTag.name, CheckableTag);
       return app;
     };
+    var CalendarOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z" } }] }, "name": "calendar", "theme": "outlined" };
+    function _objectSpread$a(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$a(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$a(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var CalendarOutlined = function CalendarOutlined2(props2, context) {
+      var p2 = _objectSpread$a({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$a({}, p2, {
+        "icon": CalendarOutlined$1
+      }), null);
+    };
+    CalendarOutlined.displayName = "CalendarOutlined";
+    CalendarOutlined.inheritAttrs = false;
     const props = () => ({
       prefixCls: String,
       width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -34183,7 +35092,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       return key2 in (html ? html.style : {});
     })[0];
     const windowIsUndefined = !(typeof window !== "undefined" && window.document && window.document.createElement);
-    var __rest$2 = function(s2, e2) {
+    var __rest$7 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -34363,7 +35272,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             maskMotion,
             motion,
             inline
-          } = props2, otherProps = __rest$2(props2, ["width", "height", "open", "prefixCls", "placement", "level", "levelMove", "ease", "duration", "getContainer", "onChange", "afterVisibleChange", "showMask", "maskClosable", "maskStyle", "keyboard", "getOpenCount", "scrollLocker", "contentWrapperStyle", "style", "class", "rootClassName", "rootStyle", "maskMotion", "motion", "inline"]);
+          } = props2, otherProps = __rest$7(props2, ["width", "height", "open", "prefixCls", "placement", "level", "levelMove", "ease", "duration", "getContainer", "onChange", "afterVisibleChange", "showMask", "maskClosable", "maskStyle", "keyboard", "getOpenCount", "scrollLocker", "contentWrapperStyle", "style", "class", "rootClassName", "rootStyle", "maskMotion", "motion", "inline"]);
           const open2 = $open && canOpen.value;
           const wrapperClassName = classNames(prefixCls, {
             [`${prefixCls}-${placement}`]: true,
@@ -34406,7 +35315,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$1 = function(s2, e2) {
+    var __rest$6 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -34456,7 +35365,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             rootClassName,
             rootStyle,
             forceRender
-          } = props2, otherProps = __rest$1(props2, ["getContainer", "wrapperClassName", "rootClassName", "rootStyle", "forceRender"]);
+          } = props2, otherProps = __rest$6(props2, ["getContainer", "wrapperClassName", "rootClassName", "rootStyle", "forceRender"]);
           let portal = null;
           if (!getContainer2) {
             return createVNode(DrawerChild, _objectSpread2$1(_objectSpread2$1({}, otherProps), {}, {
@@ -34481,7 +35390,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                 var {
                   visible,
                   afterClose
-                } = _a, rest = __rest$1(_a, ["visible", "afterClose"]);
+                } = _a, rest = __rest$6(_a, ["visible", "afterClose"]);
                 return createVNode(DrawerChild, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({
                   "ref": dom
                 }, otherProps), rest), {}, {
@@ -34790,7 +35699,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle = genComponentStyleHook("Drawer", (token2) => {
+    const useStyle$1 = genComponentStyleHook("Drawer", (token2) => {
       const drawerToken = merge(token2, {
         drawerFooterPaddingVertical: token2.paddingXS,
         drawerFooterPaddingHorizontal: token2.padding
@@ -34799,7 +35708,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     }, (token2) => ({
       zIndexPopup: token2.zIndexPopupBase
     }));
-    var __rest = function(s2, e2) {
+    var __rest$5 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -34948,7 +35857,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer,
           direction
         } = useConfigInject("drawer", props2);
-        const [wrapSSR, hashId] = useStyle(prefixCls);
+        const [wrapSSR, hashId] = useStyle$1(prefixCls);
         const getContainer2 = computed(() => (
           // 有可能为 false，所以不能直接判断
           props2.getContainer === void 0 && (getPopupContainer === null || getPopupContainer === void 0 ? void 0 : getPopupContainer.value) ? () => getPopupContainer.value(document.body) : props2.getContainer
@@ -35148,7 +36057,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             placement,
             mask,
             forceRender
-          } = props2, rest = __rest(props2, ["width", "height", "placement", "mask", "forceRender"]);
+          } = props2, rest = __rest$5(props2, ["width", "height", "placement", "mask", "forceRender"]);
           const vcDrawerProps = _extends$1(_extends$1(_extends$1({}, attrs), omit(rest, ["size", "closeIcon", "closable", "destroyOnClose", "drawerStyle", "headerStyle", "bodyStyle", "title", "push", "onAfterVisibleChange", "onClose", "onUpdate:visible", "onUpdate:open", "visible"])), {
             forceRender,
             onClose: close,
@@ -35179,6 +36088,3410 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     const Drawer$1 = withInstall(Drawer);
+    const isValid$1 = (value) => {
+      return value !== void 0 && value !== null && (Array.isArray(value) ? filterEmpty(value).length : true);
+    };
+    function hasPrefixSuffix(propsAndSlots) {
+      return isValid$1(propsAndSlots.prefix) || isValid$1(propsAndSlots.suffix) || isValid$1(propsAndSlots.allowClear);
+    }
+    function hasAddon$1(propsAndSlots) {
+      return isValid$1(propsAndSlots.addonBefore) || isValid$1(propsAndSlots.addonAfter);
+    }
+    function fixControlledValue(value) {
+      if (typeof value === "undefined" || value === null) {
+        return "";
+      }
+      return String(value);
+    }
+    function resolveOnChange(target, e2, onChange, targetValue) {
+      if (!onChange) {
+        return;
+      }
+      const event = e2;
+      if (e2.type === "click") {
+        Object.defineProperty(event, "target", {
+          writable: true
+        });
+        Object.defineProperty(event, "currentTarget", {
+          writable: true
+        });
+        const currentTarget = target.cloneNode(true);
+        event.target = currentTarget;
+        event.currentTarget = currentTarget;
+        currentTarget.value = "";
+        onChange(event);
+        return;
+      }
+      if (targetValue !== void 0) {
+        Object.defineProperty(event, "target", {
+          writable: true
+        });
+        Object.defineProperty(event, "currentTarget", {
+          writable: true
+        });
+        event.target = target;
+        event.currentTarget = target;
+        target.value = targetValue;
+        onChange(event);
+        return;
+      }
+      onChange(event);
+    }
+    function triggerFocus(element, option) {
+      if (!element) return;
+      element.focus(option);
+      const {
+        cursor
+      } = option || {};
+      if (cursor) {
+        const len = element.value.length;
+        switch (cursor) {
+          case "start":
+            element.setSelectionRange(0, 0);
+            break;
+          case "end":
+            element.setSelectionRange(len, len);
+            break;
+          default:
+            element.setSelectionRange(0, len);
+        }
+      }
+    }
+    const commonInputProps = () => {
+      return {
+        addonBefore: PropTypes.any,
+        addonAfter: PropTypes.any,
+        prefix: PropTypes.any,
+        suffix: PropTypes.any,
+        clearIcon: PropTypes.any,
+        affixWrapperClassName: String,
+        groupClassName: String,
+        wrapperClassName: String,
+        inputClassName: String,
+        allowClear: {
+          type: Boolean,
+          default: void 0
+        }
+      };
+    };
+    const baseInputProps = () => {
+      return _extends$1(_extends$1({}, commonInputProps()), {
+        value: {
+          type: [String, Number, Symbol],
+          default: void 0
+        },
+        defaultValue: {
+          type: [String, Number, Symbol],
+          default: void 0
+        },
+        inputElement: PropTypes.any,
+        prefixCls: String,
+        disabled: {
+          type: Boolean,
+          default: void 0
+        },
+        focused: {
+          type: Boolean,
+          default: void 0
+        },
+        triggerFocus: Function,
+        readonly: {
+          type: Boolean,
+          default: void 0
+        },
+        handleReset: Function,
+        hidden: {
+          type: Boolean,
+          default: void 0
+        }
+      });
+    };
+    const inputProps$1 = () => _extends$1(_extends$1({}, baseInputProps()), {
+      id: String,
+      placeholder: {
+        type: [String, Number]
+      },
+      autocomplete: String,
+      type: stringType("text"),
+      name: String,
+      size: {
+        type: String
+      },
+      autofocus: {
+        type: Boolean,
+        default: void 0
+      },
+      lazy: {
+        type: Boolean,
+        default: true
+      },
+      maxlength: Number,
+      loading: {
+        type: Boolean,
+        default: void 0
+      },
+      bordered: {
+        type: Boolean,
+        default: void 0
+      },
+      showCount: {
+        type: [Boolean, Object]
+      },
+      htmlSize: Number,
+      onPressEnter: Function,
+      onKeydown: Function,
+      onKeyup: Function,
+      onFocus: Function,
+      onBlur: Function,
+      onChange: Function,
+      onInput: Function,
+      "onUpdate:value": Function,
+      onCompositionstart: Function,
+      onCompositionend: Function,
+      valueModifiers: Object,
+      hidden: {
+        type: Boolean,
+        default: void 0
+      },
+      status: String
+    });
+    const BaseInput = /* @__PURE__ */ defineComponent({
+      name: "BaseInput",
+      inheritAttrs: false,
+      props: baseInputProps(),
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs
+        } = _ref;
+        const containerRef = ref();
+        const onInputMouseDown = (e2) => {
+          var _a;
+          if ((_a = containerRef.value) === null || _a === void 0 ? void 0 : _a.contains(e2.target)) {
+            const {
+              triggerFocus: triggerFocus2
+            } = props2;
+            triggerFocus2 === null || triggerFocus2 === void 0 ? void 0 : triggerFocus2();
+          }
+        };
+        const getClearIcon = () => {
+          var _a;
+          const {
+            allowClear,
+            value,
+            disabled,
+            readonly: readonly2,
+            handleReset,
+            suffix = slots.suffix,
+            prefixCls
+          } = props2;
+          if (!allowClear) {
+            return null;
+          }
+          const needClear = !disabled && !readonly2 && value;
+          const className = `${prefixCls}-clear-icon`;
+          const iconNode = ((_a = slots.clearIcon) === null || _a === void 0 ? void 0 : _a.call(slots)) || "*";
+          return createVNode("span", {
+            "onClick": handleReset,
+            "onMousedown": (e2) => e2.preventDefault(),
+            "class": classNames({
+              [`${className}-hidden`]: !needClear,
+              [`${className}-has-suffix`]: !!suffix
+            }, className),
+            "role": "button",
+            "tabindex": -1
+          }, [iconNode]);
+        };
+        return () => {
+          var _a, _b;
+          const {
+            focused,
+            value,
+            disabled,
+            allowClear,
+            readonly: readonly2,
+            hidden,
+            prefixCls,
+            prefix = (_a = slots.prefix) === null || _a === void 0 ? void 0 : _a.call(slots),
+            suffix = (_b = slots.suffix) === null || _b === void 0 ? void 0 : _b.call(slots),
+            addonAfter = slots.addonAfter,
+            addonBefore = slots.addonBefore,
+            inputElement,
+            affixWrapperClassName,
+            wrapperClassName,
+            groupClassName
+          } = props2;
+          let element = cloneElement(inputElement, {
+            value,
+            hidden
+          });
+          if (hasPrefixSuffix({
+            prefix,
+            suffix,
+            allowClear
+          })) {
+            const affixWrapperPrefixCls = `${prefixCls}-affix-wrapper`;
+            const affixWrapperCls = classNames(affixWrapperPrefixCls, {
+              [`${affixWrapperPrefixCls}-disabled`]: disabled,
+              [`${affixWrapperPrefixCls}-focused`]: focused,
+              [`${affixWrapperPrefixCls}-readonly`]: readonly2,
+              [`${affixWrapperPrefixCls}-input-with-clear-btn`]: suffix && allowClear && value
+            }, !hasAddon$1({
+              addonAfter,
+              addonBefore
+            }) && attrs.class, affixWrapperClassName);
+            const suffixNode = (suffix || allowClear) && createVNode("span", {
+              "class": `${prefixCls}-suffix`
+            }, [getClearIcon(), suffix]);
+            element = createVNode("span", {
+              "class": affixWrapperCls,
+              "style": attrs.style,
+              "hidden": !hasAddon$1({
+                addonAfter,
+                addonBefore
+              }) && hidden,
+              "onMousedown": onInputMouseDown,
+              "ref": containerRef
+            }, [prefix && createVNode("span", {
+              "class": `${prefixCls}-prefix`
+            }, [prefix]), cloneElement(inputElement, {
+              style: null,
+              value,
+              hidden: null
+            }), suffixNode]);
+          }
+          if (hasAddon$1({
+            addonAfter,
+            addonBefore
+          })) {
+            const wrapperCls = `${prefixCls}-group`;
+            const addonCls = `${wrapperCls}-addon`;
+            const mergedWrapperClassName = classNames(`${prefixCls}-wrapper`, wrapperCls, wrapperClassName);
+            const mergedGroupClassName = classNames(`${prefixCls}-group-wrapper`, attrs.class, groupClassName);
+            return createVNode("span", {
+              "class": mergedGroupClassName,
+              "style": attrs.style,
+              "hidden": hidden
+            }, [createVNode("span", {
+              "class": mergedWrapperClassName
+            }, [addonBefore && createVNode("span", {
+              "class": addonCls
+            }, [addonBefore]), cloneElement(element, {
+              style: null,
+              hidden: null
+            }), addonAfter && createVNode("span", {
+              "class": addonCls
+            }, [addonAfter])])]);
+          }
+          return element;
+        };
+      }
+    });
+    var __rest$4 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const VcInput = /* @__PURE__ */ defineComponent({
+      name: "VCInput",
+      inheritAttrs: false,
+      props: inputProps$1(),
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs,
+          expose,
+          emit: emit2
+        } = _ref;
+        const stateValue = shallowRef(props2.value === void 0 ? props2.defaultValue : props2.value);
+        const focused = shallowRef(false);
+        const inputRef = shallowRef();
+        const rootRef = shallowRef();
+        watch(() => props2.value, () => {
+          stateValue.value = props2.value;
+        });
+        watch(() => props2.disabled, () => {
+          if (props2.disabled) {
+            focused.value = false;
+          }
+        });
+        const focus = (option) => {
+          if (inputRef.value) {
+            triggerFocus(inputRef.value.input, option);
+          }
+        };
+        const blur = () => {
+          var _a;
+          (_a = inputRef.value.input) === null || _a === void 0 ? void 0 : _a.blur();
+        };
+        const setSelectionRange = (start, end, direction) => {
+          var _a;
+          (_a = inputRef.value.input) === null || _a === void 0 ? void 0 : _a.setSelectionRange(start, end, direction);
+        };
+        const select = () => {
+          var _a;
+          (_a = inputRef.value.input) === null || _a === void 0 ? void 0 : _a.select();
+        };
+        expose({
+          focus,
+          blur,
+          input: computed(() => {
+            var _a;
+            return (_a = inputRef.value.input) === null || _a === void 0 ? void 0 : _a.input;
+          }),
+          stateValue,
+          setSelectionRange,
+          select
+        });
+        const triggerChange = (e2) => {
+          emit2("change", e2);
+        };
+        const setValue2 = (value, callback) => {
+          if (stateValue.value === value) {
+            return;
+          }
+          if (props2.value === void 0) {
+            stateValue.value = value;
+          } else {
+            nextTick(() => {
+              var _a;
+              if (inputRef.value.input.value !== stateValue.value) {
+                (_a = rootRef.value) === null || _a === void 0 ? void 0 : _a.$forceUpdate();
+              }
+            });
+          }
+          nextTick(() => {
+            callback && callback();
+          });
+        };
+        const handleChange = (e2) => {
+          const {
+            value
+          } = e2.target;
+          if (stateValue.value === value) return;
+          const newVal = e2.target.value;
+          resolveOnChange(inputRef.value.input, e2, triggerChange);
+          setValue2(newVal);
+        };
+        const handleKeyDown = (e2) => {
+          if (e2.keyCode === 13) {
+            emit2("pressEnter", e2);
+          }
+          emit2("keydown", e2);
+        };
+        const handleFocus = (e2) => {
+          focused.value = true;
+          emit2("focus", e2);
+        };
+        const handleBlur = (e2) => {
+          focused.value = false;
+          emit2("blur", e2);
+        };
+        const handleReset = (e2) => {
+          resolveOnChange(inputRef.value.input, e2, triggerChange);
+          setValue2("", () => {
+            focus();
+          });
+        };
+        const getInputElement = () => {
+          var _a, _b;
+          const {
+            addonBefore = slots.addonBefore,
+            addonAfter = slots.addonAfter,
+            disabled,
+            valueModifiers = {},
+            htmlSize,
+            autocomplete,
+            prefixCls,
+            inputClassName,
+            prefix = (_a = slots.prefix) === null || _a === void 0 ? void 0 : _a.call(slots),
+            suffix = (_b = slots.suffix) === null || _b === void 0 ? void 0 : _b.call(slots),
+            allowClear,
+            type = "text"
+          } = props2;
+          const otherProps = omit(props2, [
+            "prefixCls",
+            "onPressEnter",
+            "addonBefore",
+            "addonAfter",
+            "prefix",
+            "suffix",
+            "allowClear",
+            // Input elements must be either controlled or uncontrolled,
+            // specify either the value prop, or the defaultValue prop, but not both.
+            "defaultValue",
+            "size",
+            "bordered",
+            "htmlSize",
+            "lazy",
+            "showCount",
+            "valueModifiers",
+            "showCount",
+            "affixWrapperClassName",
+            "groupClassName",
+            "inputClassName",
+            "wrapperClassName"
+          ]);
+          const inputProps2 = _extends$1(_extends$1(_extends$1({}, otherProps), attrs), {
+            autocomplete,
+            onChange: handleChange,
+            onInput: handleChange,
+            onFocus: handleFocus,
+            onBlur: handleBlur,
+            onKeydown: handleKeyDown,
+            class: classNames(prefixCls, {
+              [`${prefixCls}-disabled`]: disabled
+            }, inputClassName, !hasAddon$1({
+              addonAfter,
+              addonBefore
+            }) && !hasPrefixSuffix({
+              prefix,
+              suffix,
+              allowClear
+            }) && attrs.class),
+            ref: inputRef,
+            key: "ant-input",
+            size: htmlSize,
+            type,
+            lazy: props2.lazy
+          });
+          if (valueModifiers.lazy) {
+            delete inputProps2.onInput;
+          }
+          if (!inputProps2.autofocus) {
+            delete inputProps2.autofocus;
+          }
+          const inputNode = createVNode(BaseInput$1, omit(inputProps2, ["size"]), null);
+          return inputNode;
+        };
+        const getSuffix = () => {
+          var _a;
+          const {
+            maxlength,
+            suffix = (_a = slots.suffix) === null || _a === void 0 ? void 0 : _a.call(slots),
+            showCount,
+            prefixCls
+          } = props2;
+          const hasMaxLength = Number(maxlength) > 0;
+          if (suffix || showCount) {
+            const valueLength = [...fixControlledValue(stateValue.value)].length;
+            const dataCount = typeof showCount === "object" ? showCount.formatter({
+              count: valueLength,
+              maxlength
+            }) : `${valueLength}${hasMaxLength ? ` / ${maxlength}` : ""}`;
+            return createVNode(Fragment, null, [!!showCount && createVNode("span", {
+              "class": classNames(`${prefixCls}-show-count-suffix`, {
+                [`${prefixCls}-show-count-has-suffix`]: !!suffix
+              })
+            }, [dataCount]), suffix]);
+          }
+          return null;
+        };
+        onMounted(() => {
+        });
+        return () => {
+          const {
+            prefixCls,
+            disabled
+          } = props2, rest = __rest$4(props2, ["prefixCls", "disabled"]);
+          return createVNode(BaseInput, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, rest), attrs), {}, {
+            "ref": rootRef,
+            "prefixCls": prefixCls,
+            "inputElement": getInputElement(),
+            "handleReset": handleReset,
+            "value": fixControlledValue(stateValue.value),
+            "focused": focused.value,
+            "triggerFocus": focus,
+            "suffix": getSuffix(),
+            "disabled": disabled
+          }), slots);
+        };
+      }
+    });
+    const inputProps = () => {
+      return omit(inputProps$1(), ["wrapperClassName", "groupClassName", "inputClassName", "affixWrapperClassName"]);
+    };
+    const textAreaProps = () => _extends$1(_extends$1({}, omit(inputProps(), ["prefix", "addonBefore", "addonAfter", "suffix"])), {
+      rows: Number,
+      autosize: {
+        type: [Boolean, Object],
+        default: void 0
+      },
+      autoSize: {
+        type: [Boolean, Object],
+        default: void 0
+      },
+      onResize: {
+        type: Function
+      },
+      onCompositionstart: eventType(),
+      onCompositionend: eventType(),
+      valueModifiers: Object
+    });
+    var __rest$3 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const Input = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AInput",
+      inheritAttrs: false,
+      props: inputProps(),
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs,
+          expose,
+          emit: emit2
+        } = _ref;
+        const inputRef = ref();
+        const formItemContext = useInjectFormItemContext();
+        const formItemInputContext = FormItemInputContext.useInject();
+        const mergedStatus = computed(() => getMergedStatus(formItemInputContext.status, props2.status));
+        const {
+          direction,
+          prefixCls,
+          size: size2,
+          autocomplete
+        } = useConfigInject("input", props2);
+        const {
+          compactSize,
+          compactItemClassnames
+        } = useCompactItemContext(prefixCls, direction);
+        const mergedSize = computed(() => {
+          return compactSize.value || size2.value;
+        });
+        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const disabled = useInjectDisabled();
+        const focus = (option) => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.focus(option);
+        };
+        const blur = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.blur();
+        };
+        const setSelectionRange = (start, end, direction2) => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.setSelectionRange(start, end, direction2);
+        };
+        const select = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.select();
+        };
+        expose({
+          focus,
+          blur,
+          input: inputRef,
+          setSelectionRange,
+          select
+        });
+        const removePasswordTimeoutRef = ref([]);
+        const removePasswordTimeout = () => {
+          removePasswordTimeoutRef.value.push(setTimeout(() => {
+            var _a, _b, _c, _d;
+            if (((_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.input) && ((_b = inputRef.value) === null || _b === void 0 ? void 0 : _b.input.getAttribute("type")) === "password" && ((_c = inputRef.value) === null || _c === void 0 ? void 0 : _c.input.hasAttribute("value"))) {
+              (_d = inputRef.value) === null || _d === void 0 ? void 0 : _d.input.removeAttribute("value");
+            }
+          }));
+        };
+        onMounted(() => {
+          removePasswordTimeout();
+        });
+        onBeforeUpdate(() => {
+          removePasswordTimeoutRef.value.forEach((item) => clearTimeout(item));
+        });
+        onBeforeUnmount(() => {
+          removePasswordTimeoutRef.value.forEach((item) => clearTimeout(item));
+        });
+        const handleBlur = (e2) => {
+          removePasswordTimeout();
+          emit2("blur", e2);
+          formItemContext.onFieldBlur();
+        };
+        const handleFocus = (e2) => {
+          removePasswordTimeout();
+          emit2("focus", e2);
+        };
+        const triggerChange = (e2) => {
+          emit2("update:value", e2.target.value);
+          emit2("change", e2);
+          emit2("input", e2);
+          formItemContext.onFieldChange();
+        };
+        return () => {
+          var _a, _b, _c, _d, _e, _f;
+          const {
+            hasFeedback,
+            feedbackIcon
+          } = formItemInputContext;
+          const {
+            allowClear,
+            bordered = true,
+            prefix = (_a = slots.prefix) === null || _a === void 0 ? void 0 : _a.call(slots),
+            suffix = (_b = slots.suffix) === null || _b === void 0 ? void 0 : _b.call(slots),
+            addonAfter = (_c = slots.addonAfter) === null || _c === void 0 ? void 0 : _c.call(slots),
+            addonBefore = (_d = slots.addonBefore) === null || _d === void 0 ? void 0 : _d.call(slots),
+            id = (_e = formItemContext.id) === null || _e === void 0 ? void 0 : _e.value
+          } = props2, rest = __rest$3(props2, ["allowClear", "bordered", "prefix", "suffix", "addonAfter", "addonBefore", "id"]);
+          const suffixNode = (hasFeedback || suffix) && createVNode(Fragment, null, [suffix, hasFeedback && feedbackIcon]);
+          const prefixClsValue = prefixCls.value;
+          const inputHasPrefixSuffix = hasPrefixSuffix({
+            prefix,
+            suffix
+          }) || !!hasFeedback;
+          const clearIcon = slots.clearIcon || (() => createVNode(CloseCircleFilled, null, null));
+          return wrapSSR(createVNode(VcInput, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, attrs), omit(rest, ["onUpdate:value", "onChange", "onInput"])), {}, {
+            "onChange": triggerChange,
+            "id": id,
+            "disabled": (_f = props2.disabled) !== null && _f !== void 0 ? _f : disabled.value,
+            "ref": inputRef,
+            "prefixCls": prefixClsValue,
+            "autocomplete": autocomplete.value,
+            "onBlur": handleBlur,
+            "onFocus": handleFocus,
+            "prefix": prefix,
+            "suffix": suffixNode,
+            "allowClear": allowClear,
+            "addonAfter": addonAfter && createVNode(NoCompactStyle, null, {
+              default: () => [createVNode(NoFormStatus, null, {
+                default: () => [addonAfter]
+              })]
+            }),
+            "addonBefore": addonBefore && createVNode(NoCompactStyle, null, {
+              default: () => [createVNode(NoFormStatus, null, {
+                default: () => [addonBefore]
+              })]
+            }),
+            "class": [attrs.class, compactItemClassnames.value],
+            "inputClassName": classNames({
+              [`${prefixClsValue}-sm`]: mergedSize.value === "small",
+              [`${prefixClsValue}-lg`]: mergedSize.value === "large",
+              [`${prefixClsValue}-rtl`]: direction.value === "rtl",
+              [`${prefixClsValue}-borderless`]: !bordered
+            }, !inputHasPrefixSuffix && getStatusClassNames(prefixClsValue, mergedStatus.value), hashId.value),
+            "affixWrapperClassName": classNames({
+              [`${prefixClsValue}-affix-wrapper-sm`]: mergedSize.value === "small",
+              [`${prefixClsValue}-affix-wrapper-lg`]: mergedSize.value === "large",
+              [`${prefixClsValue}-affix-wrapper-rtl`]: direction.value === "rtl",
+              [`${prefixClsValue}-affix-wrapper-borderless`]: !bordered
+            }, getStatusClassNames(`${prefixClsValue}-affix-wrapper`, mergedStatus.value, hasFeedback), hashId.value),
+            "wrapperClassName": classNames({
+              [`${prefixClsValue}-group-rtl`]: direction.value === "rtl"
+            }, hashId.value),
+            "groupClassName": classNames({
+              [`${prefixClsValue}-group-wrapper-sm`]: mergedSize.value === "small",
+              [`${prefixClsValue}-group-wrapper-lg`]: mergedSize.value === "large",
+              [`${prefixClsValue}-group-wrapper-rtl`]: direction.value === "rtl"
+            }, getStatusClassNames(`${prefixClsValue}-group-wrapper`, mergedStatus.value, hasFeedback), hashId.value)
+          }), _extends$1(_extends$1({}, slots), {
+            clearIcon
+          })));
+        };
+      }
+    });
+    const Group = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AInputGroup",
+      inheritAttrs: false,
+      props: {
+        prefixCls: String,
+        size: {
+          type: String
+        },
+        compact: {
+          type: Boolean,
+          default: void 0
+        }
+      },
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs
+        } = _ref;
+        const {
+          prefixCls,
+          direction,
+          getPrefixCls
+        } = useConfigInject("input-group", props2);
+        const formItemInputContext = FormItemInputContext.useInject();
+        FormItemInputContext.useProvide(formItemInputContext, {
+          isFormItemInput: false
+        });
+        const inputPrefixCls = computed(() => getPrefixCls("input"));
+        const [wrapSSR, hashId] = useStyle$7(inputPrefixCls);
+        const cls = computed(() => {
+          const pre = prefixCls.value;
+          return {
+            [`${pre}`]: true,
+            [hashId.value]: true,
+            [`${pre}-lg`]: props2.size === "large",
+            [`${pre}-sm`]: props2.size === "small",
+            [`${pre}-compact`]: props2.compact,
+            [`${pre}-rtl`]: direction.value === "rtl"
+          };
+        });
+        return () => {
+          var _a;
+          return wrapSSR(createVNode("span", _objectSpread2$1(_objectSpread2$1({}, attrs), {}, {
+            "class": classNames(cls.value, attrs.class)
+          }), [(_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots)]));
+        };
+      }
+    });
+    var __rest$2 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const Search = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AInputSearch",
+      inheritAttrs: false,
+      props: _extends$1(_extends$1({}, inputProps()), {
+        inputPrefixCls: String,
+        // 不能设置默认值 https://github.com/vueComponent/ant-design-vue/issues/1916
+        enterButton: PropTypes.any,
+        onSearch: {
+          type: Function
+        }
+      }),
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs,
+          expose,
+          emit: emit2
+        } = _ref;
+        const inputRef = shallowRef();
+        const composedRef = shallowRef(false);
+        const focus = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+        };
+        const blur = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.blur();
+        };
+        expose({
+          focus,
+          blur
+        });
+        const onChange = (e2) => {
+          emit2("update:value", e2.target.value);
+          if (e2 && e2.target && e2.type === "click") {
+            emit2("search", e2.target.value, e2);
+          }
+          emit2("change", e2);
+        };
+        const onMousedown = (e2) => {
+          var _a;
+          if (document.activeElement === ((_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.input)) {
+            e2.preventDefault();
+          }
+        };
+        const onSearch = (e2) => {
+          var _a, _b;
+          emit2("search", (_b = (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.input) === null || _b === void 0 ? void 0 : _b.stateValue, e2);
+        };
+        const onPressEnter = (e2) => {
+          if (composedRef.value || props2.loading) {
+            return;
+          }
+          onSearch(e2);
+        };
+        const handleOnCompositionStart = (e2) => {
+          composedRef.value = true;
+          emit2("compositionstart", e2);
+        };
+        const handleOnCompositionEnd = (e2) => {
+          composedRef.value = false;
+          emit2("compositionend", e2);
+        };
+        const {
+          prefixCls,
+          getPrefixCls,
+          direction,
+          size: size2
+        } = useConfigInject("input-search", props2);
+        const inputPrefixCls = computed(() => getPrefixCls("input", props2.inputPrefixCls));
+        return () => {
+          var _a, _b, _c, _d;
+          const {
+            disabled,
+            loading,
+            addonAfter = (_a = slots.addonAfter) === null || _a === void 0 ? void 0 : _a.call(slots),
+            suffix = (_b = slots.suffix) === null || _b === void 0 ? void 0 : _b.call(slots)
+          } = props2, restProps = __rest$2(props2, ["disabled", "loading", "addonAfter", "suffix"]);
+          let {
+            enterButton = (_d = (_c = slots.enterButton) === null || _c === void 0 ? void 0 : _c.call(slots)) !== null && _d !== void 0 ? _d : false
+          } = props2;
+          enterButton = enterButton || enterButton === "";
+          const searchIcon = typeof enterButton === "boolean" ? createVNode(SearchOutlined, null, null) : null;
+          const btnClassName = `${prefixCls.value}-button`;
+          const enterButtonAsElement = Array.isArray(enterButton) ? enterButton[0] : enterButton;
+          let button;
+          const isAntdButton = enterButtonAsElement.type && isPlainObject(enterButtonAsElement.type) && enterButtonAsElement.type.__ANT_BUTTON;
+          if (isAntdButton || enterButtonAsElement.tagName === "button") {
+            button = cloneElement(enterButtonAsElement, _extends$1({
+              onMousedown,
+              onClick: onSearch,
+              key: "enterButton"
+            }, isAntdButton ? {
+              class: btnClassName,
+              size: size2.value
+            } : {}), false);
+          } else {
+            const iconOnly = searchIcon && !enterButton;
+            button = createVNode(Button, {
+              "class": btnClassName,
+              "type": enterButton ? "primary" : void 0,
+              "size": size2.value,
+              "disabled": disabled,
+              "key": "enterButton",
+              "onMousedown": onMousedown,
+              "onClick": onSearch,
+              "loading": loading,
+              "icon": iconOnly ? searchIcon : null
+            }, {
+              default: () => [iconOnly ? null : searchIcon || enterButton]
+            });
+          }
+          if (addonAfter) {
+            button = [button, addonAfter];
+          }
+          const cls = classNames(prefixCls.value, {
+            [`${prefixCls.value}-rtl`]: direction.value === "rtl",
+            [`${prefixCls.value}-${size2.value}`]: !!size2.value,
+            [`${prefixCls.value}-with-button`]: !!enterButton
+          }, attrs.class);
+          return createVNode(Input, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({
+            "ref": inputRef
+          }, omit(restProps, ["onUpdate:value", "onSearch", "enterButton"])), attrs), {}, {
+            "onPressEnter": onPressEnter,
+            "onCompositionstart": handleOnCompositionStart,
+            "onCompositionend": handleOnCompositionEnd,
+            "size": size2.value,
+            "prefixCls": inputPrefixCls.value,
+            "addonAfter": button,
+            "suffix": suffix,
+            "onChange": onChange,
+            "class": cls,
+            "disabled": disabled
+          }), slots);
+        };
+      }
+    });
+    const isValid = (value) => {
+      return value !== void 0 && value !== null && (Array.isArray(value) ? filterEmpty(value).length : true);
+    };
+    function hasAddon(propsAndSlots) {
+      return isValid(propsAndSlots.addonBefore) || isValid(propsAndSlots.addonAfter);
+    }
+    const ClearableInputType = ["text", "input"];
+    const ClearableLabeledInput = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ClearableLabeledInput",
+      inheritAttrs: false,
+      props: {
+        prefixCls: String,
+        inputType: PropTypes.oneOf(tuple("text", "input")),
+        value: anyType(),
+        defaultValue: anyType(),
+        allowClear: {
+          type: Boolean,
+          default: void 0
+        },
+        element: anyType(),
+        handleReset: Function,
+        disabled: {
+          type: Boolean,
+          default: void 0
+        },
+        direction: {
+          type: String
+        },
+        size: {
+          type: String
+        },
+        suffix: anyType(),
+        prefix: anyType(),
+        addonBefore: anyType(),
+        addonAfter: anyType(),
+        readonly: {
+          type: Boolean,
+          default: void 0
+        },
+        focused: {
+          type: Boolean,
+          default: void 0
+        },
+        bordered: {
+          type: Boolean,
+          default: true
+        },
+        triggerFocus: {
+          type: Function
+        },
+        hidden: Boolean,
+        status: String,
+        hashId: String
+      },
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs
+        } = _ref;
+        const statusContext = FormItemInputContext.useInject();
+        const renderClearIcon = (prefixCls) => {
+          const {
+            value,
+            disabled,
+            readonly: readonly2,
+            handleReset,
+            suffix = slots.suffix
+          } = props2;
+          const needClear = !disabled && !readonly2 && value;
+          const className = `${prefixCls}-clear-icon`;
+          return createVNode(CloseCircleFilled, {
+            "onClick": handleReset,
+            "onMousedown": (e2) => e2.preventDefault(),
+            "class": classNames({
+              [`${className}-hidden`]: !needClear,
+              [`${className}-has-suffix`]: !!suffix
+            }, className),
+            "role": "button"
+          }, null);
+        };
+        const renderTextAreaWithClearIcon = (prefixCls, element) => {
+          const {
+            value,
+            allowClear,
+            direction,
+            bordered,
+            hidden,
+            status: customStatus,
+            addonAfter = slots.addonAfter,
+            addonBefore = slots.addonBefore,
+            hashId
+          } = props2;
+          const {
+            status: contextStatus,
+            hasFeedback
+          } = statusContext;
+          if (!allowClear) {
+            return cloneElement(element, {
+              value,
+              disabled: props2.disabled
+            });
+          }
+          const affixWrapperCls = classNames(`${prefixCls}-affix-wrapper`, `${prefixCls}-affix-wrapper-textarea-with-clear-btn`, getStatusClassNames(`${prefixCls}-affix-wrapper`, getMergedStatus(contextStatus, customStatus), hasFeedback), {
+            [`${prefixCls}-affix-wrapper-rtl`]: direction === "rtl",
+            [`${prefixCls}-affix-wrapper-borderless`]: !bordered,
+            // className will go to addon wrapper
+            [`${attrs.class}`]: !hasAddon({
+              addonAfter,
+              addonBefore
+            }) && attrs.class
+          }, hashId);
+          return createVNode("span", {
+            "class": affixWrapperCls,
+            "style": attrs.style,
+            "hidden": hidden
+          }, [cloneElement(element, {
+            style: null,
+            value,
+            disabled: props2.disabled
+          }), renderClearIcon(prefixCls)]);
+        };
+        return () => {
+          var _a;
+          const {
+            prefixCls,
+            inputType,
+            element = (_a = slots.element) === null || _a === void 0 ? void 0 : _a.call(slots)
+          } = props2;
+          if (inputType === ClearableInputType[0]) {
+            return renderTextAreaWithClearIcon(prefixCls, element);
+          }
+          return null;
+        };
+      }
+    });
+    const HIDDEN_TEXTAREA_STYLE = `
+  min-height:0 !important;
+  max-height:none !important;
+  height:0 !important;
+  visibility:hidden !important;
+  overflow:hidden !important;
+  position:absolute !important;
+  z-index:-1000 !important;
+  top:0 !important;
+  right:0 !important;
+  pointer-events: none !important;
+`;
+    const SIZING_STYLE = ["letter-spacing", "line-height", "padding-top", "padding-bottom", "font-family", "font-weight", "font-size", "font-variant", "text-rendering", "text-transform", "width", "text-indent", "padding-left", "padding-right", "border-width", "box-sizing", "word-break", "white-space"];
+    const computedStyleCache = {};
+    let hiddenTextarea;
+    function calculateNodeStyling(node2) {
+      let useCache2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
+      const nodeRef = node2.getAttribute("id") || node2.getAttribute("data-reactid") || node2.getAttribute("name");
+      if (useCache2 && computedStyleCache[nodeRef]) {
+        return computedStyleCache[nodeRef];
+      }
+      const style = window.getComputedStyle(node2);
+      const boxSizing = style.getPropertyValue("box-sizing") || style.getPropertyValue("-moz-box-sizing") || style.getPropertyValue("-webkit-box-sizing");
+      const paddingSize = parseFloat(style.getPropertyValue("padding-bottom")) + parseFloat(style.getPropertyValue("padding-top"));
+      const borderSize = parseFloat(style.getPropertyValue("border-bottom-width")) + parseFloat(style.getPropertyValue("border-top-width"));
+      const sizingStyle = SIZING_STYLE.map((name) => `${name}:${style.getPropertyValue(name)}`).join(";");
+      const nodeInfo = {
+        sizingStyle,
+        paddingSize,
+        borderSize,
+        boxSizing
+      };
+      if (useCache2 && nodeRef) {
+        computedStyleCache[nodeRef] = nodeInfo;
+      }
+      return nodeInfo;
+    }
+    function calculateAutoSizeStyle(uiTextNode) {
+      let useCache2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : false;
+      let minRows = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : null;
+      let maxRows = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : null;
+      if (!hiddenTextarea) {
+        hiddenTextarea = document.createElement("textarea");
+        hiddenTextarea.setAttribute("tab-index", "-1");
+        hiddenTextarea.setAttribute("aria-hidden", "true");
+        document.body.appendChild(hiddenTextarea);
+      }
+      if (uiTextNode.getAttribute("wrap")) {
+        hiddenTextarea.setAttribute("wrap", uiTextNode.getAttribute("wrap"));
+      } else {
+        hiddenTextarea.removeAttribute("wrap");
+      }
+      const {
+        paddingSize,
+        borderSize,
+        boxSizing,
+        sizingStyle
+      } = calculateNodeStyling(uiTextNode, useCache2);
+      hiddenTextarea.setAttribute("style", `${sizingStyle};${HIDDEN_TEXTAREA_STYLE}`);
+      hiddenTextarea.value = uiTextNode.value || uiTextNode.placeholder || "";
+      let minHeight = void 0;
+      let maxHeight = void 0;
+      let overflowY;
+      let height = hiddenTextarea.scrollHeight;
+      if (boxSizing === "border-box") {
+        height += borderSize;
+      } else if (boxSizing === "content-box") {
+        height -= paddingSize;
+      }
+      if (minRows !== null || maxRows !== null) {
+        hiddenTextarea.value = " ";
+        const singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
+        if (minRows !== null) {
+          minHeight = singleRowHeight * minRows;
+          if (boxSizing === "border-box") {
+            minHeight = minHeight + paddingSize + borderSize;
+          }
+          height = Math.max(minHeight, height);
+        }
+        if (maxRows !== null) {
+          maxHeight = singleRowHeight * maxRows;
+          if (boxSizing === "border-box") {
+            maxHeight = maxHeight + paddingSize + borderSize;
+          }
+          overflowY = height > maxHeight ? "" : "hidden";
+          height = Math.min(maxHeight, height);
+        }
+      }
+      const style = {
+        height: `${height}px`,
+        overflowY,
+        resize: "none"
+      };
+      if (minHeight) {
+        style.minHeight = `${minHeight}px`;
+      }
+      if (maxHeight) {
+        style.maxHeight = `${maxHeight}px`;
+      }
+      return style;
+    }
+    const RESIZE_START = 0;
+    const RESIZE_MEASURING = 1;
+    const RESIZE_STABLE = 2;
+    const ResizableTextArea = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ResizableTextArea",
+      inheritAttrs: false,
+      props: textAreaProps(),
+      setup(props2, _ref) {
+        let {
+          attrs,
+          emit: emit2,
+          expose
+        } = _ref;
+        let nextFrameActionId;
+        let resizeFrameId;
+        const textAreaRef = ref();
+        const textareaStyles = ref({});
+        const resizeStatus = ref(RESIZE_STABLE);
+        onBeforeUnmount(() => {
+          wrapperRaf.cancel(nextFrameActionId);
+          wrapperRaf.cancel(resizeFrameId);
+        });
+        const fixFirefoxAutoScroll = () => {
+          try {
+            if (textAreaRef.value && document.activeElement === textAreaRef.value.input) {
+              const currentStart = textAreaRef.value.getSelectionStart();
+              const currentEnd = textAreaRef.value.getSelectionEnd();
+              const scrollTop = textAreaRef.value.getScrollTop();
+              textAreaRef.value.setSelectionRange(currentStart, currentEnd);
+              textAreaRef.value.setScrollTop(scrollTop);
+            }
+          } catch (e2) {
+          }
+        };
+        const minRows = ref();
+        const maxRows = ref();
+        watchEffect(() => {
+          const autoSize = props2.autoSize || props2.autosize;
+          if (autoSize) {
+            minRows.value = autoSize.minRows;
+            maxRows.value = autoSize.maxRows;
+          } else {
+            minRows.value = void 0;
+            maxRows.value = void 0;
+          }
+        });
+        const needAutoSize = computed(() => !!(props2.autoSize || props2.autosize));
+        const startResize = () => {
+          resizeStatus.value = RESIZE_START;
+        };
+        watch([() => props2.value, minRows, maxRows, needAutoSize], () => {
+          if (needAutoSize.value) {
+            startResize();
+          }
+        }, {
+          immediate: true
+        });
+        const autoSizeStyle = ref();
+        watch([resizeStatus, textAreaRef], () => {
+          if (!textAreaRef.value) return;
+          if (resizeStatus.value === RESIZE_START) {
+            resizeStatus.value = RESIZE_MEASURING;
+          } else if (resizeStatus.value === RESIZE_MEASURING) {
+            const textareaStyles2 = calculateAutoSizeStyle(textAreaRef.value.input, false, minRows.value, maxRows.value);
+            resizeStatus.value = RESIZE_STABLE;
+            autoSizeStyle.value = textareaStyles2;
+          } else {
+            fixFirefoxAutoScroll();
+          }
+        }, {
+          immediate: true,
+          flush: "post"
+        });
+        const instance = getCurrentInstance();
+        const resizeRafRef = ref();
+        const cleanRaf = () => {
+          wrapperRaf.cancel(resizeRafRef.value);
+        };
+        const onInternalResize = (size2) => {
+          if (resizeStatus.value === RESIZE_STABLE) {
+            emit2("resize", size2);
+            if (needAutoSize.value) {
+              cleanRaf();
+              resizeRafRef.value = wrapperRaf(() => {
+                startResize();
+              });
+            }
+          }
+        };
+        onBeforeUnmount(() => {
+          cleanRaf();
+        });
+        const resizeTextarea = () => {
+          startResize();
+        };
+        expose({
+          resizeTextarea,
+          textArea: computed(() => {
+            var _a;
+            return (_a = textAreaRef.value) === null || _a === void 0 ? void 0 : _a.input;
+          }),
+          instance
+        });
+        warning$2(props2.autosize === void 0);
+        const renderTextArea = () => {
+          const {
+            prefixCls,
+            disabled
+          } = props2;
+          const otherProps = omit(props2, ["prefixCls", "onPressEnter", "autoSize", "autosize", "defaultValue", "allowClear", "type", "maxlength", "valueModifiers"]);
+          const cls = classNames(prefixCls, attrs.class, {
+            [`${prefixCls}-disabled`]: disabled
+          });
+          const mergedAutoSizeStyle = needAutoSize.value ? autoSizeStyle.value : null;
+          const style = [attrs.style, textareaStyles.value, mergedAutoSizeStyle];
+          const textareaProps = _extends$1(_extends$1(_extends$1({}, otherProps), attrs), {
+            style,
+            class: cls
+          });
+          if (resizeStatus.value === RESIZE_START || resizeStatus.value === RESIZE_MEASURING) {
+            style.push({
+              overflowX: "hidden",
+              overflowY: "hidden"
+            });
+          }
+          if (!textareaProps.autofocus) {
+            delete textareaProps.autofocus;
+          }
+          if (textareaProps.rows === 0) {
+            delete textareaProps.rows;
+          }
+          return createVNode(ResizeObserver$1, {
+            "onResize": onInternalResize,
+            "disabled": !needAutoSize.value
+          }, {
+            default: () => [createVNode(BaseInput$1, _objectSpread2$1(_objectSpread2$1({}, textareaProps), {}, {
+              "ref": textAreaRef,
+              "tag": "textarea"
+            }), null)]
+          });
+        };
+        return () => {
+          return renderTextArea();
+        };
+      }
+    });
+    function fixEmojiLength(value, maxLength) {
+      return [...value || ""].slice(0, maxLength).join("");
+    }
+    function setTriggerValue(isCursorInEnd, preValue, triggerValue, maxLength) {
+      let newTriggerValue = triggerValue;
+      if (isCursorInEnd) {
+        newTriggerValue = fixEmojiLength(triggerValue, maxLength);
+      } else if ([...preValue || ""].length < triggerValue.length && [...triggerValue || ""].length > maxLength) {
+        newTriggerValue = preValue;
+      }
+      return newTriggerValue;
+    }
+    const TextArea = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ATextarea",
+      inheritAttrs: false,
+      props: textAreaProps(),
+      setup(props2, _ref) {
+        let {
+          attrs,
+          expose,
+          emit: emit2
+        } = _ref;
+        var _a;
+        const formItemContext = useInjectFormItemContext();
+        const formItemInputContext = FormItemInputContext.useInject();
+        const mergedStatus = computed(() => getMergedStatus(formItemInputContext.status, props2.status));
+        const stateValue = shallowRef((_a = props2.value) !== null && _a !== void 0 ? _a : props2.defaultValue);
+        const resizableTextArea = shallowRef();
+        const mergedValue = shallowRef("");
+        const {
+          prefixCls,
+          size: size2,
+          direction
+        } = useConfigInject("input", props2);
+        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const disabled = useInjectDisabled();
+        const showCount = computed(() => {
+          return props2.showCount === "" || props2.showCount || false;
+        });
+        const hasMaxLength = computed(() => Number(props2.maxlength) > 0);
+        const compositing = shallowRef(false);
+        const oldCompositionValueRef = shallowRef();
+        const oldSelectionStartRef = shallowRef(0);
+        const onInternalCompositionStart = (e2) => {
+          compositing.value = true;
+          oldCompositionValueRef.value = mergedValue.value;
+          oldSelectionStartRef.value = e2.currentTarget.selectionStart;
+          emit2("compositionstart", e2);
+        };
+        const onInternalCompositionEnd = (e2) => {
+          var _a2;
+          compositing.value = false;
+          let triggerValue = e2.currentTarget.value;
+          if (hasMaxLength.value) {
+            const isCursorInEnd = oldSelectionStartRef.value >= props2.maxlength + 1 || oldSelectionStartRef.value === ((_a2 = oldCompositionValueRef.value) === null || _a2 === void 0 ? void 0 : _a2.length);
+            triggerValue = setTriggerValue(isCursorInEnd, oldCompositionValueRef.value, triggerValue, props2.maxlength);
+          }
+          if (triggerValue !== mergedValue.value) {
+            setValue2(triggerValue);
+            resolveOnChange(e2.currentTarget, e2, triggerChange, triggerValue);
+          }
+          emit2("compositionend", e2);
+        };
+        const instance = getCurrentInstance();
+        watch(() => props2.value, () => {
+          var _a2;
+          if ("value" in instance.vnode.props || {}) {
+            stateValue.value = (_a2 = props2.value) !== null && _a2 !== void 0 ? _a2 : "";
+          }
+        });
+        const focus = (option) => {
+          var _a2;
+          triggerFocus((_a2 = resizableTextArea.value) === null || _a2 === void 0 ? void 0 : _a2.textArea, option);
+        };
+        const blur = () => {
+          var _a2, _b;
+          (_b = (_a2 = resizableTextArea.value) === null || _a2 === void 0 ? void 0 : _a2.textArea) === null || _b === void 0 ? void 0 : _b.blur();
+        };
+        const setValue2 = (value, callback) => {
+          if (stateValue.value === value) {
+            return;
+          }
+          if (props2.value === void 0) {
+            stateValue.value = value;
+          } else {
+            nextTick(() => {
+              var _a2, _b, _c;
+              if (resizableTextArea.value.textArea.value !== mergedValue.value) {
+                (_c = (_a2 = resizableTextArea.value) === null || _a2 === void 0 ? void 0 : (_b = _a2.instance).update) === null || _c === void 0 ? void 0 : _c.call(_b);
+              }
+            });
+          }
+          nextTick(() => {
+            callback && callback();
+          });
+        };
+        const handleKeyDown = (e2) => {
+          if (e2.keyCode === 13) {
+            emit2("pressEnter", e2);
+          }
+          emit2("keydown", e2);
+        };
+        const onBlur = (e2) => {
+          const {
+            onBlur: onBlur2
+          } = props2;
+          onBlur2 === null || onBlur2 === void 0 ? void 0 : onBlur2(e2);
+          formItemContext.onFieldBlur();
+        };
+        const triggerChange = (e2) => {
+          emit2("update:value", e2.target.value);
+          emit2("change", e2);
+          emit2("input", e2);
+          formItemContext.onFieldChange();
+        };
+        const handleReset = (e2) => {
+          resolveOnChange(resizableTextArea.value.textArea, e2, triggerChange);
+          setValue2("", () => {
+            focus();
+          });
+        };
+        const handleChange = (e2) => {
+          let triggerValue = e2.target.value;
+          if (stateValue.value === triggerValue) return;
+          if (hasMaxLength.value) {
+            const target = e2.target;
+            const isCursorInEnd = target.selectionStart >= props2.maxlength + 1 || target.selectionStart === triggerValue.length || !target.selectionStart;
+            triggerValue = setTriggerValue(isCursorInEnd, mergedValue.value, triggerValue, props2.maxlength);
+          }
+          resolveOnChange(e2.currentTarget, e2, triggerChange, triggerValue);
+          setValue2(triggerValue);
+        };
+        const renderTextArea = () => {
+          var _a2, _b;
+          const {
+            class: customClass
+          } = attrs;
+          const {
+            bordered = true
+          } = props2;
+          const resizeProps = _extends$1(_extends$1(_extends$1({}, omit(props2, ["allowClear"])), attrs), {
+            class: [{
+              [`${prefixCls.value}-borderless`]: !bordered,
+              [`${customClass}`]: customClass && !showCount.value,
+              [`${prefixCls.value}-sm`]: size2.value === "small",
+              [`${prefixCls.value}-lg`]: size2.value === "large"
+            }, getStatusClassNames(prefixCls.value, mergedStatus.value), hashId.value],
+            disabled: disabled.value,
+            showCount: null,
+            prefixCls: prefixCls.value,
+            onInput: handleChange,
+            onChange: handleChange,
+            onBlur,
+            onKeydown: handleKeyDown,
+            onCompositionstart: onInternalCompositionStart,
+            onCompositionend: onInternalCompositionEnd
+          });
+          if ((_a2 = props2.valueModifiers) === null || _a2 === void 0 ? void 0 : _a2.lazy) {
+            delete resizeProps.onInput;
+          }
+          return createVNode(ResizableTextArea, _objectSpread2$1(_objectSpread2$1({}, resizeProps), {}, {
+            "id": (_b = resizeProps === null || resizeProps === void 0 ? void 0 : resizeProps.id) !== null && _b !== void 0 ? _b : formItemContext.id.value,
+            "ref": resizableTextArea,
+            "maxlength": props2.maxlength,
+            "lazy": props2.lazy
+          }), null);
+        };
+        expose({
+          focus,
+          blur,
+          resizableTextArea
+        });
+        watchEffect(() => {
+          let val = fixControlledValue(stateValue.value);
+          if (!compositing.value && hasMaxLength.value && (props2.value === null || props2.value === void 0)) {
+            val = fixEmojiLength(val, props2.maxlength);
+          }
+          mergedValue.value = val;
+        });
+        return () => {
+          var _a2;
+          const {
+            maxlength,
+            bordered = true,
+            hidden
+          } = props2;
+          const {
+            style,
+            class: customClass
+          } = attrs;
+          const inputProps2 = _extends$1(_extends$1(_extends$1({}, props2), attrs), {
+            prefixCls: prefixCls.value,
+            inputType: "text",
+            handleReset,
+            direction: direction.value,
+            bordered,
+            style: showCount.value ? void 0 : style,
+            hashId: hashId.value,
+            disabled: (_a2 = props2.disabled) !== null && _a2 !== void 0 ? _a2 : disabled.value
+          });
+          let textareaNode = createVNode(ClearableLabeledInput, _objectSpread2$1(_objectSpread2$1({}, inputProps2), {}, {
+            "value": mergedValue.value,
+            "status": props2.status
+          }), {
+            element: renderTextArea
+          });
+          if (showCount.value || formItemInputContext.hasFeedback) {
+            const valueLength = [...mergedValue.value].length;
+            let dataCount = "";
+            if (typeof showCount.value === "object") {
+              dataCount = showCount.value.formatter({
+                value: mergedValue.value,
+                count: valueLength,
+                maxlength
+              });
+            } else {
+              dataCount = `${valueLength}${hasMaxLength.value ? ` / ${maxlength}` : ""}`;
+            }
+            textareaNode = createVNode("div", {
+              "hidden": hidden,
+              "class": classNames(`${prefixCls.value}-textarea`, {
+                [`${prefixCls.value}-textarea-rtl`]: direction.value === "rtl",
+                [`${prefixCls.value}-textarea-show-count`]: showCount.value,
+                [`${prefixCls.value}-textarea-in-form-item`]: formItemInputContext.isFormItemInput
+              }, `${prefixCls.value}-textarea-show-count`, customClass, hashId.value),
+              "style": style,
+              "data-count": typeof dataCount !== "object" ? dataCount : void 0
+            }, [textareaNode, formItemInputContext.hasFeedback && createVNode("span", {
+              "class": `${prefixCls.value}-textarea-suffix`
+            }, [formItemInputContext.feedbackIcon])]);
+          }
+          return wrapSSR(textareaNode);
+        };
+      }
+    });
+    var EyeOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M942.2 486.2C847.4 286.5 704.1 186 512 186c-192.2 0-335.4 100.5-430.2 300.3a60.3 60.3 0 000 51.5C176.6 737.5 319.9 838 512 838c192.2 0 335.4-100.5 430.2-300.3 7.7-16.2 7.7-35 0-51.5zM512 766c-161.3 0-279.4-81.8-362.7-254C232.6 339.8 350.7 258 512 258c161.3 0 279.4 81.8 362.7 254C791.5 684.2 673.4 766 512 766zm-4-430c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm0 288c-61.9 0-112-50.1-112-112s50.1-112 112-112 112 50.1 112 112-50.1 112-112 112z" } }] }, "name": "eye", "theme": "outlined" };
+    function _objectSpread$9(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$9(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$9(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var EyeOutlined = function EyeOutlined2(props2, context) {
+      var p2 = _objectSpread$9({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$9({}, p2, {
+        "icon": EyeOutlined$1
+      }), null);
+    };
+    EyeOutlined.displayName = "EyeOutlined";
+    EyeOutlined.inheritAttrs = false;
+    var EyeInvisibleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M942.2 486.2Q889.47 375.11 816.7 305l-50.88 50.88C807.31 395.53 843.45 447.4 874.7 512 791.5 684.2 673.4 766 512 766q-72.67 0-133.87-22.38L323 798.75Q408 838 512 838q288.3 0 430.2-300.3a60.29 60.29 0 000-51.5zm-63.57-320.64L836 122.88a8 8 0 00-11.32 0L715.31 232.2Q624.86 186 512 186q-288.3 0-430.2 300.3a60.3 60.3 0 000 51.5q56.69 119.4 136.5 191.41L112.48 835a8 8 0 000 11.31L155.17 889a8 8 0 0011.31 0l712.15-712.12a8 8 0 000-11.32zM149.3 512C232.6 339.8 350.7 258 512 258c54.54 0 104.13 9.36 149.12 28.39l-70.3 70.3a176 176 0 00-238.13 238.13l-83.42 83.42C223.1 637.49 183.3 582.28 149.3 512zm246.7 0a112.11 112.11 0 01146.2-106.69L401.31 546.2A112 112 0 01396 512z" } }, { "tag": "path", "attrs": { "d": "M508 624c-3.46 0-6.87-.16-10.25-.47l-52.82 52.82a176.09 176.09 0 00227.42-227.42l-52.82 52.82c.31 3.38.47 6.79.47 10.25a111.94 111.94 0 01-112 112z" } }] }, "name": "eye-invisible", "theme": "outlined" };
+    function _objectSpread$8(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$8(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$8(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var EyeInvisibleOutlined = function EyeInvisibleOutlined2(props2, context) {
+      var p2 = _objectSpread$8({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$8({}, p2, {
+        "icon": EyeInvisibleOutlined$1
+      }), null);
+    };
+    EyeInvisibleOutlined.displayName = "EyeInvisibleOutlined";
+    EyeInvisibleOutlined.inheritAttrs = false;
+    var __rest$1 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const ActionMap = {
+      click: "onClick",
+      hover: "onMouseover"
+    };
+    const defaultIconRender = (visible) => visible ? createVNode(EyeOutlined, null, null) : createVNode(EyeInvisibleOutlined, null, null);
+    const Password = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AInputPassword",
+      inheritAttrs: false,
+      props: _extends$1(_extends$1({}, inputProps()), {
+        prefixCls: String,
+        inputPrefixCls: String,
+        action: {
+          type: String,
+          default: "click"
+        },
+        visibilityToggle: {
+          type: Boolean,
+          default: true
+        },
+        visible: {
+          type: Boolean,
+          default: void 0
+        },
+        "onUpdate:visible": Function,
+        iconRender: Function
+      }),
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs,
+          expose,
+          emit: emit2
+        } = _ref;
+        const visible = shallowRef(false);
+        const onVisibleChange = () => {
+          const {
+            disabled
+          } = props2;
+          if (disabled) {
+            return;
+          }
+          visible.value = !visible.value;
+          emit2("update:visible", visible.value);
+        };
+        watchEffect(() => {
+          if (props2.visible !== void 0) {
+            visible.value = !!props2.visible;
+          }
+        });
+        const inputRef = shallowRef();
+        const focus = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+        };
+        const blur = () => {
+          var _a;
+          (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.blur();
+        };
+        expose({
+          focus,
+          blur
+        });
+        const getIcon = (prefixCls2) => {
+          const {
+            action,
+            iconRender = slots.iconRender || defaultIconRender
+          } = props2;
+          const iconTrigger = ActionMap[action] || "";
+          const icon = iconRender(visible.value);
+          const iconProps = {
+            [iconTrigger]: onVisibleChange,
+            class: `${prefixCls2}-icon`,
+            key: "passwordIcon",
+            onMousedown: (e2) => {
+              e2.preventDefault();
+            },
+            onMouseup: (e2) => {
+              e2.preventDefault();
+            }
+          };
+          return cloneElement(isValidElement(icon) ? icon : createVNode("span", null, [icon]), iconProps);
+        };
+        const {
+          prefixCls,
+          getPrefixCls
+        } = useConfigInject("input-password", props2);
+        const inputPrefixCls = computed(() => getPrefixCls("input", props2.inputPrefixCls));
+        const renderPassword = () => {
+          const {
+            size: size2,
+            visibilityToggle
+          } = props2, restProps = __rest$1(props2, ["size", "visibilityToggle"]);
+          const suffixIcon = visibilityToggle && getIcon(prefixCls.value);
+          const inputClassName = classNames(prefixCls.value, attrs.class, {
+            [`${prefixCls.value}-${size2}`]: !!size2
+          });
+          const omittedProps = _extends$1(_extends$1(_extends$1({}, omit(restProps, ["suffix", "iconRender", "action"])), attrs), {
+            type: visible.value ? "text" : "password",
+            class: inputClassName,
+            prefixCls: inputPrefixCls.value,
+            suffix: suffixIcon
+          });
+          if (size2) {
+            omittedProps.size = size2;
+          }
+          return createVNode(Input, _objectSpread2$1({
+            "ref": inputRef
+          }, omittedProps), slots);
+        };
+        return () => {
+          return renderPassword();
+        };
+      }
+    });
+    Input.Group = Group;
+    Input.Search = Search;
+    Input.TextArea = TextArea;
+    Input.Password = Password;
+    Input.install = function(app) {
+      app.component(Input.name, Input);
+      app.component(Input.Group.name, Input.Group);
+      app.component(Input.Search.name, Input.Search);
+      app.component(Input.TextArea.name, Input.TextArea);
+      app.component(Input.Password.name, Input.Password);
+      return app;
+    };
+    function dialogPropTypes() {
+      return {
+        keyboard: {
+          type: Boolean,
+          default: void 0
+        },
+        mask: {
+          type: Boolean,
+          default: void 0
+        },
+        afterClose: Function,
+        closable: {
+          type: Boolean,
+          default: void 0
+        },
+        maskClosable: {
+          type: Boolean,
+          default: void 0
+        },
+        visible: {
+          type: Boolean,
+          default: void 0
+        },
+        destroyOnClose: {
+          type: Boolean,
+          default: void 0
+        },
+        mousePosition: PropTypes.shape({
+          x: Number,
+          y: Number
+        }).loose,
+        title: PropTypes.any,
+        footer: PropTypes.any,
+        transitionName: String,
+        maskTransitionName: String,
+        animation: PropTypes.any,
+        maskAnimation: PropTypes.any,
+        wrapStyle: {
+          type: Object,
+          default: void 0
+        },
+        bodyStyle: {
+          type: Object,
+          default: void 0
+        },
+        maskStyle: {
+          type: Object,
+          default: void 0
+        },
+        prefixCls: String,
+        wrapClassName: String,
+        rootClassName: String,
+        width: [String, Number],
+        height: [String, Number],
+        zIndex: Number,
+        bodyProps: PropTypes.any,
+        maskProps: PropTypes.any,
+        wrapProps: PropTypes.any,
+        getContainer: PropTypes.any,
+        dialogStyle: {
+          type: Object,
+          default: void 0
+        },
+        dialogClass: String,
+        closeIcon: PropTypes.any,
+        forceRender: {
+          type: Boolean,
+          default: void 0
+        },
+        getOpenCount: Function,
+        // https://github.com/ant-design/ant-design/issues/19771
+        // https://github.com/react-component/dialog/issues/95
+        focusTriggerAfterClose: {
+          type: Boolean,
+          default: void 0
+        },
+        onClose: Function,
+        modalRender: Function
+      };
+    }
+    function getMotionName(prefixCls, transitionName2, animationName) {
+      let motionName = transitionName2;
+      if (!motionName && animationName) {
+        motionName = `${prefixCls}-${animationName}`;
+      }
+      return motionName;
+    }
+    let uuid$1 = -1;
+    function getUUID() {
+      uuid$1 += 1;
+      return uuid$1;
+    }
+    function getScroll(w2, top) {
+      let ret = w2[`page${top ? "Y" : "X"}Offset`];
+      const method = `scroll${top ? "Top" : "Left"}`;
+      if (typeof ret !== "number") {
+        const d2 = w2.document;
+        ret = d2.documentElement[method];
+        if (typeof ret !== "number") {
+          ret = d2.body[method];
+        }
+      }
+      return ret;
+    }
+    function offset(el) {
+      const rect = el.getBoundingClientRect();
+      const pos = {
+        left: rect.left,
+        top: rect.top
+      };
+      const doc2 = el.ownerDocument;
+      const w2 = doc2.defaultView || doc2.parentWindow;
+      pos.left += getScroll(w2);
+      pos.top += getScroll(w2, true);
+      return pos;
+    }
+    const sentinelStyle = {
+      width: 0,
+      height: 0,
+      overflow: "hidden",
+      outline: "none"
+    };
+    const Content = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "DialogContent",
+      inheritAttrs: false,
+      props: _extends$1(_extends$1({}, dialogPropTypes()), {
+        motionName: String,
+        ariaId: String,
+        onVisibleChanged: Function,
+        onMousedown: Function,
+        onMouseup: Function
+      }),
+      setup(props2, _ref) {
+        let {
+          expose,
+          slots,
+          attrs
+        } = _ref;
+        const sentinelStartRef = ref();
+        const sentinelEndRef = ref();
+        const dialogRef = ref();
+        expose({
+          focus: () => {
+            var _a;
+            (_a = sentinelStartRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+          },
+          changeActive: (next2) => {
+            const {
+              activeElement
+            } = document;
+            if (next2 && activeElement === sentinelEndRef.value) {
+              sentinelStartRef.value.focus();
+            } else if (!next2 && activeElement === sentinelStartRef.value) {
+              sentinelEndRef.value.focus();
+            }
+          }
+        });
+        const transformOrigin = ref();
+        const contentStyleRef = computed(() => {
+          const {
+            width,
+            height
+          } = props2;
+          const contentStyle = {};
+          if (width !== void 0) {
+            contentStyle.width = typeof width === "number" ? `${width}px` : width;
+          }
+          if (height !== void 0) {
+            contentStyle.height = typeof height === "number" ? `${height}px` : height;
+          }
+          if (transformOrigin.value) {
+            contentStyle.transformOrigin = transformOrigin.value;
+          }
+          return contentStyle;
+        });
+        const onPrepare = () => {
+          nextTick(() => {
+            if (dialogRef.value) {
+              const elementOffset = offset(dialogRef.value);
+              transformOrigin.value = props2.mousePosition ? `${props2.mousePosition.x - elementOffset.left}px ${props2.mousePosition.y - elementOffset.top}px` : "";
+            }
+          });
+        };
+        const onVisibleChanged = (visible) => {
+          props2.onVisibleChanged(visible);
+        };
+        return () => {
+          var _a, _b, _c, _d;
+          const {
+            prefixCls,
+            footer = (_a = slots.footer) === null || _a === void 0 ? void 0 : _a.call(slots),
+            title = (_b = slots.title) === null || _b === void 0 ? void 0 : _b.call(slots),
+            ariaId,
+            closable,
+            closeIcon = (_c = slots.closeIcon) === null || _c === void 0 ? void 0 : _c.call(slots),
+            onClose,
+            bodyStyle,
+            bodyProps,
+            onMousedown,
+            onMouseup,
+            visible,
+            modalRender = slots.modalRender,
+            destroyOnClose,
+            motionName
+          } = props2;
+          let footerNode;
+          if (footer) {
+            footerNode = createVNode("div", {
+              "class": `${prefixCls}-footer`
+            }, [footer]);
+          }
+          let headerNode;
+          if (title) {
+            headerNode = createVNode("div", {
+              "class": `${prefixCls}-header`
+            }, [createVNode("div", {
+              "class": `${prefixCls}-title`,
+              "id": ariaId
+            }, [title])]);
+          }
+          let closer;
+          if (closable) {
+            closer = createVNode("button", {
+              "type": "button",
+              "onClick": onClose,
+              "aria-label": "Close",
+              "class": `${prefixCls}-close`
+            }, [closeIcon || createVNode("span", {
+              "class": `${prefixCls}-close-x`
+            }, null)]);
+          }
+          const content = createVNode("div", {
+            "class": `${prefixCls}-content`
+          }, [closer, headerNode, createVNode("div", _objectSpread2$1({
+            "class": `${prefixCls}-body`,
+            "style": bodyStyle
+          }, bodyProps), [(_d = slots.default) === null || _d === void 0 ? void 0 : _d.call(slots)]), footerNode]);
+          const transitionProps = getTransitionProps(motionName);
+          return createVNode(Transition, _objectSpread2$1(_objectSpread2$1({}, transitionProps), {}, {
+            "onBeforeEnter": onPrepare,
+            "onAfterEnter": () => onVisibleChanged(true),
+            "onAfterLeave": () => onVisibleChanged(false)
+          }), {
+            default: () => [visible || !destroyOnClose ? withDirectives(createVNode("div", _objectSpread2$1(_objectSpread2$1({}, attrs), {}, {
+              "ref": dialogRef,
+              "key": "dialog-element",
+              "role": "document",
+              "style": [contentStyleRef.value, attrs.style],
+              "class": [prefixCls, attrs.class],
+              "onMousedown": onMousedown,
+              "onMouseup": onMouseup
+            }), [createVNode("div", {
+              "tabindex": 0,
+              "ref": sentinelStartRef,
+              "style": sentinelStyle,
+              "aria-hidden": "true"
+            }, null), modalRender ? modalRender({
+              originVNode: content
+            }) : content, createVNode("div", {
+              "tabindex": 0,
+              "ref": sentinelEndRef,
+              "style": sentinelStyle,
+              "aria-hidden": "true"
+            }, null)]), [[vShow, visible]]) : null]
+          });
+        };
+      }
+    });
+    const Mask = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "DialogMask",
+      props: {
+        prefixCls: String,
+        visible: Boolean,
+        motionName: String,
+        maskProps: Object
+      },
+      setup(props2, _ref) {
+        return () => {
+          const {
+            prefixCls,
+            visible,
+            maskProps,
+            motionName
+          } = props2;
+          const transitionProps = getTransitionProps(motionName);
+          return createVNode(Transition, transitionProps, {
+            default: () => [withDirectives(createVNode("div", _objectSpread2$1({
+              "class": `${prefixCls}-mask`
+            }, maskProps), null), [[vShow, visible]])]
+          });
+        };
+      }
+    });
+    const Dialog = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "VcDialog",
+      inheritAttrs: false,
+      props: initDefaultProps(_extends$1(_extends$1({}, dialogPropTypes()), {
+        getOpenCount: Function,
+        scrollLocker: Object
+      }), {
+        mask: true,
+        visible: false,
+        keyboard: true,
+        closable: true,
+        maskClosable: true,
+        destroyOnClose: false,
+        prefixCls: "rc-dialog",
+        getOpenCount: () => null,
+        focusTriggerAfterClose: true
+      }),
+      setup(props2, _ref) {
+        let {
+          attrs,
+          slots
+        } = _ref;
+        const lastOutSideActiveElementRef = shallowRef();
+        const wrapperRef = shallowRef();
+        const contentRef = shallowRef();
+        const animatedVisible = shallowRef(props2.visible);
+        const ariaIdRef = shallowRef(`vcDialogTitle${getUUID()}`);
+        const onDialogVisibleChanged = (newVisible) => {
+          var _a, _b;
+          if (newVisible) {
+            if (!contains$1(wrapperRef.value, document.activeElement)) {
+              lastOutSideActiveElementRef.value = document.activeElement;
+              (_a = contentRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+            }
+          } else {
+            const preAnimatedVisible = animatedVisible.value;
+            animatedVisible.value = false;
+            if (props2.mask && lastOutSideActiveElementRef.value && props2.focusTriggerAfterClose) {
+              try {
+                lastOutSideActiveElementRef.value.focus({
+                  preventScroll: true
+                });
+              } catch (e2) {
+              }
+              lastOutSideActiveElementRef.value = null;
+            }
+            if (preAnimatedVisible) {
+              (_b = props2.afterClose) === null || _b === void 0 ? void 0 : _b.call(props2);
+            }
+          }
+        };
+        const onInternalClose = (e2) => {
+          var _a;
+          (_a = props2.onClose) === null || _a === void 0 ? void 0 : _a.call(props2, e2);
+        };
+        const contentClickRef = shallowRef(false);
+        const contentTimeoutRef = shallowRef();
+        const onContentMouseDown = () => {
+          clearTimeout(contentTimeoutRef.value);
+          contentClickRef.value = true;
+        };
+        const onContentMouseUp = () => {
+          contentTimeoutRef.value = setTimeout(() => {
+            contentClickRef.value = false;
+          });
+        };
+        const onWrapperClick = (e2) => {
+          if (!props2.maskClosable) return null;
+          if (contentClickRef.value) {
+            contentClickRef.value = false;
+          } else if (wrapperRef.value === e2.target) {
+            onInternalClose(e2);
+          }
+        };
+        const onWrapperKeyDown = (e2) => {
+          if (props2.keyboard && e2.keyCode === KeyCode.ESC) {
+            e2.stopPropagation();
+            onInternalClose(e2);
+            return;
+          }
+          if (props2.visible) {
+            if (e2.keyCode === KeyCode.TAB) {
+              contentRef.value.changeActive(!e2.shiftKey);
+            }
+          }
+        };
+        watch(() => props2.visible, () => {
+          if (props2.visible) {
+            animatedVisible.value = true;
+          }
+        }, {
+          flush: "post"
+        });
+        onBeforeUnmount(() => {
+          var _a;
+          clearTimeout(contentTimeoutRef.value);
+          (_a = props2.scrollLocker) === null || _a === void 0 ? void 0 : _a.unLock();
+        });
+        watchEffect(() => {
+          var _a, _b;
+          (_a = props2.scrollLocker) === null || _a === void 0 ? void 0 : _a.unLock();
+          if (animatedVisible.value) {
+            (_b = props2.scrollLocker) === null || _b === void 0 ? void 0 : _b.lock();
+          }
+        });
+        return () => {
+          const {
+            prefixCls,
+            mask,
+            visible,
+            maskTransitionName,
+            maskAnimation,
+            zIndex,
+            wrapClassName,
+            rootClassName,
+            wrapStyle,
+            closable,
+            maskProps,
+            maskStyle,
+            transitionName: transitionName2,
+            animation,
+            wrapProps,
+            title = slots.title
+          } = props2;
+          const {
+            style,
+            class: className
+          } = attrs;
+          return createVNode("div", _objectSpread2$1({
+            "class": [`${prefixCls}-root`, rootClassName]
+          }, pickAttrs(props2, {
+            data: true
+          })), [createVNode(Mask, {
+            "prefixCls": prefixCls,
+            "visible": mask && visible,
+            "motionName": getMotionName(prefixCls, maskTransitionName, maskAnimation),
+            "style": _extends$1({
+              zIndex
+            }, maskStyle),
+            "maskProps": maskProps
+          }, null), createVNode("div", _objectSpread2$1({
+            "tabIndex": -1,
+            "onKeydown": onWrapperKeyDown,
+            "class": classNames(`${prefixCls}-wrap`, wrapClassName),
+            "ref": wrapperRef,
+            "onClick": onWrapperClick,
+            "role": "dialog",
+            "aria-labelledby": title ? ariaIdRef.value : null,
+            "style": _extends$1(_extends$1({
+              zIndex
+            }, wrapStyle), {
+              display: !animatedVisible.value ? "none" : null
+            })
+          }, wrapProps), [createVNode(Content, _objectSpread2$1(_objectSpread2$1({}, omit(props2, ["scrollLocker"])), {}, {
+            "style": style,
+            "class": className,
+            "onMousedown": onContentMouseDown,
+            "onMouseup": onContentMouseUp,
+            "ref": contentRef,
+            "closable": closable,
+            "ariaId": ariaIdRef.value,
+            "prefixCls": prefixCls,
+            "visible": visible,
+            "onClose": onInternalClose,
+            "onVisibleChanged": onDialogVisibleChanged,
+            "motionName": getMotionName(prefixCls, transitionName2, animation)
+          }), slots)])]);
+        };
+      }
+    });
+    const IDialogPropTypes = dialogPropTypes();
+    const DialogWrap = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "DialogWrap",
+      inheritAttrs: false,
+      props: initDefaultProps(IDialogPropTypes, {
+        visible: false
+      }),
+      setup(props2, _ref) {
+        let {
+          attrs,
+          slots
+        } = _ref;
+        const animatedVisible = ref(props2.visible);
+        useProvidePortal({}, {
+          inTriggerContext: false
+        });
+        watch(() => props2.visible, () => {
+          if (props2.visible) {
+            animatedVisible.value = true;
+          }
+        }, {
+          flush: "post"
+        });
+        return () => {
+          const {
+            visible,
+            getContainer: getContainer2,
+            forceRender,
+            destroyOnClose = false,
+            afterClose
+          } = props2;
+          let dialogProps = _extends$1(_extends$1(_extends$1({}, props2), attrs), {
+            ref: "_component",
+            key: "dialog"
+          });
+          if (getContainer2 === false) {
+            return createVNode(Dialog, _objectSpread2$1(_objectSpread2$1({}, dialogProps), {}, {
+              "getOpenCount": () => 2
+            }), slots);
+          }
+          if (!forceRender && destroyOnClose && !animatedVisible.value) {
+            return null;
+          }
+          return createVNode(Portal, {
+            "autoLock": true,
+            "visible": visible,
+            "forceRender": forceRender,
+            "getContainer": getContainer2
+          }, {
+            default: (childProps) => {
+              dialogProps = _extends$1(_extends$1(_extends$1({}, dialogProps), childProps), {
+                afterClose: () => {
+                  afterClose === null || afterClose === void 0 ? void 0 : afterClose();
+                  animatedVisible.value = false;
+                }
+              });
+              return createVNode(Dialog, dialogProps, slots);
+            }
+          });
+        };
+      }
+    });
+    function box(position2) {
+      return {
+        position: position2,
+        top: 0,
+        insetInlineEnd: 0,
+        bottom: 0,
+        insetInlineStart: 0
+      };
+    }
+    const genModalMaskStyle = (token2) => {
+      const {
+        componentCls
+      } = token2;
+      return [{
+        [`${componentCls}-root`]: {
+          [`${componentCls}${token2.antCls}-zoom-enter, ${componentCls}${token2.antCls}-zoom-appear`]: {
+            // reset scale avoid mousePosition bug
+            transform: "none",
+            opacity: 0,
+            animationDuration: token2.motionDurationSlow,
+            // https://github.com/ant-design/ant-design/issues/11777
+            userSelect: "none"
+          },
+          [`${componentCls}${token2.antCls}-zoom-leave ${componentCls}-content`]: {
+            pointerEvents: "none"
+          },
+          [`${componentCls}-mask`]: _extends$1(_extends$1({}, box("fixed")), {
+            zIndex: token2.zIndexPopupBase,
+            height: "100%",
+            backgroundColor: token2.colorBgMask,
+            [`${componentCls}-hidden`]: {
+              display: "none"
+            }
+          }),
+          [`${componentCls}-wrap`]: _extends$1(_extends$1({}, box("fixed")), {
+            overflow: "auto",
+            outline: 0,
+            WebkitOverflowScrolling: "touch"
+          })
+        }
+      }, {
+        [`${componentCls}-root`]: initFadeMotion(token2)
+      }];
+    };
+    const genModalStyle = (token2) => {
+      const {
+        componentCls
+      } = token2;
+      return [
+        // ======================== Root =========================
+        {
+          [`${componentCls}-root`]: {
+            [`${componentCls}-wrap`]: {
+              zIndex: token2.zIndexPopupBase,
+              position: "fixed",
+              inset: 0,
+              overflow: "auto",
+              outline: 0,
+              WebkitOverflowScrolling: "touch"
+            },
+            [`${componentCls}-wrap-rtl`]: {
+              direction: "rtl"
+            },
+            [`${componentCls}-centered`]: {
+              textAlign: "center",
+              "&::before": {
+                display: "inline-block",
+                width: 0,
+                height: "100%",
+                verticalAlign: "middle",
+                content: '""'
+              },
+              [componentCls]: {
+                top: 0,
+                display: "inline-block",
+                paddingBottom: 0,
+                textAlign: "start",
+                verticalAlign: "middle"
+              }
+            },
+            [`@media (max-width: ${token2.screenSMMax})`]: {
+              [componentCls]: {
+                maxWidth: "calc(100vw - 16px)",
+                margin: `${token2.marginXS} auto`
+              },
+              [`${componentCls}-centered`]: {
+                [componentCls]: {
+                  flex: 1
+                }
+              }
+            }
+          }
+        },
+        // ======================== Modal ========================
+        {
+          [componentCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
+            pointerEvents: "none",
+            position: "relative",
+            top: 100,
+            width: "auto",
+            maxWidth: `calc(100vw - ${token2.margin * 2}px)`,
+            margin: "0 auto",
+            paddingBottom: token2.paddingLG,
+            [`${componentCls}-title`]: {
+              margin: 0,
+              color: token2.modalHeadingColor,
+              fontWeight: token2.fontWeightStrong,
+              fontSize: token2.modalHeaderTitleFontSize,
+              lineHeight: token2.modalHeaderTitleLineHeight,
+              wordWrap: "break-word"
+            },
+            [`${componentCls}-content`]: {
+              position: "relative",
+              backgroundColor: token2.modalContentBg,
+              backgroundClip: "padding-box",
+              border: 0,
+              borderRadius: token2.borderRadiusLG,
+              boxShadow: token2.boxShadowSecondary,
+              pointerEvents: "auto",
+              padding: `${token2.paddingMD}px ${token2.paddingContentHorizontalLG}px`
+            },
+            [`${componentCls}-close`]: _extends$1({
+              position: "absolute",
+              top: (token2.modalHeaderCloseSize - token2.modalCloseBtnSize) / 2,
+              insetInlineEnd: (token2.modalHeaderCloseSize - token2.modalCloseBtnSize) / 2,
+              zIndex: token2.zIndexPopupBase + 10,
+              padding: 0,
+              color: token2.modalCloseColor,
+              fontWeight: token2.fontWeightStrong,
+              lineHeight: 1,
+              textDecoration: "none",
+              background: "transparent",
+              borderRadius: token2.borderRadiusSM,
+              width: token2.modalConfirmIconSize,
+              height: token2.modalConfirmIconSize,
+              border: 0,
+              outline: 0,
+              cursor: "pointer",
+              transition: `color ${token2.motionDurationMid}, background-color ${token2.motionDurationMid}`,
+              "&-x": {
+                display: "block",
+                fontSize: token2.fontSizeLG,
+                fontStyle: "normal",
+                lineHeight: `${token2.modalCloseBtnSize}px`,
+                textAlign: "center",
+                textTransform: "none",
+                textRendering: "auto"
+              },
+              "&:hover": {
+                color: token2.modalIconHoverColor,
+                backgroundColor: token2.wireframe ? "transparent" : token2.colorFillContent,
+                textDecoration: "none"
+              },
+              "&:active": {
+                backgroundColor: token2.wireframe ? "transparent" : token2.colorFillContentHover
+              }
+            }, genFocusStyle(token2)),
+            [`${componentCls}-header`]: {
+              color: token2.colorText,
+              background: token2.modalHeaderBg,
+              borderRadius: `${token2.borderRadiusLG}px ${token2.borderRadiusLG}px 0 0`,
+              marginBottom: token2.marginXS
+            },
+            [`${componentCls}-body`]: {
+              fontSize: token2.fontSize,
+              lineHeight: token2.lineHeight,
+              wordWrap: "break-word"
+            },
+            [`${componentCls}-footer`]: {
+              textAlign: "end",
+              background: token2.modalFooterBg,
+              marginTop: token2.marginSM,
+              [`${token2.antCls}-btn + ${token2.antCls}-btn:not(${token2.antCls}-dropdown-trigger)`]: {
+                marginBottom: 0,
+                marginInlineStart: token2.marginXS
+              }
+            },
+            [`${componentCls}-open`]: {
+              overflow: "hidden"
+            }
+          })
+        },
+        // ======================== Pure =========================
+        {
+          [`${componentCls}-pure-panel`]: {
+            top: "auto",
+            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+            [`${componentCls}-content,
+          ${componentCls}-body,
+          ${componentCls}-confirm-body-wrapper`]: {
+              display: "flex",
+              flexDirection: "column",
+              flex: "auto"
+            },
+            [`${componentCls}-confirm-body`]: {
+              marginBottom: "auto"
+            }
+          }
+        }
+      ];
+    };
+    const genModalConfirmStyle = (token2) => {
+      const {
+        componentCls
+      } = token2;
+      const confirmComponentCls = `${componentCls}-confirm`;
+      return {
+        [confirmComponentCls]: {
+          "&-rtl": {
+            direction: "rtl"
+          },
+          [`${token2.antCls}-modal-header`]: {
+            display: "none"
+          },
+          [`${confirmComponentCls}-body-wrapper`]: _extends$1({}, clearFix()),
+          [`${confirmComponentCls}-body`]: {
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            [`${confirmComponentCls}-title`]: {
+              flex: "0 0 100%",
+              display: "block",
+              // create BFC to avoid
+              // https://user-images.githubusercontent.com/507615/37702510-ba844e06-2d2d-11e8-9b67-8e19be57f445.png
+              overflow: "hidden",
+              color: token2.colorTextHeading,
+              fontWeight: token2.fontWeightStrong,
+              fontSize: token2.modalHeaderTitleFontSize,
+              lineHeight: token2.modalHeaderTitleLineHeight,
+              [`+ ${confirmComponentCls}-content`]: {
+                marginBlockStart: token2.marginXS,
+                flexBasis: "100%",
+                maxWidth: `calc(100% - ${token2.modalConfirmIconSize + token2.marginSM}px)`
+              }
+            },
+            [`${confirmComponentCls}-content`]: {
+              color: token2.colorText,
+              fontSize: token2.fontSize
+            },
+            [`> ${token2.iconCls}`]: {
+              flex: "none",
+              marginInlineEnd: token2.marginSM,
+              fontSize: token2.modalConfirmIconSize,
+              [`+ ${confirmComponentCls}-title`]: {
+                flex: 1
+              },
+              // `content` after `icon` should set marginLeft
+              [`+ ${confirmComponentCls}-title + ${confirmComponentCls}-content`]: {
+                marginInlineStart: token2.modalConfirmIconSize + token2.marginSM
+              }
+            }
+          },
+          [`${confirmComponentCls}-btns`]: {
+            textAlign: "end",
+            marginTop: token2.marginSM,
+            [`${token2.antCls}-btn + ${token2.antCls}-btn`]: {
+              marginBottom: 0,
+              marginInlineStart: token2.marginXS
+            }
+          }
+        },
+        [`${confirmComponentCls}-error ${confirmComponentCls}-body > ${token2.iconCls}`]: {
+          color: token2.colorError
+        },
+        [`${confirmComponentCls}-warning ${confirmComponentCls}-body > ${token2.iconCls},
+        ${confirmComponentCls}-confirm ${confirmComponentCls}-body > ${token2.iconCls}`]: {
+          color: token2.colorWarning
+        },
+        [`${confirmComponentCls}-info ${confirmComponentCls}-body > ${token2.iconCls}`]: {
+          color: token2.colorInfo
+        },
+        [`${confirmComponentCls}-success ${confirmComponentCls}-body > ${token2.iconCls}`]: {
+          color: token2.colorSuccess
+        },
+        // https://github.com/ant-design/ant-design/issues/37329
+        [`${componentCls}-zoom-leave ${componentCls}-btns`]: {
+          pointerEvents: "none"
+        }
+      };
+    };
+    const genRTLStyle = (token2) => {
+      const {
+        componentCls
+      } = token2;
+      return {
+        [`${componentCls}-root`]: {
+          [`${componentCls}-wrap-rtl`]: {
+            direction: "rtl",
+            [`${componentCls}-confirm-body`]: {
+              direction: "rtl"
+            }
+          }
+        }
+      };
+    };
+    const genWireframeStyle = (token2) => {
+      const {
+        componentCls,
+        antCls
+      } = token2;
+      const confirmComponentCls = `${componentCls}-confirm`;
+      return {
+        [componentCls]: {
+          [`${componentCls}-content`]: {
+            padding: 0
+          },
+          [`${componentCls}-header`]: {
+            padding: token2.modalHeaderPadding,
+            borderBottom: `${token2.modalHeaderBorderWidth}px ${token2.modalHeaderBorderStyle} ${token2.modalHeaderBorderColorSplit}`,
+            marginBottom: 0
+          },
+          [`${componentCls}-body`]: {
+            padding: token2.modalBodyPadding
+          },
+          [`${componentCls}-footer`]: {
+            padding: `${token2.modalFooterPaddingVertical}px ${token2.modalFooterPaddingHorizontal}px`,
+            borderTop: `${token2.modalFooterBorderWidth}px ${token2.modalFooterBorderStyle} ${token2.modalFooterBorderColorSplit}`,
+            borderRadius: `0 0 ${token2.borderRadiusLG}px ${token2.borderRadiusLG}px`,
+            marginTop: 0
+          }
+        },
+        [confirmComponentCls]: {
+          [`${antCls}-modal-body`]: {
+            padding: `${token2.padding * 2}px ${token2.padding * 2}px ${token2.paddingLG}px`
+          },
+          [`${confirmComponentCls}-body`]: {
+            [`> ${token2.iconCls}`]: {
+              marginInlineEnd: token2.margin,
+              // `content` after `icon` should set marginLeft
+              [`+ ${confirmComponentCls}-title + ${confirmComponentCls}-content`]: {
+                marginInlineStart: token2.modalConfirmIconSize + token2.margin
+              }
+            }
+          },
+          [`${confirmComponentCls}-btns`]: {
+            marginTop: token2.marginLG
+          }
+        }
+      };
+    };
+    const useStyle = genComponentStyleHook("Modal", (token2) => {
+      const headerPaddingVertical = token2.padding;
+      const headerFontSize = token2.fontSizeHeading5;
+      const headerLineHeight = token2.lineHeightHeading5;
+      const modalToken = merge(token2, {
+        modalBodyPadding: token2.paddingLG,
+        modalHeaderBg: token2.colorBgElevated,
+        modalHeaderPadding: `${headerPaddingVertical}px ${token2.paddingLG}px`,
+        modalHeaderBorderWidth: token2.lineWidth,
+        modalHeaderBorderStyle: token2.lineType,
+        modalHeaderTitleLineHeight: headerLineHeight,
+        modalHeaderTitleFontSize: headerFontSize,
+        modalHeaderBorderColorSplit: token2.colorSplit,
+        modalHeaderCloseSize: headerLineHeight * headerFontSize + headerPaddingVertical * 2,
+        modalContentBg: token2.colorBgElevated,
+        modalHeadingColor: token2.colorTextHeading,
+        modalCloseColor: token2.colorTextDescription,
+        modalFooterBg: "transparent",
+        modalFooterBorderColorSplit: token2.colorSplit,
+        modalFooterBorderStyle: token2.lineType,
+        modalFooterPaddingVertical: token2.paddingXS,
+        modalFooterPaddingHorizontal: token2.padding,
+        modalFooterBorderWidth: token2.lineWidth,
+        modalConfirmTitleFontSize: token2.fontSizeLG,
+        modalIconHoverColor: token2.colorIconHover,
+        modalConfirmIconSize: token2.fontSize * token2.lineHeight,
+        modalCloseBtnSize: token2.controlHeightLG * 0.55
+      });
+      return [genModalStyle(modalToken), genModalConfirmStyle(modalToken), genRTLStyle(modalToken), genModalMaskStyle(modalToken), token2.wireframe && genWireframeStyle(modalToken), initZoomMotion(modalToken, "zoom")];
+    });
+    var __rest = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    let mousePosition;
+    const getClickPosition = (e2) => {
+      mousePosition = {
+        x: e2.pageX,
+        y: e2.pageY
+      };
+      setTimeout(() => mousePosition = null, 100);
+    };
+    if (canUseDocElement()) {
+      addEventListenerWrap(document.documentElement, "click", getClickPosition, true);
+    }
+    const modalProps = () => ({
+      prefixCls: String,
+      /** @deprecated Please use `open` instead. */
+      visible: {
+        type: Boolean,
+        default: void 0
+      },
+      open: {
+        type: Boolean,
+        default: void 0
+      },
+      confirmLoading: {
+        type: Boolean,
+        default: void 0
+      },
+      title: PropTypes.any,
+      closable: {
+        type: Boolean,
+        default: void 0
+      },
+      closeIcon: PropTypes.any,
+      onOk: Function,
+      onCancel: Function,
+      "onUpdate:visible": Function,
+      "onUpdate:open": Function,
+      onChange: Function,
+      afterClose: Function,
+      centered: {
+        type: Boolean,
+        default: void 0
+      },
+      width: [String, Number],
+      footer: PropTypes.any,
+      okText: PropTypes.any,
+      okType: String,
+      cancelText: PropTypes.any,
+      icon: PropTypes.any,
+      maskClosable: {
+        type: Boolean,
+        default: void 0
+      },
+      forceRender: {
+        type: Boolean,
+        default: void 0
+      },
+      okButtonProps: objectType(),
+      cancelButtonProps: objectType(),
+      destroyOnClose: {
+        type: Boolean,
+        default: void 0
+      },
+      wrapClassName: String,
+      maskTransitionName: String,
+      transitionName: String,
+      getContainer: {
+        type: [String, Function, Boolean, Object],
+        default: void 0
+      },
+      zIndex: Number,
+      bodyStyle: objectType(),
+      maskStyle: objectType(),
+      mask: {
+        type: Boolean,
+        default: void 0
+      },
+      keyboard: {
+        type: Boolean,
+        default: void 0
+      },
+      wrapProps: Object,
+      focusTriggerAfterClose: {
+        type: Boolean,
+        default: void 0
+      },
+      modalRender: Function,
+      mousePosition: objectType()
+    });
+    const Modal = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AModal",
+      inheritAttrs: false,
+      props: initDefaultProps(modalProps(), {
+        width: 520,
+        confirmLoading: false,
+        okType: "primary"
+      }),
+      setup(props2, _ref) {
+        let {
+          emit: emit2,
+          slots,
+          attrs
+        } = _ref;
+        const [locale2] = useLocaleReceiver("Modal");
+        const {
+          prefixCls,
+          rootPrefixCls,
+          direction,
+          getPopupContainer
+        } = useConfigInject("modal", props2);
+        const [wrapSSR, hashId] = useStyle(prefixCls);
+        warning$2(props2.visible === void 0);
+        const handleCancel = (e2) => {
+          emit2("update:visible", false);
+          emit2("update:open", false);
+          emit2("cancel", e2);
+          emit2("change", false);
+        };
+        const handleOk = (e2) => {
+          emit2("ok", e2);
+        };
+        const renderFooter = () => {
+          var _a, _b;
+          const {
+            okText = (_a = slots.okText) === null || _a === void 0 ? void 0 : _a.call(slots),
+            okType,
+            cancelText = (_b = slots.cancelText) === null || _b === void 0 ? void 0 : _b.call(slots),
+            confirmLoading
+          } = props2;
+          return createVNode(Fragment, null, [createVNode(Button, _objectSpread2$1({
+            "onClick": handleCancel
+          }, props2.cancelButtonProps), {
+            default: () => [cancelText || locale2.value.cancelText]
+          }), createVNode(Button, _objectSpread2$1(_objectSpread2$1({}, convertLegacyProps(okType)), {}, {
+            "loading": confirmLoading,
+            "onClick": handleOk
+          }, props2.okButtonProps), {
+            default: () => [okText || locale2.value.okText]
+          })]);
+        };
+        return () => {
+          var _a, _b;
+          const {
+            prefixCls: customizePrefixCls,
+            visible,
+            open: open2,
+            wrapClassName,
+            centered,
+            getContainer: getContainer2,
+            closeIcon = (_a = slots.closeIcon) === null || _a === void 0 ? void 0 : _a.call(slots),
+            focusTriggerAfterClose = true
+          } = props2, restProps = __rest(props2, ["prefixCls", "visible", "open", "wrapClassName", "centered", "getContainer", "closeIcon", "focusTriggerAfterClose"]);
+          const wrapClassNameExtended = classNames(wrapClassName, {
+            [`${prefixCls.value}-centered`]: !!centered,
+            [`${prefixCls.value}-wrap-rtl`]: direction.value === "rtl"
+          });
+          return wrapSSR(createVNode(DialogWrap, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, restProps), attrs), {}, {
+            "rootClassName": hashId.value,
+            "class": classNames(hashId.value, attrs.class),
+            "getContainer": getContainer2 || (getPopupContainer === null || getPopupContainer === void 0 ? void 0 : getPopupContainer.value),
+            "prefixCls": prefixCls.value,
+            "wrapClassName": wrapClassNameExtended,
+            "visible": open2 !== null && open2 !== void 0 ? open2 : visible,
+            "onClose": handleCancel,
+            "focusTriggerAfterClose": focusTriggerAfterClose,
+            "transitionName": getTransitionName(rootPrefixCls.value, "zoom", props2.transitionName),
+            "maskTransitionName": getTransitionName(rootPrefixCls.value, "fade", props2.maskTransitionName),
+            "mousePosition": (_b = restProps.mousePosition) !== null && _b !== void 0 ? _b : mousePosition
+          }), _extends$1(_extends$1({}, slots), {
+            footer: slots.footer || renderFooter,
+            closeIcon: () => {
+              return createVNode("span", {
+                "class": `${prefixCls.value}-close-x`
+              }, [closeIcon || createVNode(CloseOutlined, {
+                "class": `${prefixCls.value}-close-icon`
+              }, null)]);
+            }
+          })));
+        };
+      }
+    });
+    const useDestroyed = () => {
+      const destroyed = shallowRef(false);
+      onBeforeUnmount(() => {
+        destroyed.value = true;
+      });
+      return destroyed;
+    };
+    const actionButtonProps = {
+      type: {
+        type: String
+      },
+      actionFn: Function,
+      close: Function,
+      autofocus: Boolean,
+      prefixCls: String,
+      buttonProps: objectType(),
+      emitEvent: Boolean,
+      quitOnNullishReturnValue: Boolean
+    };
+    function isThenable(thing) {
+      return !!(thing && thing.then);
+    }
+    const ActionButton = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ActionButton",
+      props: actionButtonProps,
+      setup(props2, _ref) {
+        let {
+          slots
+        } = _ref;
+        const clickedRef = shallowRef(false);
+        const buttonRef = shallowRef();
+        const loading = shallowRef(false);
+        let timeoutId;
+        const isDestroyed = useDestroyed();
+        onMounted(() => {
+          if (props2.autofocus) {
+            timeoutId = setTimeout(() => {
+              var _a, _b;
+              return (_b = (_a = findDOMNode(buttonRef.value)) === null || _a === void 0 ? void 0 : _a.focus) === null || _b === void 0 ? void 0 : _b.call(_a);
+            });
+          }
+        });
+        onBeforeUnmount(() => {
+          clearTimeout(timeoutId);
+        });
+        const onInternalClose = function() {
+          var _a;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          (_a = props2.close) === null || _a === void 0 ? void 0 : _a.call(props2, ...args);
+        };
+        const handlePromiseOnOk = (returnValueOfOnOk) => {
+          if (!isThenable(returnValueOfOnOk)) {
+            return;
+          }
+          loading.value = true;
+          returnValueOfOnOk.then(function() {
+            if (!isDestroyed.value) {
+              loading.value = false;
+            }
+            onInternalClose(...arguments);
+            clickedRef.value = false;
+          }, (e2) => {
+            if (!isDestroyed.value) {
+              loading.value = false;
+            }
+            clickedRef.value = false;
+            return Promise.reject(e2);
+          });
+        };
+        const onClick = (e2) => {
+          const {
+            actionFn
+          } = props2;
+          if (clickedRef.value) {
+            return;
+          }
+          clickedRef.value = true;
+          if (!actionFn) {
+            onInternalClose();
+            return;
+          }
+          let returnValueOfOnOk;
+          if (props2.emitEvent) {
+            returnValueOfOnOk = actionFn(e2);
+            if (props2.quitOnNullishReturnValue && !isThenable(returnValueOfOnOk)) {
+              clickedRef.value = false;
+              onInternalClose(e2);
+              return;
+            }
+          } else if (actionFn.length) {
+            returnValueOfOnOk = actionFn(props2.close);
+            clickedRef.value = false;
+          } else {
+            returnValueOfOnOk = actionFn();
+            if (!returnValueOfOnOk) {
+              onInternalClose();
+              return;
+            }
+          }
+          handlePromiseOnOk(returnValueOfOnOk);
+        };
+        return () => {
+          const {
+            type,
+            prefixCls,
+            buttonProps: buttonProps2
+          } = props2;
+          return createVNode(Button, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, convertLegacyProps(type)), {}, {
+            "onClick": onClick,
+            "loading": loading.value,
+            "prefixCls": prefixCls
+          }, buttonProps2), {}, {
+            "ref": buttonRef
+          }), slots);
+        };
+      }
+    });
+    function renderSomeContent(someContent) {
+      if (typeof someContent === "function") {
+        return someContent();
+      }
+      return someContent;
+    }
+    const ConfirmDialog = /* @__PURE__ */ defineComponent({
+      name: "ConfirmDialog",
+      inheritAttrs: false,
+      props: ["icon", "onCancel", "onOk", "close", "closable", "zIndex", "afterClose", "visible", "open", "keyboard", "centered", "getContainer", "maskStyle", "okButtonProps", "cancelButtonProps", "okType", "prefixCls", "okCancel", "width", "mask", "maskClosable", "okText", "cancelText", "autoFocusButton", "transitionName", "maskTransitionName", "type", "title", "content", "direction", "rootPrefixCls", "bodyStyle", "closeIcon", "modalRender", "focusTriggerAfterClose", "wrapClassName", "confirmPrefixCls", "footer"],
+      setup(props2, _ref) {
+        let {
+          attrs
+        } = _ref;
+        const [locale2] = useLocaleReceiver("Modal");
+        return () => {
+          const {
+            icon,
+            onCancel,
+            onOk,
+            close,
+            okText,
+            closable = false,
+            zIndex,
+            afterClose,
+            keyboard,
+            centered,
+            getContainer: getContainer2,
+            maskStyle,
+            okButtonProps,
+            cancelButtonProps,
+            okCancel,
+            width = 416,
+            mask = true,
+            maskClosable = false,
+            type,
+            open: open2,
+            title,
+            content,
+            direction,
+            closeIcon,
+            modalRender,
+            focusTriggerAfterClose,
+            rootPrefixCls,
+            bodyStyle,
+            wrapClassName,
+            footer
+          } = props2;
+          let mergedIcon = icon;
+          if (!icon && icon !== null) {
+            switch (type) {
+              case "info":
+                mergedIcon = createVNode(InfoCircleFilled, null, null);
+                break;
+              case "success":
+                mergedIcon = createVNode(CheckCircleFilled, null, null);
+                break;
+              case "error":
+                mergedIcon = createVNode(CloseCircleFilled, null, null);
+                break;
+              default:
+                mergedIcon = createVNode(ExclamationCircleFilled, null, null);
+            }
+          }
+          const okType = props2.okType || "primary";
+          const prefixCls = props2.prefixCls || "ant-modal";
+          const contentPrefixCls = `${prefixCls}-confirm`;
+          const style = attrs.style || {};
+          const mergedOkCancel = okCancel !== null && okCancel !== void 0 ? okCancel : type === "confirm";
+          const autoFocusButton = props2.autoFocusButton === null ? false : props2.autoFocusButton || "ok";
+          const confirmPrefixCls = `${prefixCls}-confirm`;
+          const classString = classNames(confirmPrefixCls, `${confirmPrefixCls}-${props2.type}`, {
+            [`${confirmPrefixCls}-rtl`]: direction === "rtl"
+          }, attrs.class);
+          const mergedLocal = locale2.value;
+          const cancelButton = mergedOkCancel && createVNode(ActionButton, {
+            "actionFn": onCancel,
+            "close": close,
+            "autofocus": autoFocusButton === "cancel",
+            "buttonProps": cancelButtonProps,
+            "prefixCls": `${rootPrefixCls}-btn`
+          }, {
+            default: () => [renderSomeContent(props2.cancelText) || mergedLocal.cancelText]
+          });
+          return createVNode(Modal, {
+            "prefixCls": prefixCls,
+            "class": classString,
+            "wrapClassName": classNames({
+              [`${confirmPrefixCls}-centered`]: !!centered
+            }, wrapClassName),
+            "onCancel": (e2) => close === null || close === void 0 ? void 0 : close({
+              triggerCancel: true
+            }, e2),
+            "open": open2,
+            "title": "",
+            "footer": "",
+            "transitionName": getTransitionName(rootPrefixCls, "zoom", props2.transitionName),
+            "maskTransitionName": getTransitionName(rootPrefixCls, "fade", props2.maskTransitionName),
+            "mask": mask,
+            "maskClosable": maskClosable,
+            "maskStyle": maskStyle,
+            "style": style,
+            "bodyStyle": bodyStyle,
+            "width": width,
+            "zIndex": zIndex,
+            "afterClose": afterClose,
+            "keyboard": keyboard,
+            "centered": centered,
+            "getContainer": getContainer2,
+            "closable": closable,
+            "closeIcon": closeIcon,
+            "modalRender": modalRender,
+            "focusTriggerAfterClose": focusTriggerAfterClose
+          }, {
+            default: () => [createVNode("div", {
+              "class": `${contentPrefixCls}-body-wrapper`
+            }, [createVNode("div", {
+              "class": `${contentPrefixCls}-body`
+            }, [renderSomeContent(mergedIcon), title === void 0 ? null : createVNode("span", {
+              "class": `${contentPrefixCls}-title`
+            }, [renderSomeContent(title)]), createVNode("div", {
+              "class": `${contentPrefixCls}-content`
+            }, [renderSomeContent(content)])]), footer !== void 0 ? renderSomeContent(footer) : createVNode("div", {
+              "class": `${contentPrefixCls}-btns`
+            }, [cancelButton, createVNode(ActionButton, {
+              "type": okType,
+              "actionFn": onOk,
+              "close": close,
+              "autofocus": autoFocusButton === "ok",
+              "buttonProps": okButtonProps,
+              "prefixCls": `${rootPrefixCls}-btn`
+            }, {
+              default: () => [renderSomeContent(okText) || (mergedOkCancel ? mergedLocal.okText : mergedLocal.justOkText)]
+            })])])]
+          });
+        };
+      }
+    });
+    const destroyFns = [];
+    const confirm = (config) => {
+      const container = document.createDocumentFragment();
+      let currentConfig = _extends$1(_extends$1({}, omit(config, ["parentContext", "appContext"])), {
+        close,
+        open: true
+      });
+      let confirmDialogInstance = null;
+      function destroy() {
+        if (confirmDialogInstance) {
+          render(null, container);
+          confirmDialogInstance = null;
+        }
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+        const triggerCancel = args.some((param) => param && param.triggerCancel);
+        if (config.onCancel && triggerCancel) {
+          config.onCancel(() => {
+          }, ...args.slice(1));
+        }
+        for (let i2 = 0; i2 < destroyFns.length; i2++) {
+          const fn = destroyFns[i2];
+          if (fn === close) {
+            destroyFns.splice(i2, 1);
+            break;
+          }
+        }
+      }
+      function close() {
+        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+        currentConfig = _extends$1(_extends$1({}, currentConfig), {
+          open: false,
+          afterClose: () => {
+            if (typeof config.afterClose === "function") {
+              config.afterClose();
+            }
+            destroy.apply(this, args);
+          }
+        });
+        if (currentConfig.visible) {
+          delete currentConfig.visible;
+        }
+        update(currentConfig);
+      }
+      function update(configUpdate) {
+        if (typeof configUpdate === "function") {
+          currentConfig = configUpdate(currentConfig);
+        } else {
+          currentConfig = _extends$1(_extends$1({}, currentConfig), configUpdate);
+        }
+        if (confirmDialogInstance) {
+          triggerVNodeUpdate(confirmDialogInstance, currentConfig, container);
+        }
+      }
+      const Wrapper = (p2) => {
+        const global2 = globalConfigForApi;
+        const rootPrefixCls = global2.prefixCls;
+        const prefixCls = p2.prefixCls || `${rootPrefixCls}-modal`;
+        const iconPrefixCls = global2.iconPrefixCls;
+        const runtimeLocale2 = getConfirmLocale();
+        return createVNode(ConfigProvider, _objectSpread2$1(_objectSpread2$1({}, global2), {}, {
+          "prefixCls": rootPrefixCls
+        }), {
+          default: () => [createVNode(ConfirmDialog, _objectSpread2$1(_objectSpread2$1({}, p2), {}, {
+            "rootPrefixCls": rootPrefixCls,
+            "prefixCls": prefixCls,
+            "iconPrefixCls": iconPrefixCls,
+            "locale": runtimeLocale2,
+            "cancelText": p2.cancelText || runtimeLocale2.cancelText
+          }), null)]
+        });
+      };
+      function render$1(props2) {
+        const vm = createVNode(Wrapper, _extends$1({}, props2));
+        vm.appContext = config.parentContext || config.appContext || vm.appContext;
+        render(vm, container);
+        return vm;
+      }
+      confirmDialogInstance = render$1(currentConfig);
+      destroyFns.push(close);
+      return {
+        destroy: close,
+        update
+      };
+    };
+    function withWarn(props2) {
+      return _extends$1(_extends$1({}, props2), {
+        type: "warning"
+      });
+    }
+    function withInfo(props2) {
+      return _extends$1(_extends$1({}, props2), {
+        type: "info"
+      });
+    }
+    function withSuccess(props2) {
+      return _extends$1(_extends$1({}, props2), {
+        type: "success"
+      });
+    }
+    function withError(props2) {
+      return _extends$1(_extends$1({}, props2), {
+        type: "error"
+      });
+    }
+    function withConfirm(props2) {
+      return _extends$1(_extends$1({}, props2), {
+        type: "confirm"
+      });
+    }
+    const comfirmFuncProps = () => ({
+      config: Object,
+      afterClose: Function,
+      destroyAction: Function,
+      open: Boolean
+    });
+    const HookModal = /* @__PURE__ */ defineComponent({
+      name: "HookModal",
+      inheritAttrs: false,
+      props: initDefaultProps(comfirmFuncProps(), {
+        config: {
+          width: 520,
+          okType: "primary"
+        }
+      }),
+      setup(props2, _ref) {
+        let {
+          expose
+        } = _ref;
+        var _a;
+        const open2 = computed(() => props2.open);
+        const innerConfig = computed(() => props2.config);
+        const {
+          direction,
+          getPrefixCls
+        } = useConfigContextInject();
+        const prefixCls = getPrefixCls("modal");
+        const rootPrefixCls = getPrefixCls();
+        const afterClose = () => {
+          var _a2, _b;
+          props2 === null || props2 === void 0 ? void 0 : props2.afterClose();
+          (_b = (_a2 = innerConfig.value).afterClose) === null || _b === void 0 ? void 0 : _b.call(_a2);
+        };
+        const close = function() {
+          props2.destroyAction(...arguments);
+        };
+        expose({
+          destroy: close
+        });
+        const mergedOkCancel = (_a = innerConfig.value.okCancel) !== null && _a !== void 0 ? _a : innerConfig.value.type === "confirm";
+        const [contextLocale] = useLocaleReceiver("Modal", localeValues.Modal);
+        return () => createVNode(ConfirmDialog, _objectSpread2$1(_objectSpread2$1({
+          "prefixCls": prefixCls,
+          "rootPrefixCls": rootPrefixCls
+        }, innerConfig.value), {}, {
+          "close": close,
+          "open": open2.value,
+          "afterClose": afterClose,
+          "okText": innerConfig.value.okText || (mergedOkCancel ? contextLocale === null || contextLocale === void 0 ? void 0 : contextLocale.value.okText : contextLocale === null || contextLocale === void 0 ? void 0 : contextLocale.value.justOkText),
+          "direction": innerConfig.value.direction || direction.value,
+          "cancelText": innerConfig.value.cancelText || (contextLocale === null || contextLocale === void 0 ? void 0 : contextLocale.value.cancelText)
+        }), null);
+      }
+    });
+    let uuid = 0;
+    const ElementsHolder = /* @__PURE__ */ defineComponent({
+      name: "ElementsHolder",
+      inheritAttrs: false,
+      setup(_2, _ref) {
+        let {
+          expose
+        } = _ref;
+        const modals = shallowRef([]);
+        const addModal = (modal) => {
+          modals.value.push(modal);
+          modals.value = modals.value.slice();
+          return () => {
+            modals.value = modals.value.filter((currentModal) => currentModal !== modal);
+          };
+        };
+        expose({
+          addModal
+        });
+        return () => {
+          return modals.value.map((modal) => modal());
+        };
+      }
+    });
+    function useModal() {
+      const holderRef = shallowRef(null);
+      const actionQueue = shallowRef([]);
+      watch(actionQueue, () => {
+        if (actionQueue.value.length) {
+          const cloneQueue = [...actionQueue.value];
+          cloneQueue.forEach((action) => {
+            action();
+          });
+          actionQueue.value = [];
+        }
+      }, {
+        immediate: true
+      });
+      const getConfirmFunc = (withFunc) => function hookConfirm(config) {
+        var _a;
+        uuid += 1;
+        const open2 = shallowRef(true);
+        const modalRef = shallowRef(null);
+        const configRef = shallowRef(unref(config));
+        const updateConfig = shallowRef({});
+        watch(() => config, (val) => {
+          updateAction(_extends$1(_extends$1({}, isRef(val) ? val.value : val), updateConfig.value));
+        });
+        const destroyAction = function() {
+          open2.value = false;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          const triggerCancel = args.some((param) => param && param.triggerCancel);
+          if (configRef.value.onCancel && triggerCancel) {
+            configRef.value.onCancel(() => {
+            }, ...args.slice(1));
+          }
+        };
+        let closeFunc;
+        const modal = () => createVNode(HookModal, {
+          "key": `modal-${uuid}`,
+          "config": withFunc(configRef.value),
+          "ref": modalRef,
+          "open": open2.value,
+          "destroyAction": destroyAction,
+          "afterClose": () => {
+            closeFunc === null || closeFunc === void 0 ? void 0 : closeFunc();
+          }
+        }, null);
+        closeFunc = (_a = holderRef.value) === null || _a === void 0 ? void 0 : _a.addModal(modal);
+        if (closeFunc) {
+          destroyFns.push(closeFunc);
+        }
+        const updateAction = (newConfig) => {
+          configRef.value = _extends$1(_extends$1({}, configRef.value), newConfig);
+        };
+        const destroy = () => {
+          if (modalRef.value) {
+            destroyAction();
+          } else {
+            actionQueue.value = [...actionQueue.value, destroyAction];
+          }
+        };
+        const update = (newConfig) => {
+          updateConfig.value = newConfig;
+          if (modalRef.value) {
+            updateAction(newConfig);
+          } else {
+            actionQueue.value = [...actionQueue.value, () => updateAction(newConfig)];
+          }
+        };
+        return {
+          destroy,
+          update
+        };
+      };
+      const fns = computed(() => ({
+        info: getConfirmFunc(withInfo),
+        success: getConfirmFunc(withSuccess),
+        error: getConfirmFunc(withError),
+        warning: getConfirmFunc(withWarn),
+        confirm: getConfirmFunc(withConfirm)
+      }));
+      const holderKey = Symbol("modalHolderKey");
+      return [fns.value, () => createVNode(ElementsHolder, {
+        "key": holderKey,
+        "ref": holderRef
+      }, null)];
+    }
+    function modalWarn(props2) {
+      return confirm(withWarn(props2));
+    }
+    Modal.useModal = useModal;
+    Modal.info = function infoFn(props2) {
+      return confirm(withInfo(props2));
+    };
+    Modal.success = function successFn(props2) {
+      return confirm(withSuccess(props2));
+    };
+    Modal.error = function errorFn(props2) {
+      return confirm(withError(props2));
+    };
+    Modal.warning = modalWarn;
+    Modal.warn = modalWarn;
+    Modal.confirm = function confirmFn(props2) {
+      return confirm(withConfirm(props2));
+    };
+    Modal.destroyAll = function destroyAllFn() {
+      while (destroyFns.length) {
+        const close = destroyFns.pop();
+        if (close) {
+          close();
+        }
+      }
+    };
+    Modal.install = function(app) {
+      app.component(Modal.name, Modal);
+      return app;
+    };
     const spaceSize = {
       small: 8,
       middle: 16,
@@ -35214,7 +39527,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           space,
           direction: directionConfig
         } = useConfigInject("space", props2);
-        const [wrapSSR, hashId] = useStyle$a(prefixCls);
+        const [wrapSSR, hashId] = useStyle$c(prefixCls);
         const supportFlexGap = useFlexGapSupport();
         const size2 = computed(() => {
           var _a, _b, _c;
@@ -35306,6 +39619,102 @@ summary tabindex target title type usemap value width wmode wrap`;
       return app;
     };
     var DeleteOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z" } }] }, "name": "delete", "theme": "outlined" };
+    function _objectSpread$7(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$7(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$7(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var DeleteOutlined = function DeleteOutlined2(props2, context) {
+      var p2 = _objectSpread$7({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$7({}, p2, {
+        "icon": DeleteOutlined$1
+      }), null);
+    };
+    DeleteOutlined.displayName = "DeleteOutlined";
+    DeleteOutlined.inheritAttrs = false;
+    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
+    function _objectSpread$6(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$6(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$6(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
+      var p2 = _objectSpread$6({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$6({}, p2, {
+        "icon": ArrowDownOutlined$1
+      }), null);
+    };
+    ArrowDownOutlined.displayName = "ArrowDownOutlined";
+    ArrowDownOutlined.inheritAttrs = false;
+    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
+    function _objectSpread$5(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$5(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$5(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+      var p2 = _objectSpread$5({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$5({}, p2, {
+        "icon": ArrowUpOutlined$1
+      }), null);
+    };
+    ArrowUpOutlined.displayName = "ArrowUpOutlined";
+    ArrowUpOutlined.inheritAttrs = false;
+    var BorderOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "border", "theme": "outlined" };
     function _objectSpread$4(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35329,15 +39738,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var DeleteOutlined = function DeleteOutlined2(props2, context) {
+    var BorderOutlined = function BorderOutlined2(props2, context) {
       var p2 = _objectSpread$4({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$4({}, p2, {
-        "icon": DeleteOutlined$1
+        "icon": BorderOutlined$1
       }), null);
     };
-    DeleteOutlined.displayName = "DeleteOutlined";
-    DeleteOutlined.inheritAttrs = false;
-    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
+    BorderOutlined.displayName = "BorderOutlined";
+    BorderOutlined.inheritAttrs = false;
+    var EditFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32zm-622.3-84c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9z" } }] }, "name": "edit", "theme": "filled" };
     function _objectSpread$3(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35361,15 +39770,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
+    var EditFilled = function EditFilled2(props2, context) {
       var p2 = _objectSpread$3({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$3({}, p2, {
-        "icon": ArrowDownOutlined$1
+        "icon": EditFilled$1
       }), null);
     };
-    ArrowDownOutlined.displayName = "ArrowDownOutlined";
-    ArrowDownOutlined.inheritAttrs = false;
-    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
+    EditFilled.displayName = "EditFilled";
+    EditFilled.inheritAttrs = false;
+    var ShoppingCartOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M922.9 701.9H327.4l29.9-60.9 496.8-.9c16.8 0 31.2-12 34.2-28.6l68.8-385.1c1.8-10.1-.9-20.5-7.5-28.4a34.99 34.99 0 00-26.6-12.5l-632-2.1-5.4-25.4c-3.4-16.2-18-28-34.6-28H96.5a35.3 35.3 0 100 70.6h125.9L246 312.8l58.1 281.3-74.8 122.1a34.96 34.96 0 00-3 36.8c6 11.9 18.1 19.4 31.5 19.4h62.8a102.43 102.43 0 00-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7h161.1a102.43 102.43 0 00-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7H923c19.4 0 35.3-15.8 35.3-35.3a35.42 35.42 0 00-35.4-35.2zM305.7 253l575.8 1.9-56.4 315.8-452.3.8L305.7 253zm96.9 612.7c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 01-31.6 31.6zm325.1 0c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 01-31.6 31.6z" } }] }, "name": "shopping-cart", "theme": "outlined" };
     function _objectSpread$2(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35393,15 +39802,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+    var ShoppingCartOutlined = function ShoppingCartOutlined2(props2, context) {
       var p2 = _objectSpread$2({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$2({}, p2, {
-        "icon": ArrowUpOutlined$1
+        "icon": ShoppingCartOutlined$1
       }), null);
     };
-    ArrowUpOutlined.displayName = "ArrowUpOutlined";
-    ArrowUpOutlined.inheritAttrs = false;
-    var BorderOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "border", "theme": "outlined" };
+    ShoppingCartOutlined.displayName = "ShoppingCartOutlined";
+    ShoppingCartOutlined.inheritAttrs = false;
+    var SyncOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z" } }] }, "name": "sync", "theme": "outlined" };
     function _objectSpread$1(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35425,15 +39834,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var BorderOutlined = function BorderOutlined2(props2, context) {
+    var SyncOutlined = function SyncOutlined2(props2, context) {
       var p2 = _objectSpread$1({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$1({}, p2, {
-        "icon": BorderOutlined$1
+        "icon": SyncOutlined$1
       }), null);
     };
-    BorderOutlined.displayName = "BorderOutlined";
-    BorderOutlined.inheritAttrs = false;
-    var SyncOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z" } }] }, "name": "sync", "theme": "outlined" };
+    SyncOutlined.displayName = "SyncOutlined";
+    SyncOutlined.inheritAttrs = false;
+    var UnorderedListOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z" } }] }, "name": "unordered-list", "theme": "outlined" };
     function _objectSpread(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -35457,14 +39866,14 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var SyncOutlined = function SyncOutlined2(props2, context) {
+    var UnorderedListOutlined = function UnorderedListOutlined2(props2, context) {
       var p2 = _objectSpread({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread({}, p2, {
-        "icon": SyncOutlined$1
+        "icon": UnorderedListOutlined$1
       }), null);
     };
-    SyncOutlined.displayName = "SyncOutlined";
-    SyncOutlined.inheritAttrs = false;
+    UnorderedListOutlined.displayName = "UnorderedListOutlined";
+    UnorderedListOutlined.inheritAttrs = false;
     const _export_sfc = (sfc, props2) => {
       const target = sfc.__vccOpts || sfc;
       for (const [key2, val] of props2) {
@@ -35540,7 +39949,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       fill: "#64B059",
       "p-id": "781"
     }, null, -1);
-    const _hoisted_14 = /* @__PURE__ */ createBaseVNode("path", {
+    const _hoisted_14$1 = /* @__PURE__ */ createBaseVNode("path", {
       d: "M496 809.6c22.4 9.6 41.6 16 60.8 20.8-8 33.6-12.8 67.2-19.2 100.8-3.2 17.6-19.2 28.8-36.8 27.2-17.6-3.2-28.8-19.2-27.2-36.8 6.4-36.8 14.4-75.2 22.4-112z",
       fill: "#E0F2D1",
       "p-id": "782"
@@ -35563,7 +39972,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       _hoisted_11$1,
       _hoisted_12$1,
       _hoisted_13$1,
-      _hoisted_14,
+      _hoisted_14$1,
       _hoisted_15
     ];
     function _sfc_render(_ctx, _cache) {
@@ -35578,7 +39987,10 @@ summary tabindex target title type usemap value width wmode wrap`;
         this.set = new Set(value);
       }
       add(...values) {
-        values.forEach((value) => this.set.add(value));
+        values.forEach((value) => {
+          this.set.delete(value);
+          this.set.add(value);
+        });
         while (this.set.size > this.maxSize) {
           const firstValue = this.set.values().next().value;
           this.set.delete(firstValue);
@@ -35608,14 +40020,15 @@ summary tabindex target title type usemap value width wmode wrap`;
     const _hoisted_3 = { class: "leek-search-sticky" };
     const _hoisted_4 = { class: "leek-select-item" };
     const _hoisted_5 = { class: "leek-select-item-label" };
-    const _hoisted_6 = { class: "leek-search-history" };
-    const _hoisted_7 = { class: "leek-search-history-title" };
-    const _hoisted_8 = /* @__PURE__ */ createBaseVNode("h4", null, "历史搜索", -1);
-    const _hoisted_9 = { class: "leek-search-history-clear" };
-    const _hoisted_10 = { class: "leek-search-history-content" };
-    const _hoisted_11 = { class: "leek-search-main" };
-    const _hoisted_12 = { class: "leek-select-item" };
-    const _hoisted_13 = { class: "leek-select-item-label" };
+    const _hoisted_6 = ["onClick"];
+    const _hoisted_7 = { class: "leek-search-history" };
+    const _hoisted_8 = { class: "leek-search-history-title" };
+    const _hoisted_9 = /* @__PURE__ */ createBaseVNode("h4", null, "历史搜索", -1);
+    const _hoisted_10 = { class: "leek-search-history-clear" };
+    const _hoisted_11 = { class: "leek-search-history-content" };
+    const _hoisted_12 = { class: "leek-search-main" };
+    const _hoisted_13 = { class: "leek-select-item" };
+    const _hoisted_14 = { class: "leek-select-item-label" };
     const maxSelectCount = 5;
     const _sfc_main = /* @__PURE__ */ defineComponent({
       __name: "App",
@@ -35634,7 +40047,8 @@ summary tabindex target title type usemap value width wmode wrap`;
           sandbox = {
             window,
             getValue: (key2, defaultValue) => {
-              const leekCachesString = sessionStorage.getItem(key2) || `'${defaultValue}'`;
+              const leekCachesString = sessionStorage.getItem(key2);
+              if (!leekCachesString) return defaultValue;
               try {
                 return JSON.parse(leekCachesString);
               } catch (error) {
@@ -35648,12 +40062,13 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.3";
+        const appVersion = "1.1.4";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
           order: "price-1",
-          extra: false
+          extra: false,
+          state: 0
         };
         const setting = reactive({
           ...defaultSettings,
@@ -35710,6 +40125,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         });
         const dataMap = {};
         const openRef = ref(false);
+        const leekCustomName = reactive({});
         const isSingleMode = () => {
           return setting.runMode === "single";
         };
@@ -35722,6 +40138,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const onOpen = () => {
           var _a, _b;
           (_b = (_a = sandbox.window) == null ? void 0 : _a.buyerStore) == null ? void 0 : _b.setBuyActiveTab("skin");
+          setState();
           check();
           openRef.value = true;
         };
@@ -35733,6 +40150,8 @@ summary tabindex target title type usemap value width wmode wrap`;
             ...defaultSettings,
             ...leekCachesWithoutHistory
           });
+          const savedCustomNames = sandbox.getValue("leekCustomName", {});
+          Object.assign(leekCustomName, savedCustomNames);
         };
         const fetchItems = async () => {
           let data;
@@ -35756,6 +40175,16 @@ summary tabindex target title type usemap value width wmode wrap`;
             onReset(false);
           }
         );
+        function setState() {
+          var _a;
+          if ((_a = sandbox == null ? void 0 : sandbox.window) == null ? void 0 : _a.searchFilterStore) {
+            sandbox.window.searchFilterStore.searchParams.state = Number(setting.state);
+            nextTick(() => {
+              onSearch();
+            });
+          }
+        }
+        watch(() => setting.state, setState);
         const onChange = (name) => (value, options) => {
           if (!isSingleMode()) {
             if (setting.selectedItems.length > maxSelectCount) {
@@ -35853,6 +40282,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const historyTagsClick = (text) => {
           if (isSingleMode()) {
             setting.selectedItems = text;
+            historyTagsAdd(text);
           } else {
             if (setting.selectedItems.includes(text)) {
               api$1.error(`${text} 已存在`);
@@ -35861,6 +40291,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             } else {
               const items = [...setting.selectedItems];
               items.push(text);
+              historyTagsAdd(text);
               setting.selectedItems = items;
             }
           }
@@ -35869,8 +40300,11 @@ summary tabindex target title type usemap value width wmode wrap`;
           setting.historyItems.clear();
         };
         const historyTagTransform = (tag) => {
-          const { name, showName } = dataMap[tag];
-          return `${name}(${showName})`;
+          const item = dataMap[tag];
+          if (!item) return tag;
+          const { name, showName } = item;
+          const displayName = leekCustomName[tag] || name;
+          return `${displayName}(${showName})`;
         };
         watch(
           () => setting,
@@ -35881,14 +40315,23 @@ summary tabindex target title type usemap value width wmode wrap`;
             deep: true
           }
         );
+        watch(
+          () => leekCustomName,
+          () => {
+            sandbox.setValue("leekCustomName", { ...leekCustomName });
+          },
+          {
+            deep: true
+          }
+        );
         const updateItems = (version2, data) => {
           sandbox.setValue("leekItemData", data);
-          sandbox.setValue("leekItemVersion", version2);
+          sandbox.setValue("leekItemVersion", { version: version2 });
         };
         const isLoading = ref(true);
         const init = async (force = false) => {
           isLoading.value = true;
-          const itemVersion = sandbox.getValue("leekItemVersion", "1.00");
+          const itemVersion = sandbox.getValue("leekItemVersion", { version: "1.00" });
           let itemData = sandbox.getValue("leekItemData");
           const now2 = (/* @__PURE__ */ new Date()).getTime();
           if (force || !itemVersion || now2 - itemVersion > 24 * 60 * 60 * 1e3 || !itemData || isEmpty(itemData)) {
@@ -35914,7 +40357,8 @@ summary tabindex target title type usemap value width wmode wrap`;
                 value: showName,
                 typeName,
                 searchDescType,
-                searchId
+                searchId,
+                item
               };
             });
             info.push({
@@ -35928,6 +40372,41 @@ summary tabindex target title type usemap value width wmode wrap`;
           loadCaches();
         };
         init();
+        const editCustomNameVisible = ref(false);
+        const editCustomNameInput = ref("");
+        const editCustomNameShowName = ref("");
+        const editCustomName = (item) => {
+          const { name, showName } = item;
+          editCustomNameShowName.value = showName;
+          editCustomNameInput.value = leekCustomName[showName] || name;
+          editCustomNameVisible.value = true;
+        };
+        const editCustomNameOk = () => {
+          var _a;
+          const newName = (_a = editCustomNameInput.value) == null ? void 0 : _a.trim();
+          if (newName) {
+            leekCustomName[editCustomNameShowName.value] = newName;
+            api$1.success("自定义名称已保存");
+          } else {
+            delete leekCustomName[editCustomNameShowName.value];
+            api$1.success("已恢复默认名称");
+          }
+          editCustomNameVisible.value = false;
+        };
+        const editCustomNameCancel = () => {
+          editCustomNameVisible.value = false;
+        };
+        const getDisplayLabel = (item) => {
+          const { name, showName } = item;
+          const displayName = leekCustomName[showName] || name;
+          return `${displayName}(${showName})`;
+        };
+        const selectedItemsInfoOptionsWithCustomLabels = computed(() => {
+          return selectedItemsInfo.value.options.map((opt) => ({
+            ...opt,
+            label: getDisplayLabel(opt.item)
+          }));
+        });
         return (_ctx, _cache) => {
           return openBlock(), createBlock(unref(ConfigProvider), {
             "prefix-cls": "antVue",
@@ -36028,6 +40507,45 @@ summary tabindex target title type usemap value width wmode wrap`;
                             _: 1
                           })),
                           (openBlock(), createBlock(unref(FormItem), {
+                            key: "寄售状态",
+                            label: "寄售状态",
+                            name: "state"
+                          }, {
+                            default: withCtx(() => [
+                              createVNode(unref(RadioGroup), {
+                                value: setting.state,
+                                "onUpdate:value": _cache[1] || (_cache[1] = ($event) => setting.state = $event),
+                                "button-style": "solid"
+                              }, {
+                                default: withCtx(() => [
+                                  createVNode(unref(RadioButton), { value: "0" }, {
+                                    default: withCtx(() => [
+                                      createTextVNode(" 不限 "),
+                                      createVNode(unref(UnorderedListOutlined))
+                                    ]),
+                                    _: 1
+                                  }),
+                                  createVNode(unref(RadioButton), { value: "1" }, {
+                                    default: withCtx(() => [
+                                      createTextVNode(" 公示期 "),
+                                      createVNode(unref(CalendarOutlined))
+                                    ]),
+                                    _: 1
+                                  }),
+                                  createVNode(unref(RadioButton), { value: "2" }, {
+                                    default: withCtx(() => [
+                                      createTextVNode(" 在售期 "),
+                                      createVNode(unref(ShoppingCartOutlined))
+                                    ]),
+                                    _: 1
+                                  })
+                                ]),
+                                _: 1
+                              }, 8, ["value"])
+                            ]),
+                            _: 1
+                          })),
+                          (openBlock(), createBlock(unref(FormItem), {
                             key: "排序方式",
                             label: "排序方式",
                             name: "order"
@@ -36035,7 +40553,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             default: withCtx(() => [
                               createVNode(unref(RadioGroup), {
                                 value: setting.order,
-                                "onUpdate:value": _cache[1] || (_cache[1] = ($event) => setting.order = $event),
+                                "onUpdate:value": _cache[2] || (_cache[2] = ($event) => setting.order = $event),
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
@@ -36082,21 +40600,21 @@ summary tabindex target title type usemap value width wmode wrap`;
                               createVNode(unref(Select), {
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[2] || (_cache[2] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
+                                onChange: _cache[3] || (_cache[3] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
                                 onSelect: selectSelect,
-                                options: selectedItemsInfo.value.options,
+                                options: selectedItemsInfoOptionsWithCustomLabels.value,
                                 mode: isSingleMode() ? void 0 : "multiple",
                                 "show-search": "",
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
                                 value: setting.selectedItems,
-                                "onUpdate:value": _cache[3] || (_cache[3] = ($event) => setting.selectedItems = $event),
+                                "onUpdate:value": _cache[4] || (_cache[4] = ($event) => setting.selectedItems = $event),
                                 "max-tag-count": 10,
                                 "get-popup-container": getPopupContainer
                               }, {
-                                option: withCtx(({ label, searchDescType }) => [
+                                option: withCtx(({ searchDescType, item }) => [
                                   createBaseVNode("div", _hoisted_4, [
-                                    createBaseVNode("span", _hoisted_5, toDisplayString(label), 1),
+                                    createBaseVNode("span", _hoisted_5, toDisplayString(getDisplayLabel(item)), 1),
                                     createVNode(unref(Tag), {
                                       class: "leek-select-item-tag",
                                       color: "default"
@@ -36105,7 +40623,13 @@ summary tabindex target title type usemap value width wmode wrap`;
                                         createTextVNode(toDisplayString(searchDescType), 1)
                                       ]),
                                       _: 2
-                                    }, 1024)
+                                    }, 1024),
+                                    createBaseVNode("span", {
+                                      class: "leek-select-item-edit",
+                                      onClick: withModifiers(($event) => editCustomName(item), ["stop"])
+                                    }, [
+                                      createVNode(unref(EditFilled))
+                                    ], 8, _hoisted_6)
                                   ])
                                 ]),
                                 _: 1
@@ -36113,14 +40637,14 @@ summary tabindex target title type usemap value width wmode wrap`;
                             ]),
                             _: 1
                           }, 8, ["label"])),
-                          withDirectives(createBaseVNode("div", _hoisted_6, [
-                            createBaseVNode("div", _hoisted_7, [
-                              _hoisted_8,
-                              createBaseVNode("div", _hoisted_9, [
+                          withDirectives(createBaseVNode("div", _hoisted_7, [
+                            createBaseVNode("div", _hoisted_8, [
+                              _hoisted_9,
+                              createBaseVNode("div", _hoisted_10, [
                                 createVNode(unref(DeleteOutlined), { onClick: historyTagsClear })
                               ])
                             ]),
-                            createBaseVNode("div", _hoisted_10, [
+                            createBaseVNode("div", _hoisted_11, [
                               (openBlock(true), createElementBlock(Fragment, null, renderList(setting.historyItems.toJSON().reverse(), (tag) => {
                                 return openBlock(), createBlock(unref(Tag), {
                                   class: "leek-search-history-tag",
@@ -36141,7 +40665,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             [vShow, setting.historyItems.size()]
                           ])
                         ]),
-                        withDirectives(createBaseVNode("div", _hoisted_11, [
+                        withDirectives(createBaseVNode("div", _hoisted_12, [
                           (openBlock(true), createElementBlock(Fragment, null, renderList(formInfo, (item) => {
                             return openBlock(), createBlock(unref(FormItem), {
                               key: item.label,
@@ -36164,8 +40688,8 @@ summary tabindex target title type usemap value width wmode wrap`;
                                   "onUpdate:value": ($event) => formModel[item.label] = $event
                                 }, {
                                   option: withCtx(({ label, searchDescType }) => [
-                                    createBaseVNode("div", _hoisted_12, [
-                                      createBaseVNode("span", _hoisted_13, toDisplayString(label), 1),
+                                    createBaseVNode("div", _hoisted_13, [
+                                      createBaseVNode("span", _hoisted_14, toDisplayString(label), 1),
                                       createVNode(unref(Tag), {
                                         class: "leek-select-item-tag",
                                         color: "default"
@@ -36192,7 +40716,24 @@ summary tabindex target title type usemap value width wmode wrap`;
                   ])
                 ]),
                 _: 1
-              }, 8, ["open", "mask"])
+              }, 8, ["open", "mask"]),
+              createVNode(unref(Modal), {
+                open: editCustomNameVisible.value,
+                "onUpdate:open": _cache[6] || (_cache[6] = ($event) => editCustomNameVisible.value = $event),
+                title: "修改自定义名称",
+                onOk: editCustomNameOk,
+                onCancel: editCustomNameCancel
+              }, {
+                default: withCtx(() => [
+                  createVNode(unref(Input), {
+                    value: editCustomNameInput.value,
+                    "onUpdate:value": _cache[5] || (_cache[5] = ($event) => editCustomNameInput.value = $event),
+                    placeholder: "请输入自定义名称",
+                    onPressEnter: editCustomNameOk
+                  }, null, 8, ["value"])
+                ]),
+                _: 1
+              }, 8, ["open"])
             ]),
             _: 1
           });
