@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑网3万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.8
+// @version      1.1.9
 // @author       吴彦祖
 // @description  剑网三万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -42262,7 +42262,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.8";
+        const appVersion = "1.1.9";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
@@ -42413,8 +42413,8 @@ summary tabindex target title type usemap value width wmode wrap`;
             else toKeep.push(item);
           }
           if (toNotify.length > 0) {
-            const names2 = toNotify.map((i2) => `${i2.role_sect || i2.goods_name} 售价：${Math.floor(i2.goods_price / 100)}元`).join("、");
-            const text = `即将开售：${names2}`;
+            const names2 = toNotify.map((i2) => `${i2.role_sect || i2.goods_name} ${Math.floor(i2.goods_price / 100)} 元`).join("、");
+            const text = `${names2}`;
             console.log("[韭菜助手]", text);
             const rawIconUrl = ((_a = toNotify[0]) == null ? void 0 : _a.goods_icon_url) || "https://jx3.seasunwbl.com/favicon.ico";
             const iconUrl = await resizeImageToDataUrl(rawIconUrl);
@@ -42424,14 +42424,14 @@ summary tabindex target title type usemap value width wmode wrap`;
             const silent = !(setting.notificationSound ?? true);
             if (typeof GM_notification !== "undefined") {
               sandbox.notification({
-                title: "韭菜助手",
+                title: "即将开售",
                 text,
                 image: iconUrl,
                 silent,
                 onclick: focusPage
               });
             } else if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-              const n2 = new Notification("韭菜助手", {
+              const n2 = new Notification("即将开售", {
                 body: text,
                 icon: iconUrl,
                 silent
