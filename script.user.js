@@ -1,19 +1,22 @@
 // ==UserScript==
-// @name         万宝楼韭菜助手
+// @name         剑网3万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.5
+// @version      1.1.8
 // @author       吴彦祖
-// @description  万宝楼物品搜索优化，方便查找物品
+// @description  剑网三万宝楼物品搜索优化，方便查找物品
 // @license MIT
 // @match        https://jx3.seasunwbl.com/*
 // @icon         https://jx3.seasunwbl.com/favicon.ico
 // @connect      aijx3.cn
 // @connect      xoyocdn.com
+// @connect      xoyo.com
+// @connect      trade-api.seasunwbl.com
 // @grant        unsafeWindow
 // @grant        GM_addElement
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
+// @grant        GM_notification
 // @run-at       document-start
 // ==/UserScript==
 
@@ -39,6 +42,11 @@
           pattern: /(\w)=(\w+)\(n\((["'])\.\/app\/web\/components\/search-filter\/store\.js\3\)\),([\s\S]*?)(\w)=new \1\.default(?:\(\))?/,
           inject: (_, storeVar, interop, quote, middle, assignVar) =>
             `${storeVar}=${interop}(n(${quote}./app/web/components/search-filter/store.js${quote})),${middle}${assignVar}=window.searchFilterStore=new ${storeVar}.default`,
+        },
+        {
+          pattern: /(\w\.loginStore\s*=\s*)(\w+)(\s*;)/,
+          inject: (_, prefix, storeVar, suffix) =>
+            `${prefix}${storeVar}${suffix}window.loginStore=${storeVar};`,
         },
       ];
 
@@ -104,10 +112,16 @@
     color: red;
     letter-spacing: 3px;
 }
+.leek-notification-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 .leek-drawer-footer {
     display: flex;
     font-size: 12px;
-    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
 }
 .leek-search {
 .leek-search-sticky {
@@ -5807,6 +5821,9 @@ var require_index = __commonJS({
     function createTextVNode(text = " ", flag = 0) {
       return createVNode(Text, null, text, flag);
     }
+    function createCommentVNode(text = "", asBlock = false) {
+      return asBlock ? (openBlock(), createBlock(Comment, null, text)) : createVNode(Comment, null, text);
+    }
     function normalizeVNode(child) {
       if (child == null || typeof child === "boolean") {
         return createVNode(Comment);
@@ -6328,14 +6345,14 @@ var require_index = __commonJS({
       return hook ? isArray$2(hook) ? hook.some((h2) => h2.length > 1) : hook.length > 1 : false;
     };
     function resolveTransitionProps(rawProps) {
-      const baseProps = {};
+      const baseProps2 = {};
       for (const key2 in rawProps) {
         if (!(key2 in DOMTransitionPropsValidators)) {
-          baseProps[key2] = rawProps[key2];
+          baseProps2[key2] = rawProps[key2];
         }
       }
       if (rawProps.css === false) {
-        return baseProps;
+        return baseProps2;
       }
       const {
         name = "v",
@@ -6363,7 +6380,7 @@ var require_index = __commonJS({
         onBeforeAppear = onBeforeEnter,
         onAppear = onEnter,
         onAppearCancelled = onEnterCancelled
-      } = baseProps;
+      } = baseProps2;
       const finishEnter = (el, isAppear, done) => {
         removeTransitionClass(el, isAppear ? appearToClass : enterToClass);
         removeTransitionClass(el, isAppear ? appearActiveClass : enterActiveClass);
@@ -6390,7 +6407,7 @@ var require_index = __commonJS({
           });
         };
       };
-      return extend(baseProps, {
+      return extend(baseProps2, {
         onBeforeEnter(el) {
           callHook(onBeforeEnter, [el]);
           addTransitionClass(el, enterFromClass);
@@ -8689,7 +8706,7 @@ var require_index = __commonJS({
     var mapTag = "[object Map]", setTag = "[object Set]";
     var objectProto = Object.prototype;
     var hasOwnProperty$1 = objectProto.hasOwnProperty;
-    function isEmpty(value) {
+    function isEmpty$1(value) {
       if (value == null) {
         return true;
       }
@@ -8765,7 +8782,7 @@ var require_index = __commonJS({
       var i2 = toPrimitive(t2, "string");
       return "symbol" == _typeof$1(i2) ? i2 : i2 + "";
     }
-    function _defineProperty$t(e2, r2, t2) {
+    function _defineProperty$v(e2, r2, t2) {
       return (r2 = toPropertyKey(r2)) in e2 ? Object.defineProperty(e2, r2, {
         value: t2,
         enumerable: true,
@@ -8787,7 +8804,7 @@ var require_index = __commonJS({
       for (var r2 = 1; r2 < arguments.length; r2++) {
         var t2 = null != arguments[r2] ? arguments[r2] : {};
         r2 % 2 ? ownKeys$1(Object(t2), true).forEach(function(r3) {
-          _defineProperty$t(e2, r3, t2[r3]);
+          _defineProperty$v(e2, r3, t2[r3]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(t2)) : ownKeys$1(Object(t2)).forEach(function(r3) {
           Object.defineProperty(e2, r3, Object.getOwnPropertyDescriptor(t2, r3));
         });
@@ -9570,7 +9587,7 @@ var require_index = __commonJS({
       }
       return splitAttrs(props2)[on ? "onEvents" : "events"];
     }
-    function getStyle$1(ele, camel) {
+    function getStyle$2(ele, camel) {
       const props2 = (isVNode(ele) ? ele.props : ele.$attrs) || {};
       let style = props2.style || {};
       if (typeof style === "string") {
@@ -9938,7 +9955,7 @@ var require_index = __commonJS({
       prev_3: "Previous 3 Pages",
       next_3: "Next 3 Pages"
     };
-    const locale$3 = {
+    const locale$6 = {
       locale: "en_US",
       today: "Today",
       now: "Now",
@@ -9967,11 +9984,11 @@ var require_index = __commonJS({
       previousCentury: "Last century",
       nextCentury: "Next century"
     };
-    const locale$2 = {
+    const locale$5 = {
       placeholder: "Select time",
       rangePlaceholder: ["Start time", "End time"]
     };
-    const locale$1 = {
+    const locale$4 = {
       lang: _extends$1({
         placeholder: "Select date",
         yearPlaceholder: "Select year",
@@ -9983,16 +10000,16 @@ var require_index = __commonJS({
         rangeQuarterPlaceholder: ["Start quarter", "End quarter"],
         rangeMonthPlaceholder: ["Start month", "End month"],
         rangeWeekPlaceholder: ["Start week", "End week"]
-      }, locale$3),
-      timePickerLocale: _extends$1({}, locale$2)
+      }, locale$6),
+      timePickerLocale: _extends$1({}, locale$5)
     };
-    const typeTemplate$1 = "${label} is not a valid ${type}";
-    const localeValues = {
+    const typeTemplate$2 = "${label} is not a valid ${type}";
+    const localeValues$1 = {
       locale: "en",
       Pagination: enUS,
-      DatePicker: locale$1,
-      TimePicker: locale$2,
-      Calendar: locale$1,
+      DatePicker: locale$4,
+      TimePicker: locale$5,
+      Calendar: locale$4,
       global: {
         placeholder: "Please select"
       },
@@ -10076,19 +10093,19 @@ var require_index = __commonJS({
             invalid: "${label} is an invalid date"
           },
           types: {
-            string: typeTemplate$1,
-            method: typeTemplate$1,
-            array: typeTemplate$1,
-            object: typeTemplate$1,
-            number: typeTemplate$1,
-            date: typeTemplate$1,
-            boolean: typeTemplate$1,
-            integer: typeTemplate$1,
-            float: typeTemplate$1,
-            regexp: typeTemplate$1,
-            email: typeTemplate$1,
-            url: typeTemplate$1,
-            hex: typeTemplate$1
+            string: typeTemplate$2,
+            method: typeTemplate$2,
+            array: typeTemplate$2,
+            object: typeTemplate$2,
+            number: typeTemplate$2,
+            date: typeTemplate$2,
+            boolean: typeTemplate$2,
+            integer: typeTemplate$2,
+            float: typeTemplate$2,
+            regexp: typeTemplate$2,
+            email: typeTemplate$2,
+            url: typeTemplate$2,
+            hex: typeTemplate$2
           },
           string: {
             len: "${label} must be ${len} characters",
@@ -10146,7 +10163,7 @@ var require_index = __commonJS({
             componentName = "global",
             defaultLocale
           } = props2;
-          const locale3 = defaultLocale || localeValues[componentName || "global"];
+          const locale3 = defaultLocale || localeValues$1[componentName || "global"];
           const {
             antLocale
           } = localeData;
@@ -10159,7 +10176,7 @@ var require_index = __commonJS({
           } = localeData;
           const localeCode2 = antLocale && antLocale.locale;
           if (antLocale && antLocale.exist && !localeCode2) {
-            return localeValues.locale;
+            return localeValues$1.locale;
           }
           return localeCode2;
         });
@@ -10178,7 +10195,7 @@ var require_index = __commonJS({
         const {
           antLocale
         } = localeData;
-        const locale2 = unref(defaultLocale) || localeValues[componentName || "global"];
+        const locale2 = unref(defaultLocale) || localeValues$1[componentName || "global"];
         const localeFromContext = componentName && antLocale ? antLocale[componentName] : {};
         return _extends$1(_extends$1(_extends$1({}, typeof locale2 === "function" ? locale2() : locale2), localeFromContext || {}), unref(propsLocale) || {});
       });
@@ -12831,7 +12848,7 @@ var require_index = __commonJS({
         a: 1
       }).toRgbString();
     }
-    var __rest$r = function(s2, e2) {
+    var __rest$u = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -12842,7 +12859,7 @@ var require_index = __commonJS({
     function formatToken(derivativeToken) {
       const {
         override
-      } = derivativeToken, restToken = __rest$r(derivativeToken, ["override"]);
+      } = derivativeToken, restToken = __rest$u(derivativeToken, ["override"]);
       const overrideTokens = _extends$1({}, override);
       Object.keys(seedToken).forEach((token2) => {
         delete overrideTokens[token2];
@@ -13486,7 +13503,7 @@ var require_index = __commonJS({
         }
       };
     };
-    const useStyle$d = genComponentStyleHook("Empty", (token2) => {
+    const useStyle$f = genComponentStyleHook("Empty", (token2) => {
       const {
         componentCls,
         controlHeightLG
@@ -13499,7 +13516,7 @@ var require_index = __commonJS({
       });
       return [genSharedEmptyStyle(emptyToken)];
     });
-    var __rest$q = function(s2, e2) {
+    var __rest$t = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -13531,7 +13548,7 @@ var require_index = __commonJS({
           direction,
           prefixCls: prefixClsRef
         } = useConfigInject("empty", props2);
-        const [wrapSSR, hashId] = useStyle$d(prefixClsRef);
+        const [wrapSSR, hashId] = useStyle$f(prefixClsRef);
         return () => {
           var _a, _b;
           const prefixCls = prefixClsRef.value;
@@ -13540,7 +13557,7 @@ var require_index = __commonJS({
             description = ((_b = slots.description) === null || _b === void 0 ? void 0 : _b.call(slots)) || void 0,
             imageStyle,
             class: className = ""
-          } = _c, restProps = __rest$q(_c, ["image", "description", "imageStyle", "class"]);
+          } = _c, restProps = __rest$t(_c, ["image", "description", "imageStyle", "class"]);
           return wrapSSR(createVNode(LocaleReceiver, {
             "componentName": "Empty",
             "children": (locale2) => {
@@ -14631,7 +14648,7 @@ var require_index = __commonJS({
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = null != arguments[i2] ? arguments[i2] : {};
         i2 % 2 ? ownKeys(Object(source), true).forEach(function(key2) {
-          _defineProperty$s(target, key2, source[key2]);
+          _defineProperty$u(target, key2, source[key2]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key2) {
           Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
@@ -14646,7 +14663,7 @@ var require_index = __commonJS({
         return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
       }, _typeof(obj);
     }
-    function _defineProperty$s(obj, key2, value) {
+    function _defineProperty$u(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, {
           value,
@@ -17143,7 +17160,7 @@ html body {
         return createVNode(Fragment, null, [trigger2, portal]);
       }
     });
-    var __rest$p = function(s2, e2) {
+    var __rest$s = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -17245,7 +17262,7 @@ html body {
         return () => {
           const _a = _extends$1(_extends$1({}, props2), attrs), {
             empty = false
-          } = _a, restProps = __rest$p(_a, ["empty"]);
+          } = _a, restProps = __rest$s(_a, ["empty"]);
           const {
             visible,
             dropdownAlign,
@@ -17860,7 +17877,7 @@ html body {
       onMousedown: Function,
       onClick: Function
     };
-    var __rest$o = function(s2, e2) {
+    var __rest$r = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -17940,7 +17957,7 @@ html body {
           const {
             tag: Tag2,
             value
-          } = props2, restProps = __rest$o(props2, ["tag", "value"]);
+          } = props2, restProps = __rest$r(props2, ["tag", "value"]);
           return createVNode(Tag2, _objectSpread2$1(_objectSpread2$1({}, restProps), {}, {
             "ref": inputRef,
             "value": value
@@ -17958,7 +17975,7 @@ html body {
         return acc;
       }, "");
     }
-    var __rest$n = function(s2, e2) {
+    var __rest$q = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18086,7 +18103,7 @@ html body {
           return props2.style && typeof props2.style !== "string" ? styleObjectToString(props2.style) : props2.style;
         });
         return () => {
-          const restProps = __rest$n(props2, ["style", "lazy"]);
+          const restProps = __rest$q(props2, ["style", "lazy"]);
           return createVNode(BaseInputInner, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, restProps), attrs), {}, {
             "style": styleString.value,
             "onInput": handleInput,
@@ -18363,7 +18380,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     const useInjectOverflowContext = () => {
       return inject(OverflowContextProviderKey, computed(() => null));
     };
-    var __rest$m = function(s2, e2) {
+    var __rest$p = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18420,7 +18437,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             display,
             order,
             component: Component = "div"
-          } = props2, restProps = __rest$m(props2, ["prefixCls", "invalidate", "item", "renderItem", "responsive", "registerSize", "itemKey", "display", "order", "component"]);
+          } = props2, restProps = __rest$p(props2, ["prefixCls", "invalidate", "item", "renderItem", "responsive", "registerSize", "itemKey", "display", "order", "component"]);
           const children = (_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots);
           const childNode = renderItem && item !== UNDEFINED ? renderItem(item) : children;
           let overflowStyle;
@@ -18459,7 +18476,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$l = function(s2, e2) {
+    var __rest$o = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18506,17 +18523,17 @@ summary tabindex target title type usemap value width wmode wrap`;
           if (!context.value) {
             const {
               component: Component = "div"
-            } = props2, restProps2 = __rest$l(props2, ["component"]);
+            } = props2, restProps2 = __rest$o(props2, ["component"]);
             return createVNode(Component, _objectSpread2$1(_objectSpread2$1({}, restProps2), attrs), {
               default: () => [(_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots)]
             });
           }
           const _b = context.value, {
             className: contextClassName
-          } = _b, restContext = __rest$l(_b, ["className"]);
+          } = _b, restContext = __rest$o(_b, ["className"]);
           const {
             class: className
-          } = attrs, restProps = __rest$l(attrs, ["class"]);
+          } = attrs, restProps = __rest$o(attrs, ["class"]);
           return createVNode(OverflowContextProvider, {
             "value": null
           }, {
@@ -18527,7 +18544,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$k = function(s2, e2) {
+    var __rest$n = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -18708,7 +18725,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             class: className,
             style
-          } = attrs, restAttrs = __rest$k(attrs, ["class", "style"]);
+          } = attrs, restAttrs = __rest$n(attrs, ["class", "style"]);
           let suffixStyle = {};
           if (suffixFixedStart.value !== null && isResponsive.value) {
             suffixStyle = {
@@ -19503,7 +19520,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return reactive(proxy);
     }
-    var __rest$j = function(s2, e2) {
+    var __rest$m = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -20015,7 +20032,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             activeDescendantId,
             activeValue,
             OptionList: OptionList2
-          } = _a, restProps = __rest$j(_a, ["prefixCls", "id", "open", "defaultOpen", "mode", "showSearch", "searchValue", "onSearch", "allowClear", "clearIcon", "showArrow", "inputIcon", "disabled", "loading", "getInputElement", "getPopupContainer", "placement", "animation", "transitionName", "dropdownStyle", "dropdownClassName", "dropdownMatchSelectWidth", "dropdownRender", "dropdownAlign", "showAction", "direction", "tokenSeparators", "tagRender", "optionLabelRender", "onPopupScroll", "onDropdownVisibleChange", "onFocus", "onBlur", "onKeyup", "onKeydown", "onMousedown", "onClear", "omitDomProps", "getRawInputElement", "displayValues", "onDisplayValuesChange", "emptyOptions", "activeDescendantId", "activeValue", "OptionList"]);
+          } = _a, restProps = __rest$m(_a, ["prefixCls", "id", "open", "defaultOpen", "mode", "showSearch", "searchValue", "onSearch", "allowClear", "clearIcon", "showArrow", "inputIcon", "disabled", "loading", "getInputElement", "getPopupContainer", "placement", "animation", "transitionName", "dropdownStyle", "dropdownClassName", "dropdownMatchSelectWidth", "dropdownRender", "dropdownAlign", "showAction", "direction", "tokenSeparators", "tagRender", "optionLabelRender", "onPopupScroll", "onDropdownVisibleChange", "onFocus", "onBlur", "onKeyup", "onKeydown", "onMousedown", "onClear", "omitDomProps", "getRawInputElement", "displayValues", "onDisplayValuesChange", "emptyOptions", "activeDescendantId", "activeValue", "OptionList"]);
           const customizeInputElement = mode === "combobox" && getInputElement && getInputElement() || null;
           const customizeRawInputElement = typeof getRawInputElement === "function" && getRawInputElement();
           const domProps = _extends$1({}, restProps);
@@ -20732,7 +20749,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         document.removeEventListener("touchmove", noop2);
       });
     }
-    var __rest$i = function(s2, e2) {
+    var __rest$l = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21098,7 +21115,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           children = this.$slots.default,
           style,
           class: className
-        } = _a, restProps = __rest$i(_a, ["prefixCls", "height", "itemHeight", "fullHeight", "data", "itemKey", "virtual", "component", "onScroll", "children", "style", "class"]);
+        } = _a, restProps = __rest$l(_a, ["prefixCls", "height", "itemHeight", "fullHeight", "data", "itemKey", "virtual", "component", "onScroll", "children", "style", "class"]);
         const mergedClassName = classNames(prefixCls, className);
         const {
           scrollTop
@@ -21181,7 +21198,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     function useSelectProps() {
       return inject(SelectContextKey, {});
     }
-    var __rest$h = function(s2, e2) {
+    var __rest$k = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21203,10 +21220,10 @@ summary tabindex target title type usemap value width wmode wrap`;
           expose,
           slots
         } = _ref;
-        const baseProps = useBaseProps();
+        const baseProps2 = useBaseProps();
         const props2 = useSelectProps();
-        const itemPrefixCls = computed(() => `${baseProps.prefixCls}-item`);
-        const memoFlattenOptions = useMemo(() => props2.flattenOptions, [() => baseProps.open, () => props2.flattenOptions], (next2) => next2[0]);
+        const itemPrefixCls = computed(() => `${baseProps2.prefixCls}-item`);
+        const memoFlattenOptions = useMemo(() => props2.flattenOptions, [() => baseProps2.open, () => props2.flattenOptions], (next2) => next2[0]);
         const listRef = createRef();
         const onListMouseDown = (event) => {
           event.preventDefault();
@@ -21249,14 +21266,14 @@ summary tabindex target title type usemap value width wmode wrap`;
           }
           props2.onActiveValue(flattenItem.value, index2, info);
         };
-        watch([() => memoFlattenOptions.value.length, () => baseProps.searchValue], () => {
+        watch([() => memoFlattenOptions.value.length, () => baseProps2.searchValue], () => {
           setActive(props2.defaultActiveFirstOption !== false ? getEnabledActiveIndex(0) : -1);
         }, {
           immediate: true
         });
-        const isSelected = (value) => props2.rawValues.has(value) && baseProps.mode !== "combobox";
-        watch([() => baseProps.open, () => baseProps.searchValue], () => {
-          if (!baseProps.multiple && baseProps.open && props2.rawValues.size === 1) {
+        const isSelected = (value) => props2.rawValues.has(value) && baseProps2.mode !== "combobox";
+        watch([() => baseProps2.open, () => baseProps2.searchValue], () => {
+          if (!baseProps2.multiple && baseProps2.open && props2.rawValues.size === 1) {
             const value = Array.from(props2.rawValues)[0];
             const index2 = toRaw(memoFlattenOptions.value).findIndex((_ref2) => {
               let {
@@ -21271,7 +21288,7 @@ summary tabindex target title type usemap value width wmode wrap`;
               });
             }
           }
-          if (baseProps.open) {
+          if (baseProps2.open) {
             nextTick(() => {
               var _a;
               (_a = listRef.current) === null || _a === void 0 ? void 0 : _a.scrollTo(void 0);
@@ -21287,8 +21304,8 @@ summary tabindex target title type usemap value width wmode wrap`;
               selected: !props2.rawValues.has(value)
             });
           }
-          if (!baseProps.multiple) {
-            baseProps.toggleOpen(false);
+          if (!baseProps2.multiple) {
+            baseProps2.toggleOpen(false);
           }
         };
         const getLabel = (item) => typeof item.label === "function" ? item.label() : item.label;
@@ -21309,7 +21326,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           }, attrs), {}, {
             "key": index2,
             "role": group ? "presentation" : "option",
-            "id": `${baseProps.id}_list_${index2}`,
+            "id": `${baseProps2.id}_list_${index2}`,
             "aria-selected": isSelected(value)
           }), [value]) : null;
         }
@@ -21349,14 +21366,14 @@ summary tabindex target title type usemap value width wmode wrap`;
               } else {
                 onSelectValue(void 0);
               }
-              if (baseProps.open) {
+              if (baseProps2.open) {
                 event.preventDefault();
               }
               break;
             }
             case KeyCode.ESC: {
-              baseProps.toggleOpen(false);
-              if (baseProps.open) {
+              baseProps2.toggleOpen(false);
+              if (baseProps2.open) {
                 event.stopPropagation();
               }
             }
@@ -21377,7 +21394,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             id,
             notFoundContent,
             onPopupScroll
-          } = baseProps;
+          } = baseProps2;
           const {
             menuItemSelectedIcon,
             fieldNames,
@@ -21443,7 +21460,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                 style,
                 class: cls,
                 className
-              } = data, otherProps = __rest$h(data, ["disabled", "title", "children", "style", "class", "className"]);
+              } = data, otherProps = __rest$k(data, ["disabled", "title", "children", "style", "class", "className"]);
               const passedProps = omit(otherProps, omitFieldNameList);
               const selected = isSelected(value);
               const optionPrefixCls = `${itemPrefixCls.value}-option`;
@@ -21498,7 +21515,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$g = function(s2, e2) {
+    var __rest$j = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -21513,7 +21530,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       } = _a, _b = _a.props, {
         value,
         disabled
-      } = _b, restProps = __rest$g(_b, ["value", "disabled"]);
+      } = _b, restProps = __rest$j(_b, ["value", "disabled"]);
       const child = children === null || children === void 0 ? void 0 : children.default;
       return _extends$1({
         key: key2,
@@ -22268,7 +22285,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       newNode.setAttribute(getMark(option), key2);
       return newNode;
     }
-    function _objectSpread$r(target) {
+    function _objectSpread$t(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22278,12 +22295,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$r(target, key2, source[key2]);
+          _defineProperty$t(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$r(obj, key2, value) {
+    function _defineProperty$t(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22298,13 +22315,13 @@ summary tabindex target title type usemap value width wmode wrap`;
     }
     function generate(node2, key2, rootProps) {
       if (!rootProps) {
-        return h$1(node2.tag, _objectSpread$r({
+        return h$1(node2.tag, _objectSpread$t({
           key: key2
         }, node2.attrs), (node2.children || []).map(function(child, index2) {
           return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
         }));
       }
-      return h$1(node2.tag, _objectSpread$r({
+      return h$1(node2.tag, _objectSpread$t({
         key: key2
       }, rootProps, node2.attrs), (node2.children || []).map(function(child, index2) {
         return generate(child, "".concat(key2, "-").concat(node2.tag, "-").concat(index2));
@@ -22380,7 +22397,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return target;
     }
-    function _objectSpread$q(target) {
+    function _objectSpread$s(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22390,12 +22407,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$q(target, key2, source[key2]);
+          _defineProperty$s(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$q(obj, key2, value) {
+    function _defineProperty$s(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22415,10 +22432,10 @@ summary tabindex target title type usemap value width wmode wrap`;
       twoToneColorPalette.calculated = !!secondaryColor;
     }
     function getTwoToneColors() {
-      return _objectSpread$q({}, twoToneColorPalette);
+      return _objectSpread$s({}, twoToneColorPalette);
     }
     var IconBase = function IconBase2(props2, context) {
-      var _props$context$attrs = _objectSpread$q({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
+      var _props$context$attrs = _objectSpread$s({}, props2, context.attrs), icon = _props$context$attrs.icon, primaryColor = _props$context$attrs.primaryColor, secondaryColor = _props$context$attrs.secondaryColor, restProps = _objectWithoutProperties$1(_props$context$attrs, _excluded$1);
       var colors = twoToneColorPalette;
       if (primaryColor) {
         colors = {
@@ -22432,11 +22449,11 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       var target = icon;
       if (target && typeof target.icon === "function") {
-        target = _objectSpread$q({}, target, {
+        target = _objectSpread$s({}, target, {
           icon: target.icon(colors.primaryColor, colors.secondaryColor)
         });
       }
-      return generate(target.icon, "svg-".concat(target.name), _objectSpread$q({}, restProps, {
+      return generate(target.icon, "svg-".concat(target.name), _objectSpread$s({}, restProps, {
         "data-icon": target.name,
         width: "1em",
         height: "1em",
@@ -22574,7 +22591,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     function _arrayWithHoles(arr) {
       if (Array.isArray(arr)) return arr;
     }
-    function _objectSpread$p(target) {
+    function _objectSpread$r(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -22584,12 +22601,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$p(target, key2, source[key2]);
+          _defineProperty$r(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$p(obj, key2, value) {
+    function _defineProperty$r(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -22627,9 +22644,9 @@ summary tabindex target title type usemap value width wmode wrap`;
     setTwoToneColor(blue.primary);
     var Icon = function Icon2(props2, context) {
       var _classObj;
-      var _props$context$attrs = _objectSpread$p({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
+      var _props$context$attrs = _objectSpread$r({}, props2, context.attrs), cls = _props$context$attrs["class"], icon = _props$context$attrs.icon, spin = _props$context$attrs.spin, rotate = _props$context$attrs.rotate, tabindex = _props$context$attrs.tabindex, twoToneColor = _props$context$attrs.twoToneColor, onClick = _props$context$attrs.onClick, restProps = _objectWithoutProperties(_props$context$attrs, _excluded);
       var _useInjectIconContext = useInjectIconContext(), prefixCls = _useInjectIconContext.prefixCls, rootClassName = _useInjectIconContext.rootClassName;
-      var classObj = (_classObj = {}, _defineProperty$p(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$p(_classObj, prefixCls.value, true), _defineProperty$p(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$p(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
+      var classObj = (_classObj = {}, _defineProperty$r(_classObj, rootClassName.value, !!rootClassName.value), _defineProperty$r(_classObj, prefixCls.value, true), _defineProperty$r(_classObj, "".concat(prefixCls.value, "-").concat(icon.name), Boolean(icon.name)), _defineProperty$r(_classObj, "".concat(prefixCls.value, "-spin"), !!spin || icon.name === "loading"), _classObj);
       var iconTabIndex = tabindex;
       if (iconTabIndex === void 0 && onClick) {
         iconTabIndex = -1;
@@ -22639,7 +22656,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         transform: "rotate(".concat(rotate, "deg)")
       } : void 0;
       var _normalizeTwoToneColo = normalizeTwoToneColors(twoToneColor), _normalizeTwoToneColo2 = _slicedToArray(_normalizeTwoToneColo, 2), primaryColor = _normalizeTwoToneColo2[0], secondaryColor = _normalizeTwoToneColo2[1];
-      return createVNode("span", _objectSpread$p({
+      return createVNode("span", _objectSpread$r({
         "role": "img",
         "aria-label": icon.name
       }, restProps, {
@@ -22663,6 +22680,70 @@ summary tabindex target title type usemap value width wmode wrap`;
     Icon.inheritAttrs = false;
     Icon.getTwoToneColor = getTwoToneColor;
     Icon.setTwoToneColor = setTwoToneColor;
+    function _objectSpread$q(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$q(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$q(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var DownOutlined = function DownOutlined2(props2, context) {
+      var p2 = _objectSpread$q({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$q({}, p2, {
+        "icon": DownOutlined$1
+      }), null);
+    };
+    DownOutlined.displayName = "DownOutlined";
+    DownOutlined.inheritAttrs = false;
+    var LoadingOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z" } }] }, "name": "loading", "theme": "outlined" };
+    function _objectSpread$p(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$p(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$p(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var LoadingOutlined = function LoadingOutlined2(props2, context) {
+      var p2 = _objectSpread$p({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$p({}, p2, {
+        "icon": LoadingOutlined$1
+      }), null);
+    };
+    LoadingOutlined.displayName = "LoadingOutlined";
+    LoadingOutlined.inheritAttrs = false;
+    var CheckOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z" } }] }, "name": "check", "theme": "outlined" };
     function _objectSpread$o(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22686,15 +22767,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var DownOutlined = function DownOutlined2(props2, context) {
+    var CheckOutlined = function CheckOutlined2(props2, context) {
       var p2 = _objectSpread$o({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$o({}, p2, {
-        "icon": DownOutlined$1
+        "icon": CheckOutlined$1
       }), null);
     };
-    DownOutlined.displayName = "DownOutlined";
-    DownOutlined.inheritAttrs = false;
-    var LoadingOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z" } }] }, "name": "loading", "theme": "outlined" };
+    CheckOutlined.displayName = "CheckOutlined";
+    CheckOutlined.inheritAttrs = false;
+    var CloseOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z" } }] }, "name": "close", "theme": "outlined" };
     function _objectSpread$n(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22718,15 +22799,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var LoadingOutlined = function LoadingOutlined2(props2, context) {
+    var CloseOutlined = function CloseOutlined2(props2, context) {
       var p2 = _objectSpread$n({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$n({}, p2, {
-        "icon": LoadingOutlined$1
+        "icon": CloseOutlined$1
       }), null);
     };
-    LoadingOutlined.displayName = "LoadingOutlined";
-    LoadingOutlined.inheritAttrs = false;
-    var CheckOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 190h-69.9c-9.8 0-19.1 4.5-25.1 12.2L404.7 724.5 207 474a32 32 0 00-25.1-12.2H112c-6.7 0-10.4 7.7-6.3 12.9l273.9 347c12.8 16.2 37.4 16.2 50.3 0l488.4-618.9c4.1-5.1.4-12.8-6.3-12.8z" } }] }, "name": "check", "theme": "outlined" };
+    CloseOutlined.displayName = "CloseOutlined";
+    CloseOutlined.inheritAttrs = false;
+    var CloseCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z" } }] }, "name": "close-circle", "theme": "filled" };
     function _objectSpread$m(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22750,15 +22831,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckOutlined = function CheckOutlined2(props2, context) {
+    var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
       var p2 = _objectSpread$m({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$m({}, p2, {
-        "icon": CheckOutlined$1
+        "icon": CloseCircleFilled$1
       }), null);
     };
-    CheckOutlined.displayName = "CheckOutlined";
-    CheckOutlined.inheritAttrs = false;
-    var CloseOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z" } }] }, "name": "close", "theme": "outlined" };
+    CloseCircleFilled.displayName = "CloseCircleFilled";
+    CloseCircleFilled.inheritAttrs = false;
+    var SearchOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" } }] }, "name": "search", "theme": "outlined" };
     function _objectSpread$l(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -22782,73 +22863,9 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CloseOutlined = function CloseOutlined2(props2, context) {
+    var SearchOutlined = function SearchOutlined2(props2, context) {
       var p2 = _objectSpread$l({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$l({}, p2, {
-        "icon": CloseOutlined$1
-      }), null);
-    };
-    CloseOutlined.displayName = "CloseOutlined";
-    CloseOutlined.inheritAttrs = false;
-    var CloseCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm127.98 274.82h-.04l-.08.06L512 466.75 384.14 338.88c-.04-.05-.06-.06-.08-.06a.12.12 0 00-.07 0c-.03 0-.05.01-.09.05l-45.02 45.02a.2.2 0 00-.05.09.12.12 0 000 .07v.02a.27.27 0 00.06.06L466.75 512 338.88 639.86c-.05.04-.06.06-.06.08a.12.12 0 000 .07c0 .03.01.05.05.09l45.02 45.02a.2.2 0 00.09.05.12.12 0 00.07 0c.02 0 .04-.01.08-.05L512 557.25l127.86 127.87c.04.04.06.05.08.05a.12.12 0 00.07 0c.03 0 .05-.01.09-.05l45.02-45.02a.2.2 0 00.05-.09.12.12 0 000-.07v-.02a.27.27 0 00-.05-.06L557.25 512l127.87-127.86c.04-.04.05-.06.05-.08a.12.12 0 000-.07c0-.03-.01-.05-.05-.09l-45.02-45.02a.2.2 0 00-.09-.05.12.12 0 00-.07 0z" } }] }, "name": "close-circle", "theme": "filled" };
-    function _objectSpread$k(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$k(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$k(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var CloseCircleFilled = function CloseCircleFilled2(props2, context) {
-      var p2 = _objectSpread$k({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$k({}, p2, {
-        "icon": CloseCircleFilled$1
-      }), null);
-    };
-    CloseCircleFilled.displayName = "CloseCircleFilled";
-    CloseCircleFilled.inheritAttrs = false;
-    var SearchOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z" } }] }, "name": "search", "theme": "outlined" };
-    function _objectSpread$j(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$j(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$j(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var SearchOutlined = function SearchOutlined2(props2, context) {
-      var p2 = _objectSpread$j({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$j({}, p2, {
         "icon": SearchOutlined$1
       }), null);
     };
@@ -23075,7 +23092,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$c = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
+    const useStyle$e = genComponentStyleHook("Space", (token2) => [genSpaceStyle(token2), genSpaceCompactStyle(token2)]);
     const spaceCompactItemProps = () => ({
       compactSize: String,
       compactDirection: PropTypes.oneOf(tuple("horizontal", "vertical")).def("horizontal"),
@@ -23086,7 +23103,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     const useCompactItemContext = (prefixCls, direction) => {
       const compactItemContext = SpaceCompactItemContext.useInject();
       const compactItemClassnames = computed(() => {
-        if (!compactItemContext || isEmpty(compactItemContext)) return "";
+        if (!compactItemContext || isEmpty$1(compactItemContext)) return "";
         const {
           compactDirection,
           isFirstItem,
@@ -23159,7 +23176,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction: directionConfig
         } = useConfigInject("space-compact", props2);
         const compactItemContext = SpaceCompactItemContext.useInject();
-        const [wrapSSR, hashId] = useStyle$c(prefixCls);
+        const [wrapSSR, hashId] = useStyle$e(prefixCls);
         const clx = computed(() => {
           return classNames(prefixCls.value, hashId.value, {
             [`${prefixCls.value}-rtl`]: directionConfig.value === "rtl",
@@ -23178,7 +23195,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           }), [childNodes.map((child, i2) => {
             var _a2;
             const key2 = child && child.key || `${prefixCls.value}-item-${i2}`;
-            const noCompactItemContext = !compactItemContext || isEmpty(compactItemContext);
+            const noCompactItemContext = !compactItemContext || isEmpty$1(compactItemContext);
             return createVNode(CompactItem, {
               "key": key2,
               "compactSize": (_a2 = props2.size) !== null && _a2 !== void 0 ? _a2 : "middle",
@@ -24754,6 +24771,70 @@ summary tabindex target title type usemap value width wmode wrap`;
     Select.Option;
     Select.OptGroup;
     var CheckCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0051.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z" } }, { "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }] }, "name": "check-circle", "theme": "outlined" };
+    function _objectSpread$k(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$k(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$k(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$k({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$k({}, p2, {
+        "icon": CheckCircleOutlined$1
+      }), null);
+    };
+    CheckCircleOutlined.displayName = "CheckCircleOutlined";
+    CheckCircleOutlined.inheritAttrs = false;
+    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
+    function _objectSpread$j(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$j(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$j(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
+      var p2 = _objectSpread$j({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$j({}, p2, {
+        "icon": ExclamationCircleOutlined$1
+      }), null);
+    };
+    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
+    ExclamationCircleOutlined.inheritAttrs = false;
+    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
     function _objectSpread$i(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24777,15 +24858,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckCircleOutlined = function CheckCircleOutlined2(props2, context) {
+    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
       var p2 = _objectSpread$i({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$i({}, p2, {
-        "icon": CheckCircleOutlined$1
+        "icon": InfoCircleOutlined$1
       }), null);
     };
-    CheckCircleOutlined.displayName = "CheckCircleOutlined";
-    CheckCircleOutlined.inheritAttrs = false;
-    var ExclamationCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 688a48 48 0 1096 0 48 48 0 10-96 0zm24-112h48c4.4 0 8-3.6 8-8V296c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8z" } }] }, "name": "exclamation-circle", "theme": "outlined" };
+    InfoCircleOutlined.displayName = "InfoCircleOutlined";
+    InfoCircleOutlined.inheritAttrs = false;
+    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
     function _objectSpread$h(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24809,15 +24890,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ExclamationCircleOutlined = function ExclamationCircleOutlined2(props2, context) {
+    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
       var p2 = _objectSpread$h({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$h({}, p2, {
-        "icon": ExclamationCircleOutlined$1
+        "icon": CloseCircleOutlined$1
       }), null);
     };
-    ExclamationCircleOutlined.displayName = "ExclamationCircleOutlined";
-    ExclamationCircleOutlined.inheritAttrs = false;
-    var InfoCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
+    CloseCircleOutlined.displayName = "CloseCircleOutlined";
+    CloseCircleOutlined.inheritAttrs = false;
+    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
     function _objectSpread$g(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24841,15 +24922,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var InfoCircleOutlined = function InfoCircleOutlined2(props2, context) {
+    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
       var p2 = _objectSpread$g({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$g({}, p2, {
-        "icon": InfoCircleOutlined$1
+        "icon": CheckCircleFilled$1
       }), null);
     };
-    InfoCircleOutlined.displayName = "InfoCircleOutlined";
-    InfoCircleOutlined.inheritAttrs = false;
-    var CloseCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "fill-rule": "evenodd", "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64c247.4 0 448 200.6 448 448S759.4 960 512 960 64 759.4 64 512 264.6 64 512 64zm0 76c-205.4 0-372 166.6-372 372s166.6 372 372 372 372-166.6 372-372-166.6-372-372-372zm128.01 198.83c.03 0 .05.01.09.06l45.02 45.01a.2.2 0 01.05.09.12.12 0 010 .07c0 .02-.01.04-.05.08L557.25 512l127.87 127.86a.27.27 0 01.05.06v.02a.12.12 0 010 .07c0 .03-.01.05-.05.09l-45.02 45.02a.2.2 0 01-.09.05.12.12 0 01-.07 0c-.02 0-.04-.01-.08-.05L512 557.25 384.14 685.12c-.04.04-.06.05-.08.05a.12.12 0 01-.07 0c-.03 0-.05-.01-.09-.05l-45.02-45.02a.2.2 0 01-.05-.09.12.12 0 010-.07c0-.02.01-.04.06-.08L466.75 512 338.88 384.14a.27.27 0 01-.05-.06l-.01-.02a.12.12 0 010-.07c0-.03.01-.05.05-.09l45.02-45.02a.2.2 0 01.09-.05.12.12 0 01.07 0c.02 0 .04.01.08.06L512 466.75l127.86-127.86c.04-.05.06-.06.08-.06a.12.12 0 01.07 0z" } }] }, "name": "close-circle", "theme": "outlined" };
+    CheckCircleFilled.displayName = "CheckCircleFilled";
+    CheckCircleFilled.inheritAttrs = false;
+    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
     function _objectSpread$f(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24873,15 +24954,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CloseCircleOutlined = function CloseCircleOutlined2(props2, context) {
+    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
       var p2 = _objectSpread$f({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$f({}, p2, {
-        "icon": CloseCircleOutlined$1
+        "icon": ExclamationCircleFilled$1
       }), null);
     };
-    CloseCircleOutlined.displayName = "CloseCircleOutlined";
-    CloseCircleOutlined.inheritAttrs = false;
-    var CheckCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 01-51.7 0L318.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.2 0 19.9 4.9 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3H699c6.5 0 10.3 7.4 6.5 12.7z" } }] }, "name": "check-circle", "theme": "filled" };
+    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
+    ExclamationCircleFilled.inheritAttrs = false;
+    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
     function _objectSpread$e(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -24905,73 +24986,9 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var CheckCircleFilled = function CheckCircleFilled2(props2, context) {
+    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
       var p2 = _objectSpread$e({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$e({}, p2, {
-        "icon": CheckCircleFilled$1
-      }), null);
-    };
-    CheckCircleFilled.displayName = "CheckCircleFilled";
-    CheckCircleFilled.inheritAttrs = false;
-    var ExclamationCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "exclamation-circle", "theme": "filled" };
-    function _objectSpread$d(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$d(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$d(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var ExclamationCircleFilled = function ExclamationCircleFilled2(props2, context) {
-      var p2 = _objectSpread$d({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$d({}, p2, {
-        "icon": ExclamationCircleFilled$1
-      }), null);
-    };
-    ExclamationCircleFilled.displayName = "ExclamationCircleFilled";
-    ExclamationCircleFilled.inheritAttrs = false;
-    var InfoCircleFilled$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z" } }] }, "name": "info-circle", "theme": "filled" };
-    function _objectSpread$c(target) {
-      for (var i2 = 1; i2 < arguments.length; i2++) {
-        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
-        var ownKeys2 = Object.keys(source);
-        if (typeof Object.getOwnPropertySymbols === "function") {
-          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-          }));
-        }
-        ownKeys2.forEach(function(key2) {
-          _defineProperty$c(target, key2, source[key2]);
-        });
-      }
-      return target;
-    }
-    function _defineProperty$c(obj, key2, value) {
-      if (key2 in obj) {
-        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
-      } else {
-        obj[key2] = value;
-      }
-      return obj;
-    }
-    var InfoCircleFilled = function InfoCircleFilled2(props2, context) {
-      var p2 = _objectSpread$c({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$c({}, p2, {
         "icon": InfoCircleFilled$1
       }), null);
     };
@@ -25149,7 +25166,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$f = function(s2, e2) {
+    var __rest$i = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -25279,7 +25296,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             align,
             destroyTooltipOnHide,
             defaultVisible
-          } = props2, restProps = __rest$f(props2, ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "afterVisibleChange", "transitionName", "animation", "placement", "align", "destroyTooltipOnHide", "defaultVisible"]);
+          } = props2, restProps = __rest$i(props2, ["overlayClassName", "trigger", "mouseEnterDelay", "mouseLeaveDelay", "overlayStyle", "prefixCls", "afterVisibleChange", "transitionName", "animation", "placement", "align", "destroyTooltipOnHide", "defaultVisible"]);
           const extraProps = _extends$1({}, restProps);
           if (props2.visible !== void 0) {
             extraProps.popupVisible = props2.visible;
@@ -25754,7 +25771,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$b = (prefixCls, injectStyle) => {
+    const useStyle$d = (prefixCls, injectStyle) => {
       const useOriginHook = genComponentStyleHook("Tooltip", (token2) => {
         if ((injectStyle === null || injectStyle === void 0 ? void 0 : injectStyle.value) === false) {
           return [];
@@ -25901,7 +25918,7 @@ summary tabindex target title type usemap value width wmode wrap`;
               const {
                 picked,
                 omitted
-              } = splitObject(getStyle$1(ele), ["position", "left", "right", "top", "bottom", "float", "display", "zIndex"]);
+              } = splitObject(getStyle$2(ele), ["position", "left", "right", "top", "bottom", "float", "display", "zIndex"]);
               const spanStyle = _extends$1(_extends$1({
                 display: "inline-block"
               }, picked), {
@@ -25954,7 +25971,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
         const colorInfo = computed(() => parseColor(prefixCls.value, props2.color));
         const injectFromPopover = computed(() => attrs["data-popover-inject"]);
-        const [wrapSSR, hashId] = useStyle$b(prefixCls, computed(() => !injectFromPopover.value));
+        const [wrapSSR, hashId] = useStyle$d(prefixCls, computed(() => !injectFromPopover.value));
         return () => {
           var _a, _b;
           const {
@@ -26037,7 +26054,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$a = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
+    const useStyle$c = genComponentStyleHook("Wave", (token2) => [genWaveStyle(token2)]);
     function isNotGrey(color) {
       const match2 = (color || "").match(/rgba?\((\d*), (\d*), (\d*)(, [\d.]*)?\)/);
       if (match2 && match2[1] && match2[2] && match2[3]) {
@@ -26221,7 +26238,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           wave
         } = useConfigInject("wave", props2);
-        const [, hashId] = useStyle$a(prefixCls);
+        const [, hashId] = useStyle$c(prefixCls);
         const showWave = useWave(instance, computed(() => classNames(prefixCls.value, hashId.value)), wave);
         let onClick;
         const clear2 = () => {
@@ -26806,7 +26823,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$9 = genComponentStyleHook("Button", (token2) => {
+    const useStyle$b = genComponentStyleHook("Button", (token2) => {
       const {
         controlTmpOutline,
         paddingContentHorizontal
@@ -26923,7 +26940,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("btn", props2);
-        const [wrapSSR, hashId] = useStyle$9(prefixCls);
+        const [wrapSSR, hashId] = useStyle$b(prefixCls);
         const groupSizeContext = GroupSizeContext.useInject();
         const disabledContext = useInjectDisabled();
         const mergedDisabled = computed(() => {
@@ -27176,7 +27193,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    var __rest$e = function(s2, e2) {
+    var __rest$h = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -27184,7 +27201,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return t2;
     };
-    const checkboxProps = {
+    const checkboxProps$1 = {
       prefixCls: String,
       name: String,
       id: String,
@@ -27212,7 +27229,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       },
       name: "Checkbox",
       inheritAttrs: false,
-      props: initDefaultProps(checkboxProps, {
+      props: initDefaultProps(checkboxProps$1, {
         prefixCls: "rc-checkbox",
         type: "checkbox",
         defaultChecked: false
@@ -27282,7 +27299,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             autofocus,
             value,
             required
-          } = props2, others = __rest$e(props2, ["prefixCls", "name", "id", "type", "disabled", "readonly", "tabindex", "autofocus", "value", "required"]);
+          } = props2, others = __rest$h(props2, ["prefixCls", "name", "id", "type", "disabled", "readonly", "tabindex", "autofocus", "value", "required"]);
           const {
             class: className,
             onFocus,
@@ -27733,7 +27750,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$8 = genComponentStyleHook("Radio", (token2) => {
+    const useStyle$a = genComponentStyleHook("Radio", (token2) => {
       const {
         padding,
         lineWidth,
@@ -27785,7 +27802,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return [getGroupRadioStyle(radioToken), getRadioBasicStyle(radioToken), getRadioButtonStyle(radioToken)];
     });
-    var __rest$d = function(s2, e2) {
+    var __rest$g = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -27840,7 +27857,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         } = useConfigInject("radio", props2);
         const prefixCls = computed(() => (radioGroupContext === null || radioGroupContext === void 0 ? void 0 : radioGroupContext.optionType.value) === "button" || radioOptionTypeContext === "button" ? `${radioPrefixCls.value}-button` : radioPrefixCls.value);
         const contextDisabled = useInjectDisabled();
-        const [wrapSSR, hashId] = useStyle$8(radioPrefixCls);
+        const [wrapSSR, hashId] = useStyle$a(radioPrefixCls);
         const focus = () => {
           vcCheckbox.value.focus();
         };
@@ -27870,7 +27887,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             prefixCls: customizePrefixCls,
             id = formItemContext.id.value
-          } = props2, restProps = __rest$d(props2, ["prefixCls", "id"]);
+          } = props2, restProps = __rest$g(props2, ["prefixCls", "id"]);
           const rProps = _extends$1(_extends$1({
             prefixCls: prefixCls.value,
             id
@@ -27934,7 +27951,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           size: size2
         } = useConfigInject("radio", props2);
-        const [wrapSSR, hashId] = useStyle$8(prefixCls);
+        const [wrapSSR, hashId] = useStyle$a(prefixCls);
         const stateValue = ref(props2.value);
         const updatingValue = ref(false);
         watch(() => props2.value, (val) => {
@@ -28821,7 +28838,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$7 = genComponentStyleHook("Input", (token2) => {
+    const useStyle$9 = genComponentStyleHook("Input", (token2) => {
       const inputToken = initInputToken(token2);
       return [
         genInputStyle(inputToken),
@@ -30286,7 +30303,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return namePath.every((nameUnit, i2) => changedNamePath[i2] === nameUnit);
     }
-    const typeTemplate = "'${name}' is not a valid ${type}";
+    const typeTemplate$1 = "'${name}' is not a valid ${type}";
     const defaultValidateMessages = {
       default: "Validation error on field '${name}'",
       required: "'${name}' is required",
@@ -30298,19 +30315,19 @@ summary tabindex target title type usemap value width wmode wrap`;
         invalid: "'${name}' is invalid date"
       },
       types: {
-        string: typeTemplate,
-        method: typeTemplate,
-        array: typeTemplate,
-        object: typeTemplate,
-        number: typeTemplate,
-        date: typeTemplate,
-        boolean: typeTemplate,
-        integer: typeTemplate,
-        float: typeTemplate,
-        regexp: typeTemplate,
-        email: typeTemplate,
-        url: typeTemplate,
-        hex: typeTemplate
+        string: typeTemplate$1,
+        method: typeTemplate$1,
+        array: typeTemplate$1,
+        object: typeTemplate$1,
+        number: typeTemplate$1,
+        date: typeTemplate$1,
+        boolean: typeTemplate$1,
+        integer: typeTemplate$1,
+        float: typeTemplate$1,
+        regexp: typeTemplate$1,
+        email: typeTemplate$1,
+        url: typeTemplate$1,
+        hex: typeTemplate$1
       },
       string: {
         len: "'${name}' must be exactly ${len} characters",
@@ -30696,7 +30713,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     var QuestionCircleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M623.6 316.7C593.6 290.4 554 276 512 276s-81.6 14.5-111.6 40.7C369.2 344 352 380.7 352 420v7.6c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V420c0-44.1 43.1-80 96-80s96 35.9 96 80c0 31.1-22 59.6-56.1 72.7-21.2 8.1-39.2 22.3-52.1 40.9-13.1 19-19.9 41.8-19.9 64.9V620c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8v-22.7a48.3 48.3 0 0130.9-44.8c59-22.7 97.1-74.7 97.1-132.5.1-39.3-17.1-76-48.3-103.3zM472 732a40 40 0 1080 0 40 40 0 10-80 0z" } }] }, "name": "question-circle", "theme": "outlined" };
-    function _objectSpread$b(target) {
+    function _objectSpread$d(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -30706,12 +30723,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$b(target, key2, source[key2]);
+          _defineProperty$d(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$b(obj, key2, value) {
+    function _defineProperty$d(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -30720,8 +30737,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var QuestionCircleOutlined = function QuestionCircleOutlined2(props2, context) {
-      var p2 = _objectSpread$b({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$b({}, p2, {
+      var p2 = _objectSpread$d({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$d({}, p2, {
         "icon": QuestionCircleOutlined$1
       }), null);
     };
@@ -30780,7 +30797,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       if (requiredMark === "optional" && !required) {
         labelChildren = createVNode(Fragment, null, [labelChildren, createVNode("span", {
           "class": `${prefixCls}-item-optional`
-        }, [((_d = formLocale.value) === null || _d === void 0 ? void 0 : _d.optional) || ((_e = localeValues.Form) === null || _e === void 0 ? void 0 : _e.optional)])]);
+        }, [((_d = formLocale.value) === null || _d === void 0 ? void 0 : _d.optional) || ((_e = localeValues$1.Form) === null || _e === void 0 ? void 0 : _e.optional)])]);
       }
       const labelClassName = classNames({
         [`${prefixCls}-item-required`]: required,
@@ -31240,7 +31257,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$6 = genComponentStyleHook("Form", (token2, _ref) => {
+    const useStyle$8 = genComponentStyleHook("Form", (token2, _ref) => {
       let {
         rootPrefixCls
       } = _ref;
@@ -31268,7 +31285,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const baseClassName = computed(() => `${prefixCls.value}-item-explain`);
         const visible = computed(() => !!(props2.errors && props2.errors.length));
         const innerStatus = ref(status.value);
-        const [, hashId] = useStyle$6(prefixCls);
+        const [, hashId] = useStyle$8(prefixCls);
         watch([visible, status], () => {
           if (visible.value) {
             innerStatus.value = status.value;
@@ -31487,7 +31504,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("form", props2);
-        const [wrapSSR, hashId] = useStyle$6(prefixCls);
+        const [wrapSSR, hashId] = useStyle$8(prefixCls);
         const itemRef = shallowRef();
         const formContext = useInjectForm();
         const fieldName = computed(() => props2.name || props2.prop);
@@ -32197,7 +32214,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const validateMessages = computed(() => {
           return _extends$1(_extends$1(_extends$1({}, defaultValidateMessages), globalValidateMessages.value), props2.validateMessages);
         });
-        const [wrapSSR, hashId] = useStyle$6(prefixCls);
+        const [wrapSSR, hashId] = useStyle$8(prefixCls);
         const formClassName = computed(() => classNames(prefixCls.value, {
           [`${prefixCls.value}-${props2.layout}`]: true,
           [`${prefixCls.value}-hide-required-mark`]: mergedRequiredMark.value === false,
@@ -32417,12 +32434,564 @@ summary tabindex target title type usemap value width wmode wrap`;
       app.component(FormItemRest.name, FormItemRest);
       return app;
     };
-    let runtimeLocale = _extends$1({}, localeValues.Modal);
+    const antCheckboxEffect = new Keyframe("antCheckboxEffect", {
+      "0%": {
+        transform: "scale(1)",
+        opacity: 0.5
+      },
+      "100%": {
+        transform: "scale(1.6)",
+        opacity: 0
+      }
+    });
+    const genCheckboxStyle = (token2) => {
+      const {
+        checkboxCls
+      } = token2;
+      const wrapperCls = `${checkboxCls}-wrapper`;
+      return [
+        // ===================== Basic =====================
+        {
+          // Group
+          [`${checkboxCls}-group`]: _extends$1(_extends$1({}, resetComponent(token2)), {
+            display: "inline-flex",
+            flexWrap: "wrap",
+            columnGap: token2.marginXS,
+            // Group > Grid
+            [`> ${token2.antCls}-row`]: {
+              flex: 1
+            }
+          }),
+          // Wrapper
+          [wrapperCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
+            display: "inline-flex",
+            alignItems: "baseline",
+            cursor: "pointer",
+            // Fix checkbox & radio in flex align #30260
+            "&:after": {
+              display: "inline-block",
+              width: 0,
+              overflow: "hidden",
+              content: "'\\a0'"
+            },
+            // Checkbox near checkbox
+            [`& + ${wrapperCls}`]: {
+              marginInlineStart: 0
+            },
+            [`&${wrapperCls}-in-form-item`]: {
+              'input[type="checkbox"]': {
+                width: 14,
+                height: 14
+                // FIXME: magic
+              }
+            }
+          }),
+          // Wrapper > Checkbox
+          [checkboxCls]: _extends$1(_extends$1({}, resetComponent(token2)), {
+            position: "relative",
+            whiteSpace: "nowrap",
+            lineHeight: 1,
+            cursor: "pointer",
+            // To make alignment right when `controlHeight` is changed
+            // Ref: https://github.com/ant-design/ant-design/issues/41564
+            alignSelf: "center",
+            // Wrapper > Checkbox > input
+            [`${checkboxCls}-input`]: {
+              position: "absolute",
+              // Since baseline align will get additional space offset,
+              // we need to move input to top to make it align with text.
+              // Ref: https://github.com/ant-design/ant-design/issues/38926#issuecomment-1486137799
+              inset: 0,
+              zIndex: 1,
+              cursor: "pointer",
+              opacity: 0,
+              margin: 0,
+              [`&:focus-visible + ${checkboxCls}-inner`]: _extends$1({}, genFocusOutline(token2))
+            },
+            // Wrapper > Checkbox > inner
+            [`${checkboxCls}-inner`]: {
+              boxSizing: "border-box",
+              position: "relative",
+              top: 0,
+              insetInlineStart: 0,
+              display: "block",
+              width: token2.checkboxSize,
+              height: token2.checkboxSize,
+              direction: "ltr",
+              backgroundColor: token2.colorBgContainer,
+              border: `${token2.lineWidth}px ${token2.lineType} ${token2.colorBorder}`,
+              borderRadius: token2.borderRadiusSM,
+              borderCollapse: "separate",
+              transition: `all ${token2.motionDurationSlow}`,
+              "&:after": {
+                boxSizing: "border-box",
+                position: "absolute",
+                top: "50%",
+                insetInlineStart: "21.5%",
+                display: "table",
+                width: token2.checkboxSize / 14 * 5,
+                height: token2.checkboxSize / 14 * 8,
+                border: `${token2.lineWidthBold}px solid ${token2.colorWhite}`,
+                borderTop: 0,
+                borderInlineStart: 0,
+                transform: "rotate(45deg) scale(0) translate(-50%,-50%)",
+                opacity: 0,
+                content: '""',
+                transition: `all ${token2.motionDurationFast} ${token2.motionEaseInBack}, opacity ${token2.motionDurationFast}`
+              }
+            },
+            // Wrapper > Checkbox + Text
+            "& + span": {
+              paddingInlineStart: token2.paddingXS,
+              paddingInlineEnd: token2.paddingXS
+            }
+          })
+        },
+        // ================= Indeterminate =================
+        {
+          [checkboxCls]: {
+            "&-indeterminate": {
+              // Wrapper > Checkbox > inner
+              [`${checkboxCls}-inner`]: {
+                "&:after": {
+                  top: "50%",
+                  insetInlineStart: "50%",
+                  width: token2.fontSizeLG / 2,
+                  height: token2.fontSizeLG / 2,
+                  backgroundColor: token2.colorPrimary,
+                  border: 0,
+                  transform: "translate(-50%, -50%) scale(1)",
+                  opacity: 1,
+                  content: '""'
+                }
+              }
+            }
+          }
+        },
+        // ===================== Hover =====================
+        {
+          // Wrapper
+          [`${wrapperCls}:hover ${checkboxCls}:after`]: {
+            visibility: "visible"
+          },
+          // Wrapper & Wrapper > Checkbox
+          [`
+        ${wrapperCls}:not(${wrapperCls}-disabled),
+        ${checkboxCls}:not(${checkboxCls}-disabled)
+      `]: {
+            [`&:hover ${checkboxCls}-inner`]: {
+              borderColor: token2.colorPrimary
+            }
+          },
+          [`${wrapperCls}:not(${wrapperCls}-disabled)`]: {
+            [`&:hover ${checkboxCls}-checked:not(${checkboxCls}-disabled) ${checkboxCls}-inner`]: {
+              backgroundColor: token2.colorPrimaryHover,
+              borderColor: "transparent"
+            },
+            [`&:hover ${checkboxCls}-checked:not(${checkboxCls}-disabled):after`]: {
+              borderColor: token2.colorPrimaryHover
+            }
+          }
+        },
+        // ==================== Checked ====================
+        {
+          // Wrapper > Checkbox
+          [`${checkboxCls}-checked`]: {
+            [`${checkboxCls}-inner`]: {
+              backgroundColor: token2.colorPrimary,
+              borderColor: token2.colorPrimary,
+              "&:after": {
+                opacity: 1,
+                transform: "rotate(45deg) scale(1) translate(-50%,-50%)",
+                transition: `all ${token2.motionDurationMid} ${token2.motionEaseOutBack} ${token2.motionDurationFast}`
+              }
+            },
+            // Checked Effect
+            "&:after": {
+              position: "absolute",
+              top: 0,
+              insetInlineStart: 0,
+              width: "100%",
+              height: "100%",
+              borderRadius: token2.borderRadiusSM,
+              visibility: "hidden",
+              border: `${token2.lineWidthBold}px solid ${token2.colorPrimary}`,
+              animationName: antCheckboxEffect,
+              animationDuration: token2.motionDurationSlow,
+              animationTimingFunction: "ease-in-out",
+              animationFillMode: "backwards",
+              content: '""',
+              transition: `all ${token2.motionDurationSlow}`
+            }
+          },
+          [`
+        ${wrapperCls}-checked:not(${wrapperCls}-disabled),
+        ${checkboxCls}-checked:not(${checkboxCls}-disabled)
+      `]: {
+            [`&:hover ${checkboxCls}-inner`]: {
+              backgroundColor: token2.colorPrimaryHover,
+              borderColor: "transparent"
+            },
+            [`&:hover ${checkboxCls}:after`]: {
+              borderColor: token2.colorPrimaryHover
+            }
+          }
+        },
+        // ==================== Disable ====================
+        {
+          // Wrapper
+          [`${wrapperCls}-disabled`]: {
+            cursor: "not-allowed"
+          },
+          // Wrapper > Checkbox
+          [`${checkboxCls}-disabled`]: {
+            // Wrapper > Checkbox > input
+            [`&, ${checkboxCls}-input`]: {
+              cursor: "not-allowed",
+              // Disabled for native input to enable Tooltip event handler
+              // ref: https://github.com/ant-design/ant-design/issues/39822#issuecomment-1365075901
+              pointerEvents: "none"
+            },
+            // Wrapper > Checkbox > inner
+            [`${checkboxCls}-inner`]: {
+              background: token2.colorBgContainerDisabled,
+              borderColor: token2.colorBorder,
+              "&:after": {
+                borderColor: token2.colorTextDisabled
+              }
+            },
+            "&:after": {
+              display: "none"
+            },
+            "& + span": {
+              color: token2.colorTextDisabled
+            },
+            [`&${checkboxCls}-indeterminate ${checkboxCls}-inner::after`]: {
+              background: token2.colorTextDisabled
+            }
+          }
+        }
+      ];
+    };
+    function getStyle$1(prefixCls, token2) {
+      const checkboxToken = merge(token2, {
+        checkboxCls: `.${prefixCls}`,
+        checkboxSize: token2.controlInteractiveSize
+      });
+      return [genCheckboxStyle(checkboxToken)];
+    }
+    const useStyle$7 = genComponentStyleHook("Checkbox", (token2, _ref) => {
+      let {
+        prefixCls
+      } = _ref;
+      return [getStyle$1(prefixCls, token2)];
+    });
+    const abstractCheckboxGroupProps = () => {
+      return {
+        name: String,
+        prefixCls: String,
+        options: arrayType([]),
+        disabled: Boolean,
+        id: String
+      };
+    };
+    const checkboxGroupProps = () => {
+      return _extends$1(_extends$1({}, abstractCheckboxGroupProps()), {
+        defaultValue: arrayType(),
+        value: arrayType(),
+        onChange: functionType(),
+        "onUpdate:value": functionType()
+      });
+    };
+    const abstractCheckboxProps = () => {
+      return {
+        prefixCls: String,
+        defaultChecked: booleanType(),
+        checked: booleanType(),
+        disabled: booleanType(),
+        isGroup: booleanType(),
+        value: PropTypes.any,
+        name: String,
+        id: String,
+        indeterminate: booleanType(),
+        type: stringType("checkbox"),
+        autofocus: booleanType(),
+        onChange: functionType(),
+        "onUpdate:checked": functionType(),
+        onClick: functionType(),
+        skipGroup: booleanType(false)
+      };
+    };
+    const checkboxProps = () => {
+      return _extends$1(_extends$1({}, abstractCheckboxProps()), {
+        indeterminate: booleanType(false)
+      });
+    };
+    const CheckboxGroupContextKey = Symbol("CheckboxGroupContext");
+    var __rest$f = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const Checkbox = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ACheckbox",
+      inheritAttrs: false,
+      __ANT_CHECKBOX: true,
+      props: checkboxProps(),
+      // emits: ['change', 'update:checked'],
+      setup(props2, _ref) {
+        let {
+          emit: emit2,
+          attrs,
+          slots,
+          expose
+        } = _ref;
+        const formItemContext = useInjectFormItemContext();
+        const formItemInputContext = FormItemInputContext.useInject();
+        const {
+          prefixCls,
+          direction,
+          disabled
+        } = useConfigInject("checkbox", props2);
+        const contextDisabled = useInjectDisabled();
+        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const checkboxGroup = inject(CheckboxGroupContextKey, void 0);
+        const uniId = Symbol("checkboxUniId");
+        const mergedDisabled = computed(() => {
+          return (checkboxGroup === null || checkboxGroup === void 0 ? void 0 : checkboxGroup.disabled.value) || disabled.value;
+        });
+        watchEffect(() => {
+          if (!props2.skipGroup && checkboxGroup) {
+            checkboxGroup.registerValue(uniId, props2.value);
+          }
+        });
+        onBeforeUnmount(() => {
+          if (checkboxGroup) {
+            checkboxGroup.cancelValue(uniId);
+          }
+        });
+        onMounted(() => {
+          warning$2(!!(props2.checked !== void 0 || checkboxGroup || props2.value === void 0));
+        });
+        const handleChange = (event) => {
+          const targetChecked = event.target.checked;
+          emit2("update:checked", targetChecked);
+          emit2("change", event);
+          formItemContext.onFieldChange();
+        };
+        const checkboxRef = ref();
+        const focus = () => {
+          var _a;
+          (_a = checkboxRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+        };
+        const blur = () => {
+          var _a;
+          (_a = checkboxRef.value) === null || _a === void 0 ? void 0 : _a.blur();
+        };
+        expose({
+          focus,
+          blur
+        });
+        return () => {
+          var _a;
+          const children = flattenChildren((_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots));
+          const {
+            indeterminate,
+            skipGroup,
+            id = formItemContext.id.value
+          } = props2, restProps = __rest$f(props2, ["indeterminate", "skipGroup", "id"]);
+          const {
+            onMouseenter,
+            onMouseleave,
+            onInput,
+            class: className,
+            style
+          } = attrs, restAttrs = __rest$f(attrs, ["onMouseenter", "onMouseleave", "onInput", "class", "style"]);
+          const checkboxProps2 = _extends$1(_extends$1(_extends$1(_extends$1({}, restProps), {
+            id,
+            prefixCls: prefixCls.value
+          }), restAttrs), {
+            disabled: mergedDisabled.value
+          });
+          if (checkboxGroup && !skipGroup) {
+            checkboxProps2.onChange = function() {
+              for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+              }
+              emit2("change", ...args);
+              checkboxGroup.toggleOption({
+                label: children,
+                value: props2.value
+              });
+            };
+            checkboxProps2.name = checkboxGroup.name.value;
+            checkboxProps2.checked = checkboxGroup.mergedValue.value.includes(props2.value);
+            checkboxProps2.disabled = mergedDisabled.value || contextDisabled.value;
+            checkboxProps2.indeterminate = indeterminate;
+          } else {
+            checkboxProps2.onChange = handleChange;
+          }
+          const classString = classNames({
+            [`${prefixCls.value}-wrapper`]: true,
+            [`${prefixCls.value}-rtl`]: direction.value === "rtl",
+            [`${prefixCls.value}-wrapper-checked`]: checkboxProps2.checked,
+            [`${prefixCls.value}-wrapper-disabled`]: checkboxProps2.disabled,
+            [`${prefixCls.value}-wrapper-in-form-item`]: formItemInputContext.isFormItemInput
+          }, className, hashId.value);
+          const checkboxClass = classNames({
+            [`${prefixCls.value}-indeterminate`]: indeterminate
+          }, hashId.value);
+          const ariaChecked = indeterminate ? "mixed" : void 0;
+          return wrapSSR(createVNode("label", {
+            "class": classString,
+            "style": style,
+            "onMouseenter": onMouseenter,
+            "onMouseleave": onMouseleave
+          }, [createVNode(VcCheckbox, _objectSpread2$1(_objectSpread2$1({
+            "aria-checked": ariaChecked
+          }, checkboxProps2), {}, {
+            "class": checkboxClass,
+            "ref": checkboxRef
+          }), null), children.length ? createVNode("span", null, [children]) : null]));
+        };
+      }
+    });
+    const CheckboxGroup = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "ACheckboxGroup",
+      inheritAttrs: false,
+      props: checkboxGroupProps(),
+      // emits: ['change', 'update:value'],
+      setup(props2, _ref) {
+        let {
+          slots,
+          attrs,
+          emit: emit2,
+          expose
+        } = _ref;
+        const formItemContext = useInjectFormItemContext();
+        const {
+          prefixCls,
+          direction
+        } = useConfigInject("checkbox", props2);
+        const groupPrefixCls = computed(() => `${prefixCls.value}-group`);
+        const [wrapSSR, hashId] = useStyle$7(groupPrefixCls);
+        const mergedValue = ref((props2.value === void 0 ? props2.defaultValue : props2.value) || []);
+        watch(() => props2.value, () => {
+          mergedValue.value = props2.value || [];
+        });
+        const options = computed(() => {
+          return props2.options.map((option) => {
+            if (typeof option === "string" || typeof option === "number") {
+              return {
+                label: option,
+                value: option
+              };
+            }
+            return option;
+          });
+        });
+        const triggerUpdate = ref(Symbol());
+        const registeredValuesMap = ref(/* @__PURE__ */ new Map());
+        const cancelValue = (id) => {
+          registeredValuesMap.value.delete(id);
+          triggerUpdate.value = Symbol();
+        };
+        const registerValue = (id, value) => {
+          registeredValuesMap.value.set(id, value);
+          triggerUpdate.value = Symbol();
+        };
+        const registeredValues = ref(/* @__PURE__ */ new Map());
+        watch(triggerUpdate, () => {
+          const valuseMap = /* @__PURE__ */ new Map();
+          for (const value of registeredValuesMap.value.values()) {
+            valuseMap.set(value, true);
+          }
+          registeredValues.value = valuseMap;
+        });
+        const toggleOption = (option) => {
+          const optionIndex = mergedValue.value.indexOf(option.value);
+          const value = [...mergedValue.value];
+          if (optionIndex === -1) {
+            value.push(option.value);
+          } else {
+            value.splice(optionIndex, 1);
+          }
+          if (props2.value === void 0) {
+            mergedValue.value = value;
+          }
+          const val = value.filter((val2) => registeredValues.value.has(val2)).sort((a2, b2) => {
+            const indexA = options.value.findIndex((opt) => opt.value === a2);
+            const indexB = options.value.findIndex((opt) => opt.value === b2);
+            return indexA - indexB;
+          });
+          emit2("update:value", val);
+          emit2("change", val);
+          formItemContext.onFieldChange();
+        };
+        provide(CheckboxGroupContextKey, {
+          cancelValue,
+          registerValue,
+          toggleOption,
+          mergedValue,
+          name: computed(() => props2.name),
+          disabled: computed(() => props2.disabled)
+        });
+        expose({
+          mergedValue
+        });
+        return () => {
+          var _a;
+          const {
+            id = formItemContext.id.value
+          } = props2;
+          let children = null;
+          if (options.value && options.value.length > 0) {
+            children = options.value.map((option) => {
+              var _a2;
+              return createVNode(Checkbox, {
+                "prefixCls": prefixCls.value,
+                "key": option.value.toString(),
+                "disabled": "disabled" in option ? option.disabled : props2.disabled,
+                "indeterminate": option.indeterminate,
+                "value": option.value,
+                "checked": mergedValue.value.indexOf(option.value) !== -1,
+                "onChange": option.onChange,
+                "class": `${groupPrefixCls.value}-item`
+              }, {
+                default: () => [slots.label !== void 0 ? (_a2 = slots.label) === null || _a2 === void 0 ? void 0 : _a2.call(slots, option) : option.label]
+              });
+            });
+          }
+          return wrapSSR(createVNode("div", _objectSpread2$1(_objectSpread2$1({}, attrs), {}, {
+            "class": [groupPrefixCls.value, {
+              [`${groupPrefixCls.value}-rtl`]: direction.value === "rtl"
+            }, attrs.class, hashId.value],
+            "id": id
+          }), [children || ((_a = slots.default) === null || _a === void 0 ? void 0 : _a.call(slots))]));
+        };
+      }
+    });
+    Checkbox.Group = CheckboxGroup;
+    Checkbox.install = function(app) {
+      app.component(Checkbox.name, Checkbox);
+      app.component(CheckboxGroup.name, CheckboxGroup);
+      return app;
+    };
+    let runtimeLocale = _extends$1({}, localeValues$1.Modal);
     function changeConfirmLocale(newLocale) {
       if (newLocale) {
         runtimeLocale = _extends$1(_extends$1({}, runtimeLocale), newLocale);
       } else {
-        runtimeLocale = _extends$1({}, localeValues.Modal);
+        runtimeLocale = _extends$1({}, localeValues$1.Modal);
       }
     }
     function getConfirmLocale() {
@@ -32470,7 +33039,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       app.component(LocaleProvider.name, LocaleProvider);
       return app;
     };
-    const locale = withInstall(LocaleProvider);
+    const locale$3 = withInstall(LocaleProvider);
     const Notice = /* @__PURE__ */ defineComponent({
       name: "Notice",
       inheritAttrs: false,
@@ -32577,7 +33146,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$c = function(s2, e2) {
+    var __rest$e = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -32592,7 +33161,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       seed$1 += 1;
       return `rcNotification_${now$1}_${id}`;
     }
-    const Notification$1 = /* @__PURE__ */ defineComponent({
+    const Notification$2 = /* @__PURE__ */ defineComponent({
       name: "Notification",
       inheritAttrs: false,
       props: ["prefixCls", "transitionName", "animation", "maxCount", "closeIcon", "hashId"],
@@ -32742,7 +33311,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    Notification$1.newInstance = function newNotificationInstance(properties, callback) {
+    Notification$2.newInstance = function newNotificationInstance(properties, callback) {
       const _a = properties || {}, {
         name = "notification",
         getContainer: getContainer2,
@@ -32752,7 +33321,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         transitionName: customTransitionName,
         hasTransitionName: hasTransitionName2,
         useStyle: useStyle2
-      } = _a, props2 = __rest$c(_a, ["name", "getContainer", "appContext", "prefixCls", "rootPrefixCls", "transitionName", "hasTransitionName", "useStyle"]);
+      } = _a, props2 = __rest$e(_a, ["name", "getContainer", "appContext", "prefixCls", "rootPrefixCls", "transitionName", "hasTransitionName", "useStyle"]);
       const div = document.createElement("div");
       if (getContainer2) {
         const root2 = getContainer2();
@@ -32798,7 +33367,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             return createVNode(ConfigProvider, _objectSpread2$1(_objectSpread2$1({}, global2), {}, {
               "prefixCls": rootPrefixCls
             }), {
-              default: () => [createVNode(Notification$1, _objectSpread2$1(_objectSpread2$1({
+              default: () => [createVNode(Notification$2, _objectSpread2$1(_objectSpread2$1({
                 "ref": notiRef
               }, attrs), {}, {
                 "prefixCls": prefixCls.value,
@@ -32820,7 +33389,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       seed += 1;
       return `rcNotification_${now}_${id}`;
     }
-    const Notification = /* @__PURE__ */ defineComponent({
+    const Notification$1 = /* @__PURE__ */ defineComponent({
       name: "HookNotification",
       inheritAttrs: false,
       props: ["prefixCls", "transitionName", "animation", "maxCount", "closeIcon", "hashId", "remove", "notices", "getStyles", "getClassName", "onAllRemoved", "getContainer"],
@@ -32975,8 +33544,8 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    const HookNotification = Notification;
-    var __rest$b = function(s2, e2) {
+    const HookNotification = Notification$1;
+    var __rest$d = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -33013,7 +33582,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         getClassName,
         getStyles,
         onAllRemoved
-      } = rootConfig, shareConfig = __rest$b(rootConfig, ["getContainer", "motion", "prefixCls", "maxCount", "getClassName", "getStyles", "onAllRemoved"]);
+      } = rootConfig, shareConfig = __rest$d(rootConfig, ["getContainer", "motion", "prefixCls", "maxCount", "getClassName", "getStyles", "onAllRemoved"]);
       const notices = shallowRef([]);
       const notificationsRef = shallowRef();
       const add2 = (originNotice, holderCallback) => {
@@ -33248,7 +33817,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$5 = genComponentStyleHook("Message", (token2) => {
+    const useStyle$6 = genComponentStyleHook("Message", (token2) => {
       const combinedToken = merge(token2, {
         messageNoticeContentPadding: `${(token2.controlHeightLG - token2.fontSize * token2.lineHeight) / 2}px ${token2.paddingSM}px`
       });
@@ -33280,7 +33849,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$a = function(s2, e2) {
+    var __rest$c = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -33304,7 +33873,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer
         } = useConfigInject("message", props2);
         const prefixCls = computed(() => getPrefixCls("message", props2.prefixCls));
-        const [, hashId] = useStyle$5(prefixCls);
+        const [, hashId] = useStyle$6(prefixCls);
         const getStyles = () => {
           var _a2;
           const top = (_a2 = props2.top) !== null && _a2 !== void 0 ? _a2 : DEFAULT_OFFSET$1;
@@ -33377,7 +33946,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           key: key2,
           class: className,
           onClose
-        } = config, restConfig = __rest$a(config, ["content", "icon", "type", "key", "class", "onClose"]);
+        } = config, restConfig = __rest$c(config, ["content", "icon", "type", "key", "class", "onClose"]);
         let mergedKey = key2;
         if (mergedKey === void 0 || mergedKey === null) {
           keyIndex += 1;
@@ -33502,7 +34071,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         callback(messageInstance);
         return;
       }
-      Notification$1.newInstance({
+      Notification$2.newInstance({
         appContext: args.appContext,
         prefixCls: args.prefixCls || localPrefixCls,
         rootPrefixCls: args.rootPrefixCls,
@@ -33514,7 +34083,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         getContainer: getContainer || args.getPopupContainer,
         maxCount: maxCount$1,
         name: "message",
-        useStyle: useStyle$5
+        useStyle: useStyle$6
       }, (instance) => {
         if (messageInstance) {
           callback(messageInstance);
@@ -33887,7 +34456,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       ];
     };
-    const useStyle$4 = genComponentStyleHook("Notification", (token2) => {
+    const useStyle$5 = genComponentStyleHook("Notification", (token2) => {
       const notificationPaddingVertical = token2.paddingMD;
       const notificationPaddingHorizontal = token2.paddingLG;
       const notificationToken = merge(token2, {
@@ -34020,7 +34589,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         name: `${prefixCls}-fade`
       };
     }
-    var __rest$9 = function(s2, e2) {
+    var __rest$b = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -34047,7 +34616,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           return getPlacementStyle(placement, (_a = props2.top) !== null && _a !== void 0 ? _a : DEFAULT_OFFSET, (_b = props2.bottom) !== null && _b !== void 0 ? _b : DEFAULT_OFFSET);
         };
-        const [, hashId] = useStyle$4(prefixCls);
+        const [, hashId] = useStyle$5(prefixCls);
         const getClassName = () => classNames(hashId.value, {
           [`${prefixCls.value}-rtl`]: props2.rtl
         });
@@ -34095,7 +34664,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           type,
           btn,
           class: className
-        } = config, restConfig = __rest$9(config, ["message", "description", "icon", "type", "btn", "class"]);
+        } = config, restConfig = __rest$b(config, ["message", "description", "icon", "type", "btn", "class"]);
         return originOpen(_extends$1(_extends$1({
           placement: "topRight"
         }, restConfig), {
@@ -34211,10 +34780,10 @@ summary tabindex target title type usemap value width wmode wrap`;
       const notificationClass = classNames(`${prefixCls}-${placement}`, {
         [`${prefixCls}-rtl`]: rtl === true
       });
-      Notification$1.newInstance({
+      Notification$2.newInstance({
         name: "notification",
         prefixCls: customizePrefixCls || defaultPrefixCls$1,
-        useStyle: useStyle$4,
+        useStyle: useStyle$5,
         class: notificationClass,
         style: getPlacementStyle(placement, top !== null && top !== void 0 ? top : defaultTop, bottom !== null && bottom !== void 0 ? bottom : defaultBottom),
         appContext,
@@ -34377,7 +34946,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         updateCSS$1(style, `${dynamicStyleMark}-dynamic-theme`);
       }
     }
-    const useStyle$3 = (iconPrefixCls) => {
+    const useStyle$4 = (iconPrefixCls) => {
       const [theme, token2] = useToken();
       return useStyleRegister(computed(() => ({
         theme: theme.value,
@@ -34410,7 +34979,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return mergedTheme;
     }
-    var __rest$8 = function(s2, e2) {
+    var __rest$a = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -34494,7 +35063,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a;
           return props2.csp || ((_a = parentContext.csp) === null || _a === void 0 ? void 0 : _a.value);
         });
-        const wrapSSR = useStyle$3(iconPrefixCls);
+        const wrapSSR = useStyle$4(iconPrefixCls);
         const mergedTheme = useTheme(computed(() => props2.theme), computed(() => {
           var _a;
           return (_a = parentContext.theme) === null || _a === void 0 ? void 0 : _a.value;
@@ -34507,12 +35076,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           return (_a = props2.autoInsertSpaceInButton) !== null && _a !== void 0 ? _a : (_b = parentContext.autoInsertSpaceInButton) === null || _b === void 0 ? void 0 : _b.value;
         });
-        const locale$12 = computed(() => {
+        const locale2 = computed(() => {
           var _a;
           return props2.locale || ((_a = parentContext.locale) === null || _a === void 0 ? void 0 : _a.value);
         });
-        watch(locale$12, () => {
-          globalConfigBySet.locale = locale$12.value;
+        watch(locale2, () => {
+          globalConfigBySet.locale = locale2.value;
         }, {
           immediate: true
         });
@@ -34569,7 +35138,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const configProvider = {
           csp,
           autoInsertSpaceInButton,
-          locale: locale$12,
+          locale: locale2,
           direction,
           space,
           virtual,
@@ -34597,7 +35166,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const _a = mergedTheme.value || {}, {
             algorithm,
             token: token2
-          } = _a, rest = __rest$8(_a, ["algorithm", "token"]);
+          } = _a, rest = __rest$a(_a, ["algorithm", "token"]);
           const themeObj = algorithm && (!Array.isArray(algorithm) || algorithm.length > 0) ? createTheme(algorithm) : void 0;
           return _extends$1(_extends$1({}, rest), {
             theme: themeObj,
@@ -34607,8 +35176,8 @@ summary tabindex target title type usemap value width wmode wrap`;
         const validateMessagesRef = computed(() => {
           var _a, _b;
           let validateMessages = {};
-          if (locale$12.value) {
-            validateMessages = ((_a = locale$12.value.Form) === null || _a === void 0 ? void 0 : _a.defaultValidateMessages) || ((_b = localeValues.Form) === null || _b === void 0 ? void 0 : _b.defaultValidateMessages) || {};
+          if (locale2.value) {
+            validateMessages = ((_a = locale2.value.Form) === null || _a === void 0 ? void 0 : _a.defaultValidateMessages) || ((_b = localeValues$1.Form) === null || _b === void 0 ? void 0 : _b.defaultValidateMessages) || {};
           }
           if (props2.form && props2.form.validateMessages) {
             validateMessages = _extends$1(_extends$1({}, validateMessages), props2.form.validateMessages);
@@ -34634,8 +35203,8 @@ summary tabindex target title type usemap value width wmode wrap`;
               default: () => [_childNode]
             });
           }
-          return createVNode(locale, {
-            "locale": locale$12.value || legacyLocale,
+          return createVNode(locale$3, {
+            "locale": locale2.value || legacyLocale,
             "ANT_MARK__": ANT_MARK
           }, {
             default: () => [childNode]
@@ -34780,7 +35349,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$2 = genComponentStyleHook("Tag", (token2) => {
+    const useStyle$3 = genComponentStyleHook("Tag", (token2) => {
       const {
         fontSize,
         lineHeight,
@@ -34834,7 +35403,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const {
           prefixCls
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$2(prefixCls);
+        const [wrapSSR, hashId] = useStyle$3(prefixCls);
         const handleClick = (e2) => {
           const {
             checked
@@ -34901,7 +35470,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           prefixCls,
           direction
         } = useConfigInject("tag", props2);
-        const [wrapSSR, hashId] = useStyle$2(prefixCls);
+        const [wrapSSR, hashId] = useStyle$3(prefixCls);
         const visible = shallowRef(true);
         watchEffect(() => {
           if (props2.visible !== void 0) {
@@ -34975,7 +35544,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       return app;
     };
     var CalendarOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z" } }] }, "name": "calendar", "theme": "outlined" };
-    function _objectSpread$a(target) {
+    function _objectSpread$c(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -34985,12 +35554,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$a(target, key2, source[key2]);
+          _defineProperty$c(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$a(obj, key2, value) {
+    function _defineProperty$c(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -34999,8 +35568,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var CalendarOutlined = function CalendarOutlined2(props2, context) {
-      var p2 = _objectSpread$a({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$a({}, p2, {
+      var p2 = _objectSpread$c({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$c({}, p2, {
         "icon": CalendarOutlined$1
       }), null);
     };
@@ -35092,7 +35661,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       return key2 in (html ? html.style : {});
     })[0];
     const windowIsUndefined = !(typeof window !== "undefined" && window.document && window.document.createElement);
-    var __rest$7 = function(s2, e2) {
+    var __rest$9 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -35272,7 +35841,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             maskMotion,
             motion,
             inline
-          } = props2, otherProps = __rest$7(props2, ["width", "height", "open", "prefixCls", "placement", "level", "levelMove", "ease", "duration", "getContainer", "onChange", "afterVisibleChange", "showMask", "maskClosable", "maskStyle", "keyboard", "getOpenCount", "scrollLocker", "contentWrapperStyle", "style", "class", "rootClassName", "rootStyle", "maskMotion", "motion", "inline"]);
+          } = props2, otherProps = __rest$9(props2, ["width", "height", "open", "prefixCls", "placement", "level", "levelMove", "ease", "duration", "getContainer", "onChange", "afterVisibleChange", "showMask", "maskClosable", "maskStyle", "keyboard", "getOpenCount", "scrollLocker", "contentWrapperStyle", "style", "class", "rootClassName", "rootStyle", "maskMotion", "motion", "inline"]);
           const open2 = $open && canOpen.value;
           const wrapperClassName = classNames(prefixCls, {
             [`${prefixCls}-${placement}`]: true,
@@ -35315,7 +35884,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$6 = function(s2, e2) {
+    var __rest$8 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -35365,7 +35934,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             rootClassName,
             rootStyle,
             forceRender
-          } = props2, otherProps = __rest$6(props2, ["getContainer", "wrapperClassName", "rootClassName", "rootStyle", "forceRender"]);
+          } = props2, otherProps = __rest$8(props2, ["getContainer", "wrapperClassName", "rootClassName", "rootStyle", "forceRender"]);
           let portal = null;
           if (!getContainer2) {
             return createVNode(DrawerChild, _objectSpread2$1(_objectSpread2$1({}, otherProps), {}, {
@@ -35390,7 +35959,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                 var {
                   visible,
                   afterClose
-                } = _a, rest = __rest$6(_a, ["visible", "afterClose"]);
+                } = _a, rest = __rest$8(_a, ["visible", "afterClose"]);
                 return createVNode(DrawerChild, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({
                   "ref": dom
                 }, otherProps), rest), {}, {
@@ -35699,7 +36268,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle$1 = genComponentStyleHook("Drawer", (token2) => {
+    const useStyle$2 = genComponentStyleHook("Drawer", (token2) => {
       const drawerToken = merge(token2, {
         drawerFooterPaddingVertical: token2.paddingXS,
         drawerFooterPaddingHorizontal: token2.padding
@@ -35708,7 +36277,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     }, (token2) => ({
       zIndexPopup: token2.zIndexPopupBase
     }));
-    var __rest$5 = function(s2, e2) {
+    var __rest$7 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -35857,7 +36426,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           getPopupContainer,
           direction
         } = useConfigInject("drawer", props2);
-        const [wrapSSR, hashId] = useStyle$1(prefixCls);
+        const [wrapSSR, hashId] = useStyle$2(prefixCls);
         const getContainer2 = computed(() => (
           // 有可能为 false，所以不能直接判断
           props2.getContainer === void 0 && (getPopupContainer === null || getPopupContainer === void 0 ? void 0 : getPopupContainer.value) ? () => getPopupContainer.value(document.body) : props2.getContainer
@@ -36057,7 +36626,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             placement,
             mask,
             forceRender
-          } = props2, rest = __rest$5(props2, ["width", "height", "placement", "mask", "forceRender"]);
+          } = props2, rest = __rest$7(props2, ["width", "height", "placement", "mask", "forceRender"]);
           const vcDrawerProps = _extends$1(_extends$1(_extends$1({}, attrs), omit(rest, ["size", "closeIcon", "closable", "destroyOnClose", "drawerStyle", "headerStyle", "bodyStyle", "title", "push", "onAfterVisibleChange", "onClose", "onUpdate:visible", "onUpdate:open", "visible"])), {
             forceRender,
             onClose: close,
@@ -36387,7 +36956,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$4 = function(s2, e2) {
+    var __rest$6 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -36596,7 +37165,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             prefixCls,
             disabled
-          } = props2, rest = __rest$4(props2, ["prefixCls", "disabled"]);
+          } = props2, rest = __rest$6(props2, ["prefixCls", "disabled"]);
           return createVNode(BaseInput, _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({}, rest), attrs), {}, {
             "ref": rootRef,
             "prefixCls": prefixCls,
@@ -36631,7 +37200,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       onCompositionend: eventType(),
       valueModifiers: Object
     });
-    var __rest$3 = function(s2, e2) {
+    var __rest$5 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -36670,7 +37239,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         const mergedSize = computed(() => {
           return compactSize.value || size2.value;
         });
-        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const [wrapSSR, hashId] = useStyle$9(prefixCls);
         const disabled = useInjectDisabled();
         const focus = (option) => {
           var _a;
@@ -36742,7 +37311,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             addonAfter = (_c = slots.addonAfter) === null || _c === void 0 ? void 0 : _c.call(slots),
             addonBefore = (_d = slots.addonBefore) === null || _d === void 0 ? void 0 : _d.call(slots),
             id = (_e = formItemContext.id) === null || _e === void 0 ? void 0 : _e.value
-          } = props2, rest = __rest$3(props2, ["allowClear", "bordered", "prefix", "suffix", "addonAfter", "addonBefore", "id"]);
+          } = props2, rest = __rest$5(props2, ["allowClear", "bordered", "prefix", "suffix", "addonAfter", "addonBefore", "id"]);
           const suffixNode = (hasFeedback || suffix) && createVNode(Fragment, null, [suffix, hasFeedback && feedbackIcon]);
           const prefixClsValue = prefixCls.value;
           const inputHasPrefixSuffix = hasPrefixSuffix({
@@ -36830,7 +37399,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           isFormItemInput: false
         });
         const inputPrefixCls = computed(() => getPrefixCls("input"));
-        const [wrapSSR, hashId] = useStyle$7(inputPrefixCls);
+        const [wrapSSR, hashId] = useStyle$9(inputPrefixCls);
         const cls = computed(() => {
           const pre = prefixCls.value;
           return {
@@ -36850,7 +37419,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         };
       }
     });
-    var __rest$2 = function(s2, e2) {
+    var __rest$4 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -36938,7 +37507,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             loading,
             addonAfter = (_a = slots.addonAfter) === null || _a === void 0 ? void 0 : _a.call(slots),
             suffix = (_b = slots.suffix) === null || _b === void 0 ? void 0 : _b.call(slots)
-          } = props2, restProps = __rest$2(props2, ["disabled", "loading", "addonAfter", "suffix"]);
+          } = props2, restProps = __rest$4(props2, ["disabled", "loading", "addonAfter", "suffix"]);
           let {
             enterButton = (_d = (_c = slots.enterButton) === null || _c === void 0 ? void 0 : _c.call(slots)) !== null && _d !== void 0 ? _d : false
           } = props2;
@@ -37423,7 +37992,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           size: size2,
           direction
         } = useConfigInject("input", props2);
-        const [wrapSSR, hashId] = useStyle$7(prefixCls);
+        const [wrapSSR, hashId] = useStyle$9(prefixCls);
         const disabled = useInjectDisabled();
         const showCount = computed(() => {
           return props2.showCount === "" || props2.showCount || false;
@@ -37625,7 +38194,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
     });
     var EyeOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M942.2 486.2C847.4 286.5 704.1 186 512 186c-192.2 0-335.4 100.5-430.2 300.3a60.3 60.3 0 000 51.5C176.6 737.5 319.9 838 512 838c192.2 0 335.4-100.5 430.2-300.3 7.7-16.2 7.7-35 0-51.5zM512 766c-161.3 0-279.4-81.8-362.7-254C232.6 339.8 350.7 258 512 258c161.3 0 279.4 81.8 362.7 254C791.5 684.2 673.4 766 512 766zm-4-430c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm0 288c-61.9 0-112-50.1-112-112s50.1-112 112-112 112 50.1 112 112-50.1 112-112 112z" } }] }, "name": "eye", "theme": "outlined" };
-    function _objectSpread$9(target) {
+    function _objectSpread$b(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -37635,12 +38204,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$9(target, key2, source[key2]);
+          _defineProperty$b(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$9(obj, key2, value) {
+    function _defineProperty$b(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -37649,15 +38218,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var EyeOutlined = function EyeOutlined2(props2, context) {
-      var p2 = _objectSpread$9({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$9({}, p2, {
+      var p2 = _objectSpread$b({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$b({}, p2, {
         "icon": EyeOutlined$1
       }), null);
     };
     EyeOutlined.displayName = "EyeOutlined";
     EyeOutlined.inheritAttrs = false;
     var EyeInvisibleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M942.2 486.2Q889.47 375.11 816.7 305l-50.88 50.88C807.31 395.53 843.45 447.4 874.7 512 791.5 684.2 673.4 766 512 766q-72.67 0-133.87-22.38L323 798.75Q408 838 512 838q288.3 0 430.2-300.3a60.29 60.29 0 000-51.5zm-63.57-320.64L836 122.88a8 8 0 00-11.32 0L715.31 232.2Q624.86 186 512 186q-288.3 0-430.2 300.3a60.3 60.3 0 000 51.5q56.69 119.4 136.5 191.41L112.48 835a8 8 0 000 11.31L155.17 889a8 8 0 0011.31 0l712.15-712.12a8 8 0 000-11.32zM149.3 512C232.6 339.8 350.7 258 512 258c54.54 0 104.13 9.36 149.12 28.39l-70.3 70.3a176 176 0 00-238.13 238.13l-83.42 83.42C223.1 637.49 183.3 582.28 149.3 512zm246.7 0a112.11 112.11 0 01146.2-106.69L401.31 546.2A112 112 0 01396 512z" } }, { "tag": "path", "attrs": { "d": "M508 624c-3.46 0-6.87-.16-10.25-.47l-52.82 52.82a176.09 176.09 0 00227.42-227.42l-52.82 52.82c.31 3.38.47 6.79.47 10.25a111.94 111.94 0 01-112 112z" } }] }, "name": "eye-invisible", "theme": "outlined" };
-    function _objectSpread$8(target) {
+    function _objectSpread$a(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
         var ownKeys2 = Object.keys(source);
@@ -37667,12 +38236,12 @@ summary tabindex target title type usemap value width wmode wrap`;
           }));
         }
         ownKeys2.forEach(function(key2) {
-          _defineProperty$8(target, key2, source[key2]);
+          _defineProperty$a(target, key2, source[key2]);
         });
       }
       return target;
     }
-    function _defineProperty$8(obj, key2, value) {
+    function _defineProperty$a(obj, key2, value) {
       if (key2 in obj) {
         Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
       } else {
@@ -37681,14 +38250,14 @@ summary tabindex target title type usemap value width wmode wrap`;
       return obj;
     }
     var EyeInvisibleOutlined = function EyeInvisibleOutlined2(props2, context) {
-      var p2 = _objectSpread$8({}, props2, context.attrs);
-      return createVNode(Icon, _objectSpread$8({}, p2, {
+      var p2 = _objectSpread$a({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$a({}, p2, {
         "icon": EyeInvisibleOutlined$1
       }), null);
     };
     EyeInvisibleOutlined.displayName = "EyeInvisibleOutlined";
     EyeInvisibleOutlined.inheritAttrs = false;
-    var __rest$1 = function(s2, e2) {
+    var __rest$3 = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
       if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
@@ -37790,7 +38359,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           const {
             size: size2,
             visibilityToggle
-          } = props2, restProps = __rest$1(props2, ["size", "visibilityToggle"]);
+          } = props2, restProps = __rest$3(props2, ["size", "visibilityToggle"]);
           const suffixIcon = visibilityToggle && getIcon(prefixCls.value);
           const inputClassName = classNames(prefixCls.value, attrs.class, {
             [`${prefixCls.value}-${size2}`]: !!size2
@@ -38704,7 +39273,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         }
       };
     };
-    const useStyle = genComponentStyleHook("Modal", (token2) => {
+    const useStyle$1 = genComponentStyleHook("Modal", (token2) => {
       const headerPaddingVertical = token2.padding;
       const headerFontSize = token2.fontSizeHeading5;
       const headerLineHeight = token2.lineHeightHeading5;
@@ -38734,6 +39303,1411 @@ summary tabindex target title type usemap value width wmode wrap`;
       });
       return [genModalStyle(modalToken), genModalConfirmStyle(modalToken), genRTLStyle(modalToken), genModalMaskStyle(modalToken), token2.wireframe && genWireframeStyle(modalToken), initZoomMotion(modalToken, "zoom")];
     });
+    var UpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M890.5 755.3L537.9 269.2c-12.8-17.6-39-17.6-51.7 0L133.5 755.3A8 8 0 00140 768h75c5.1 0 9.9-2.5 12.9-6.6L512 369.8l284.1 391.6c3 4.1 7.8 6.6 12.9 6.6h75c6.5 0 10.3-7.4 6.5-12.7z" } }] }, "name": "up", "theme": "outlined" };
+    function _objectSpread$9(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$9(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$9(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var UpOutlined = function UpOutlined2(props2, context) {
+      var p2 = _objectSpread$9({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$9({}, p2, {
+        "icon": UpOutlined$1
+      }), null);
+    };
+    UpOutlined.displayName = "UpOutlined";
+    UpOutlined.inheritAttrs = false;
+    function supportBigInt() {
+      return typeof BigInt === "function";
+    }
+    function trimNumber(numStr) {
+      let str = numStr.trim();
+      let negative = str.startsWith("-");
+      if (negative) {
+        str = str.slice(1);
+      }
+      str = str.replace(/(\.\d*[^0])0*$/, "$1").replace(/\.0*$/, "").replace(/^0+/, "");
+      if (str.startsWith(".")) {
+        str = `0${str}`;
+      }
+      const trimStr = str || "0";
+      const splitNumber = trimStr.split(".");
+      const integerStr = splitNumber[0] || "0";
+      const decimalStr = splitNumber[1] || "0";
+      if (integerStr === "0" && decimalStr === "0") {
+        negative = false;
+      }
+      const negativeStr = negative ? "-" : "";
+      return {
+        negative,
+        negativeStr,
+        trimStr,
+        integerStr,
+        decimalStr,
+        fullStr: `${negativeStr}${trimStr}`
+      };
+    }
+    function isE(number) {
+      const str = String(number);
+      return !Number.isNaN(Number(str)) && str.includes("e");
+    }
+    function getNumberPrecision(number) {
+      const numStr = String(number);
+      if (isE(number)) {
+        let precision = Number(numStr.slice(numStr.indexOf("e-") + 2));
+        const decimalMatch = numStr.match(/\.(\d+)/);
+        if (decimalMatch === null || decimalMatch === void 0 ? void 0 : decimalMatch[1]) {
+          precision += decimalMatch[1].length;
+        }
+        return precision;
+      }
+      return numStr.includes(".") && validateNumber(numStr) ? numStr.length - numStr.indexOf(".") - 1 : 0;
+    }
+    function num2str(number) {
+      let numStr = String(number);
+      if (isE(number)) {
+        if (number > Number.MAX_SAFE_INTEGER) {
+          return String(supportBigInt() ? BigInt(number).toString() : Number.MAX_SAFE_INTEGER);
+        }
+        if (number < Number.MIN_SAFE_INTEGER) {
+          return String(supportBigInt() ? BigInt(number).toString() : Number.MIN_SAFE_INTEGER);
+        }
+        numStr = number.toFixed(getNumberPrecision(numStr));
+      }
+      return trimNumber(numStr).fullStr;
+    }
+    function validateNumber(num) {
+      if (typeof num === "number") {
+        return !Number.isNaN(num);
+      }
+      if (!num) {
+        return false;
+      }
+      return (
+        // Normal type: 11.28
+        /^\s*-?\d+(\.\d+)?\s*$/.test(num) || // Pre-number: 1.
+        /^\s*-?\d+\.\s*$/.test(num) || // Post-number: .1
+        /^\s*-?\.\d+\s*$/.test(num)
+      );
+    }
+    function isEmpty(value) {
+      return !value && value !== 0 && !Number.isNaN(value) || !String(value).trim();
+    }
+    class NumberDecimal {
+      constructor(value) {
+        this.origin = "";
+        if (isEmpty(value)) {
+          this.empty = true;
+          return;
+        }
+        this.origin = String(value);
+        this.number = Number(value);
+      }
+      negate() {
+        return new NumberDecimal(-this.toNumber());
+      }
+      add(value) {
+        if (this.isInvalidate()) {
+          return new NumberDecimal(value);
+        }
+        const target = Number(value);
+        if (Number.isNaN(target)) {
+          return this;
+        }
+        const number = this.number + target;
+        if (number > Number.MAX_SAFE_INTEGER) {
+          return new NumberDecimal(Number.MAX_SAFE_INTEGER);
+        }
+        if (number < Number.MIN_SAFE_INTEGER) {
+          return new NumberDecimal(Number.MIN_SAFE_INTEGER);
+        }
+        const maxPrecision = Math.max(getNumberPrecision(this.number), getNumberPrecision(target));
+        return new NumberDecimal(number.toFixed(maxPrecision));
+      }
+      isEmpty() {
+        return this.empty;
+      }
+      isNaN() {
+        return Number.isNaN(this.number);
+      }
+      isInvalidate() {
+        return this.isEmpty() || this.isNaN();
+      }
+      equals(target) {
+        return this.toNumber() === (target === null || target === void 0 ? void 0 : target.toNumber());
+      }
+      lessEquals(target) {
+        return this.add(target.negate().toString()).toNumber() <= 0;
+      }
+      toNumber() {
+        return this.number;
+      }
+      toString() {
+        let safe = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : true;
+        if (!safe) {
+          return this.origin;
+        }
+        if (this.isInvalidate()) {
+          return "";
+        }
+        return num2str(this.number);
+      }
+    }
+    class BigIntDecimal {
+      constructor(value) {
+        this.origin = "";
+        if (isEmpty(value)) {
+          this.empty = true;
+          return;
+        }
+        this.origin = String(value);
+        if (value === "-" || Number.isNaN(value)) {
+          this.nan = true;
+          return;
+        }
+        let mergedValue = value;
+        if (isE(mergedValue)) {
+          mergedValue = Number(mergedValue);
+        }
+        mergedValue = typeof mergedValue === "string" ? mergedValue : num2str(mergedValue);
+        if (validateNumber(mergedValue)) {
+          const trimRet = trimNumber(mergedValue);
+          this.negative = trimRet.negative;
+          const numbers = trimRet.trimStr.split(".");
+          this.integer = BigInt(numbers[0]);
+          const decimalStr = numbers[1] || "0";
+          this.decimal = BigInt(decimalStr);
+          this.decimalLen = decimalStr.length;
+        } else {
+          this.nan = true;
+        }
+      }
+      getMark() {
+        return this.negative ? "-" : "";
+      }
+      getIntegerStr() {
+        return this.integer.toString();
+      }
+      getDecimalStr() {
+        return this.decimal.toString().padStart(this.decimalLen, "0");
+      }
+      /**
+       * Align BigIntDecimal with same decimal length. e.g. 12.3 + 5 = 1230000
+       * This is used for add function only.
+       */
+      alignDecimal(decimalLength) {
+        const str = `${this.getMark()}${this.getIntegerStr()}${this.getDecimalStr().padEnd(decimalLength, "0")}`;
+        return BigInt(str);
+      }
+      negate() {
+        const clone = new BigIntDecimal(this.toString());
+        clone.negative = !clone.negative;
+        return clone;
+      }
+      add(value) {
+        if (this.isInvalidate()) {
+          return new BigIntDecimal(value);
+        }
+        const offset2 = new BigIntDecimal(value);
+        if (offset2.isInvalidate()) {
+          return this;
+        }
+        const maxDecimalLength = Math.max(this.getDecimalStr().length, offset2.getDecimalStr().length);
+        const myAlignedDecimal = this.alignDecimal(maxDecimalLength);
+        const offsetAlignedDecimal = offset2.alignDecimal(maxDecimalLength);
+        const valueStr = (myAlignedDecimal + offsetAlignedDecimal).toString();
+        const {
+          negativeStr,
+          trimStr
+        } = trimNumber(valueStr);
+        const hydrateValueStr = `${negativeStr}${trimStr.padStart(maxDecimalLength + 1, "0")}`;
+        return new BigIntDecimal(`${hydrateValueStr.slice(0, -maxDecimalLength)}.${hydrateValueStr.slice(-maxDecimalLength)}`);
+      }
+      isEmpty() {
+        return this.empty;
+      }
+      isNaN() {
+        return this.nan;
+      }
+      isInvalidate() {
+        return this.isEmpty() || this.isNaN();
+      }
+      equals(target) {
+        return this.toString() === (target === null || target === void 0 ? void 0 : target.toString());
+      }
+      lessEquals(target) {
+        return this.add(target.negate().toString()).toNumber() <= 0;
+      }
+      toNumber() {
+        if (this.isNaN()) {
+          return NaN;
+        }
+        return Number(this.toString());
+      }
+      toString() {
+        let safe = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : true;
+        if (!safe) {
+          return this.origin;
+        }
+        if (this.isInvalidate()) {
+          return "";
+        }
+        return trimNumber(`${this.getMark()}${this.getIntegerStr()}.${this.getDecimalStr()}`).fullStr;
+      }
+    }
+    function getMiniDecimal(value) {
+      if (supportBigInt()) {
+        return new BigIntDecimal(value);
+      }
+      return new NumberDecimal(value);
+    }
+    function toFixed(numStr, separatorStr, precision) {
+      let cutOnly = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : false;
+      if (numStr === "") {
+        return "";
+      }
+      const {
+        negativeStr,
+        integerStr,
+        decimalStr
+      } = trimNumber(numStr);
+      const precisionDecimalStr = `${separatorStr}${decimalStr}`;
+      const numberWithoutDecimal = `${negativeStr}${integerStr}`;
+      if (precision >= 0) {
+        const advancedNum = Number(decimalStr[precision]);
+        if (advancedNum >= 5 && !cutOnly) {
+          const advancedDecimal = getMiniDecimal(numStr).add(`${negativeStr}0.${"0".repeat(precision)}${10 - advancedNum}`);
+          return toFixed(advancedDecimal.toString(), separatorStr, precision, cutOnly);
+        }
+        if (precision === 0) {
+          return numberWithoutDecimal;
+        }
+        return `${numberWithoutDecimal}${separatorStr}${decimalStr.padEnd(precision, "0").slice(0, precision)}`;
+      }
+      if (precisionDecimalStr === ".0") {
+        return numberWithoutDecimal;
+      }
+      return `${numberWithoutDecimal}${precisionDecimalStr}`;
+    }
+    const STEP_INTERVAL = 200;
+    const STEP_DELAY = 600;
+    const StepHandler = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "StepHandler",
+      inheritAttrs: false,
+      props: {
+        prefixCls: String,
+        upDisabled: Boolean,
+        downDisabled: Boolean,
+        onStep: functionType()
+      },
+      slots: Object,
+      setup(props2, _ref) {
+        let {
+          slots,
+          emit: emit2
+        } = _ref;
+        const stepTimeoutRef = ref();
+        const onStepMouseDown = (e2, up) => {
+          e2.preventDefault();
+          emit2("step", up);
+          function loopStep() {
+            emit2("step", up);
+            stepTimeoutRef.value = setTimeout(loopStep, STEP_INTERVAL);
+          }
+          stepTimeoutRef.value = setTimeout(loopStep, STEP_DELAY);
+        };
+        const onStopStep = () => {
+          clearTimeout(stepTimeoutRef.value);
+        };
+        onBeforeUnmount(() => {
+          onStopStep();
+        });
+        return () => {
+          if (isMobile()) {
+            return null;
+          }
+          const {
+            prefixCls,
+            upDisabled,
+            downDisabled
+          } = props2;
+          const handlerClassName = `${prefixCls}-handler`;
+          const upClassName = classNames(handlerClassName, `${handlerClassName}-up`, {
+            [`${handlerClassName}-up-disabled`]: upDisabled
+          });
+          const downClassName = classNames(handlerClassName, `${handlerClassName}-down`, {
+            [`${handlerClassName}-down-disabled`]: downDisabled
+          });
+          const sharedHandlerProps = {
+            unselectable: "on",
+            role: "button",
+            onMouseup: onStopStep,
+            onMouseleave: onStopStep
+          };
+          const {
+            upNode,
+            downNode
+          } = slots;
+          return createVNode("div", {
+            "class": `${handlerClassName}-wrap`
+          }, [createVNode("span", _objectSpread2$1(_objectSpread2$1({}, sharedHandlerProps), {}, {
+            "onMousedown": (e2) => {
+              onStepMouseDown(e2, true);
+            },
+            "aria-label": "Increase Value",
+            "aria-disabled": upDisabled,
+            "class": upClassName
+          }), [(upNode === null || upNode === void 0 ? void 0 : upNode()) || createVNode("span", {
+            "unselectable": "on",
+            "class": `${prefixCls}-handler-up-inner`
+          }, null)]), createVNode("span", _objectSpread2$1(_objectSpread2$1({}, sharedHandlerProps), {}, {
+            "onMousedown": (e2) => {
+              onStepMouseDown(e2, false);
+            },
+            "aria-label": "Decrease Value",
+            "aria-disabled": downDisabled,
+            "class": downClassName
+          }), [(downNode === null || downNode === void 0 ? void 0 : downNode()) || createVNode("span", {
+            "unselectable": "on",
+            "class": `${prefixCls}-handler-down-inner`
+          }, null)])]);
+        };
+      }
+    });
+    function useCursor(inputRef, focused) {
+      const selectionRef = ref(null);
+      function recordCursor() {
+        try {
+          const {
+            selectionStart: start,
+            selectionEnd: end,
+            value
+          } = inputRef.value;
+          const beforeTxt = value.substring(0, start);
+          const afterTxt = value.substring(end);
+          selectionRef.value = {
+            start,
+            end,
+            value,
+            beforeTxt,
+            afterTxt
+          };
+        } catch (e2) {
+        }
+      }
+      function restoreCursor() {
+        if (inputRef.value && selectionRef.value && focused.value) {
+          try {
+            const {
+              value
+            } = inputRef.value;
+            const {
+              beforeTxt,
+              afterTxt,
+              start
+            } = selectionRef.value;
+            let startPos = value.length;
+            if (value.endsWith(afterTxt)) {
+              startPos = value.length - selectionRef.value.afterTxt.length;
+            } else if (value.startsWith(beforeTxt)) {
+              startPos = beforeTxt.length;
+            } else {
+              const beforeLastChar = beforeTxt[start - 1];
+              const newIndex = value.indexOf(beforeLastChar, start - 1);
+              if (newIndex !== -1) {
+                startPos = newIndex + 1;
+              }
+            }
+            inputRef.value.setSelectionRange(startPos, startPos);
+          } catch (e2) {
+            warning$3(false, `Something warning of cursor restore. Please fire issue about this: ${e2.message}`);
+          }
+        }
+      }
+      return [recordCursor, restoreCursor];
+    }
+    const useFrame = () => {
+      const idRef = shallowRef(0);
+      const cleanUp = () => {
+        wrapperRaf.cancel(idRef.value);
+      };
+      onBeforeUnmount(() => {
+        cleanUp();
+      });
+      return (callback) => {
+        cleanUp();
+        idRef.value = wrapperRaf(() => {
+          callback();
+        });
+      };
+    };
+    var __rest$2 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const getDecimalValue = (stringMode, decimalValue) => {
+      if (stringMode || decimalValue.isEmpty()) {
+        return decimalValue.toString();
+      }
+      return decimalValue.toNumber();
+    };
+    const getDecimalIfValidate = (value) => {
+      const decimal = getMiniDecimal(value);
+      return decimal.isInvalidate() ? null : decimal;
+    };
+    const inputNumberProps$1 = () => ({
+      /** value will show as string */
+      stringMode: booleanType(),
+      defaultValue: someType([String, Number]),
+      value: someType([String, Number]),
+      prefixCls: stringType(),
+      min: someType([String, Number]),
+      max: someType([String, Number]),
+      step: someType([String, Number], 1),
+      tabindex: Number,
+      controls: booleanType(true),
+      readonly: booleanType(),
+      disabled: booleanType(),
+      autofocus: booleanType(),
+      keyboard: booleanType(true),
+      /** Parse display value to validate number */
+      parser: functionType(),
+      /** Transform `value` to display value show in input */
+      formatter: functionType(),
+      /** Syntactic sugar of `formatter`. Config precision of display. */
+      precision: Number,
+      /** Syntactic sugar of `formatter`. Config decimal separator of display. */
+      decimalSeparator: String,
+      onInput: functionType(),
+      onChange: functionType(),
+      onPressEnter: functionType(),
+      onStep: functionType(),
+      onBlur: functionType(),
+      onFocus: functionType()
+    });
+    const VcInputNumber = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "InnerInputNumber",
+      inheritAttrs: false,
+      props: _extends$1(_extends$1({}, inputNumberProps$1()), {
+        lazy: Boolean
+      }),
+      slots: Object,
+      setup(props2, _ref) {
+        let {
+          attrs,
+          slots,
+          emit: emit2,
+          expose
+        } = _ref;
+        const inputRef = shallowRef();
+        const focus = shallowRef(false);
+        const userTypingRef = shallowRef(false);
+        const compositionRef = shallowRef(false);
+        const decimalValue = shallowRef(getMiniDecimal(props2.value));
+        function setUncontrolledDecimalValue(newDecimal) {
+          if (props2.value === void 0) {
+            decimalValue.value = newDecimal;
+          }
+        }
+        const getPrecision = (numStr, userTyping) => {
+          if (userTyping) {
+            return void 0;
+          }
+          if (props2.precision >= 0) {
+            return props2.precision;
+          }
+          return Math.max(getNumberPrecision(numStr), getNumberPrecision(props2.step));
+        };
+        const mergedParser = (num) => {
+          const numStr = String(num);
+          if (props2.parser) {
+            return props2.parser(numStr);
+          }
+          let parsedStr = numStr;
+          if (props2.decimalSeparator) {
+            parsedStr = parsedStr.replace(props2.decimalSeparator, ".");
+          }
+          return parsedStr.replace(/[^\w.-]+/g, "");
+        };
+        const inputValue = shallowRef("");
+        const mergedFormatter = (number, userTyping) => {
+          if (props2.formatter) {
+            return props2.formatter(number, {
+              userTyping,
+              input: String(inputValue.value)
+            });
+          }
+          let str = typeof number === "number" ? num2str(number) : number;
+          if (!userTyping) {
+            const mergedPrecision = getPrecision(str, userTyping);
+            if (validateNumber(str) && (props2.decimalSeparator || mergedPrecision >= 0)) {
+              const separatorStr = props2.decimalSeparator || ".";
+              str = toFixed(str, separatorStr, mergedPrecision);
+            }
+          }
+          return str;
+        };
+        const initValue = (() => {
+          const initValue2 = props2.value;
+          if (decimalValue.value.isInvalidate() && ["string", "number"].includes(typeof initValue2)) {
+            return Number.isNaN(initValue2) ? "" : initValue2;
+          }
+          return mergedFormatter(decimalValue.value.toString(), false);
+        })();
+        inputValue.value = initValue;
+        function setInputValue(newValue, userTyping) {
+          inputValue.value = mergedFormatter(
+            // Invalidate number is sometime passed by external control, we should let it go
+            // Otherwise is controlled by internal interactive logic which check by userTyping
+            // You can ref 'show limited value when input is not focused' test for more info.
+            newValue.isInvalidate() ? newValue.toString(false) : newValue.toString(!userTyping),
+            userTyping
+          );
+        }
+        const maxDecimal = computed(() => getDecimalIfValidate(props2.max));
+        const minDecimal = computed(() => getDecimalIfValidate(props2.min));
+        const upDisabled = computed(() => {
+          if (!maxDecimal.value || !decimalValue.value || decimalValue.value.isInvalidate()) {
+            return false;
+          }
+          return maxDecimal.value.lessEquals(decimalValue.value);
+        });
+        const downDisabled = computed(() => {
+          if (!minDecimal.value || !decimalValue.value || decimalValue.value.isInvalidate()) {
+            return false;
+          }
+          return decimalValue.value.lessEquals(minDecimal.value);
+        });
+        const [recordCursor, restoreCursor] = useCursor(inputRef, focus);
+        const getRangeValue = (target) => {
+          if (maxDecimal.value && !target.lessEquals(maxDecimal.value)) {
+            return maxDecimal.value;
+          }
+          if (minDecimal.value && !minDecimal.value.lessEquals(target)) {
+            return minDecimal.value;
+          }
+          return null;
+        };
+        const isInRange = (target) => !getRangeValue(target);
+        const triggerValueUpdate = (newValue, userTyping) => {
+          var _a;
+          let updateValue = newValue;
+          let isRangeValidate = isInRange(updateValue) || updateValue.isEmpty();
+          if (!updateValue.isEmpty() && !userTyping) {
+            updateValue = getRangeValue(updateValue) || updateValue;
+            isRangeValidate = true;
+          }
+          if (!props2.readonly && !props2.disabled && isRangeValidate) {
+            const numStr = updateValue.toString();
+            const mergedPrecision = getPrecision(numStr, userTyping);
+            if (mergedPrecision >= 0) {
+              updateValue = getMiniDecimal(toFixed(numStr, ".", mergedPrecision));
+            }
+            if (!updateValue.equals(decimalValue.value)) {
+              setUncontrolledDecimalValue(updateValue);
+              (_a = props2.onChange) === null || _a === void 0 ? void 0 : _a.call(props2, updateValue.isEmpty() ? null : getDecimalValue(props2.stringMode, updateValue));
+              if (props2.value === void 0) {
+                setInputValue(updateValue, userTyping);
+              }
+            }
+            return updateValue;
+          }
+          return decimalValue.value;
+        };
+        const onNextPromise = useFrame();
+        const collectInputValue = (inputStr) => {
+          var _a;
+          recordCursor();
+          inputValue.value = inputStr;
+          if (!compositionRef.value) {
+            const finalValue = mergedParser(inputStr);
+            const finalDecimal = getMiniDecimal(finalValue);
+            if (!finalDecimal.isNaN()) {
+              triggerValueUpdate(finalDecimal, true);
+            }
+          }
+          (_a = props2.onInput) === null || _a === void 0 ? void 0 : _a.call(props2, inputStr);
+          onNextPromise(() => {
+            let nextInputStr = inputStr;
+            if (!props2.parser) {
+              nextInputStr = inputStr.replace(/。/g, ".");
+            }
+            if (nextInputStr !== inputStr) {
+              collectInputValue(nextInputStr);
+            }
+          });
+        };
+        const onCompositionStart = () => {
+          compositionRef.value = true;
+        };
+        const onCompositionEnd = () => {
+          compositionRef.value = false;
+          collectInputValue(inputRef.value.value);
+        };
+        const onInternalInput = (e2) => {
+          collectInputValue(e2.target.value);
+        };
+        const onInternalStep = (up) => {
+          var _a, _b;
+          if (up && upDisabled.value || !up && downDisabled.value) {
+            return;
+          }
+          userTypingRef.value = false;
+          let stepDecimal = getMiniDecimal(props2.step);
+          if (!up) {
+            stepDecimal = stepDecimal.negate();
+          }
+          const target = (decimalValue.value || getMiniDecimal(0)).add(stepDecimal.toString());
+          const updatedValue = triggerValueUpdate(target, false);
+          (_a = props2.onStep) === null || _a === void 0 ? void 0 : _a.call(props2, getDecimalValue(props2.stringMode, updatedValue), {
+            offset: props2.step,
+            type: up ? "up" : "down"
+          });
+          (_b = inputRef.value) === null || _b === void 0 ? void 0 : _b.focus();
+        };
+        const flushInputValue = (userTyping) => {
+          const parsedValue = getMiniDecimal(mergedParser(inputValue.value));
+          let formatValue = parsedValue;
+          if (!parsedValue.isNaN()) {
+            formatValue = triggerValueUpdate(parsedValue, userTyping);
+          } else {
+            formatValue = decimalValue.value;
+          }
+          if (props2.value !== void 0) {
+            setInputValue(decimalValue.value, false);
+          } else if (!formatValue.isNaN()) {
+            setInputValue(formatValue, false);
+          }
+        };
+        const onKeyDown = (event) => {
+          var _a;
+          const {
+            which
+          } = event;
+          userTypingRef.value = true;
+          if (which === KeyCode.ENTER) {
+            if (!compositionRef.value) {
+              userTypingRef.value = false;
+            }
+            flushInputValue(false);
+            (_a = props2.onPressEnter) === null || _a === void 0 ? void 0 : _a.call(props2, event);
+          }
+          if (props2.keyboard === false) {
+            return;
+          }
+          if (!compositionRef.value && [KeyCode.UP, KeyCode.DOWN].includes(which)) {
+            onInternalStep(KeyCode.UP === which);
+            event.preventDefault();
+          }
+        };
+        const onKeyUp = () => {
+          userTypingRef.value = false;
+        };
+        const onBlur = (e2) => {
+          flushInputValue(false);
+          focus.value = false;
+          userTypingRef.value = false;
+          emit2("blur", e2);
+        };
+        watch(() => props2.precision, () => {
+          if (!decimalValue.value.isInvalidate()) {
+            setInputValue(decimalValue.value, false);
+          }
+        }, {
+          flush: "post"
+        });
+        watch(() => props2.value, () => {
+          const newValue = getMiniDecimal(props2.value);
+          decimalValue.value = newValue;
+          const currentParsedValue = getMiniDecimal(mergedParser(inputValue.value));
+          if (!newValue.equals(currentParsedValue) || !userTypingRef.value || props2.formatter) {
+            setInputValue(newValue, userTypingRef.value);
+          }
+        }, {
+          flush: "post"
+        });
+        watch(inputValue, () => {
+          if (props2.formatter) {
+            restoreCursor();
+          }
+        }, {
+          flush: "post"
+        });
+        watch(() => props2.disabled, (val) => {
+          if (val) {
+            focus.value = false;
+          }
+        });
+        expose({
+          focus: () => {
+            var _a;
+            (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.focus();
+          },
+          blur: () => {
+            var _a;
+            (_a = inputRef.value) === null || _a === void 0 ? void 0 : _a.blur();
+          }
+        });
+        return () => {
+          const _a = _extends$1(_extends$1({}, attrs), props2), {
+            prefixCls = "rc-input-number",
+            min,
+            max,
+            step = 1,
+            defaultValue,
+            value,
+            disabled,
+            readonly: readonly2,
+            keyboard,
+            controls = true,
+            autofocus,
+            stringMode,
+            parser,
+            formatter,
+            precision,
+            decimalSeparator,
+            onChange,
+            onInput,
+            onPressEnter,
+            onStep,
+            lazy,
+            class: className,
+            style
+          } = _a, inputProps2 = __rest$2(_a, ["prefixCls", "min", "max", "step", "defaultValue", "value", "disabled", "readonly", "keyboard", "controls", "autofocus", "stringMode", "parser", "formatter", "precision", "decimalSeparator", "onChange", "onInput", "onPressEnter", "onStep", "lazy", "class", "style"]);
+          const {
+            upHandler,
+            downHandler
+          } = slots;
+          const inputClassName = `${prefixCls}-input`;
+          const eventProps = {};
+          if (lazy) {
+            eventProps.onChange = onInternalInput;
+          } else {
+            eventProps.onInput = onInternalInput;
+          }
+          return createVNode("div", {
+            "class": classNames(prefixCls, className, {
+              [`${prefixCls}-focused`]: focus.value,
+              [`${prefixCls}-disabled`]: disabled,
+              [`${prefixCls}-readonly`]: readonly2,
+              [`${prefixCls}-not-a-number`]: decimalValue.value.isNaN(),
+              [`${prefixCls}-out-of-range`]: !decimalValue.value.isInvalidate() && !isInRange(decimalValue.value)
+            }),
+            "style": style,
+            "onKeydown": onKeyDown,
+            "onKeyup": onKeyUp
+          }, [controls && createVNode(StepHandler, {
+            "prefixCls": prefixCls,
+            "upDisabled": upDisabled.value,
+            "downDisabled": downDisabled.value,
+            "onStep": onInternalStep
+          }, {
+            upNode: upHandler,
+            downNode: downHandler
+          }), createVNode("div", {
+            "class": `${inputClassName}-wrap`
+          }, [createVNode("input", _objectSpread2$1(_objectSpread2$1(_objectSpread2$1({
+            "autofocus": autofocus,
+            "autocomplete": "off",
+            "role": "spinbutton",
+            "aria-valuemin": min,
+            "aria-valuemax": max,
+            "aria-valuenow": decimalValue.value.isInvalidate() ? null : decimalValue.value.toString(),
+            "step": step
+          }, inputProps2), {}, {
+            "ref": inputRef,
+            "class": inputClassName,
+            "value": inputValue.value,
+            "disabled": disabled,
+            "readonly": readonly2,
+            "onFocus": (e2) => {
+              focus.value = true;
+              emit2("focus", e2);
+            }
+          }, eventProps), {}, {
+            "onBlur": onBlur,
+            "onCompositionstart": onCompositionStart,
+            "onCompositionend": onCompositionEnd
+          }), null)])]);
+        };
+      }
+    });
+    function isValidValue(val) {
+      return val !== void 0 && val !== null;
+    }
+    const genInputNumberStyles = (token2) => {
+      const {
+        componentCls,
+        lineWidth,
+        lineType,
+        colorBorder,
+        borderRadius,
+        fontSizeLG,
+        controlHeightLG,
+        controlHeightSM,
+        colorError,
+        inputPaddingHorizontalSM,
+        colorTextDescription,
+        motionDurationMid,
+        colorPrimary,
+        controlHeight,
+        inputPaddingHorizontal,
+        colorBgContainer,
+        colorTextDisabled,
+        borderRadiusSM,
+        borderRadiusLG,
+        controlWidth,
+        handleVisible
+      } = token2;
+      return [
+        {
+          [componentCls]: _extends$1(_extends$1(_extends$1(_extends$1({}, resetComponent(token2)), genBasicInputStyle(token2)), genStatusStyle(token2, componentCls)), {
+            display: "inline-block",
+            width: controlWidth,
+            margin: 0,
+            padding: 0,
+            border: `${lineWidth}px ${lineType} ${colorBorder}`,
+            borderRadius,
+            "&-rtl": {
+              direction: "rtl",
+              [`${componentCls}-input`]: {
+                direction: "rtl"
+              }
+            },
+            "&-lg": {
+              padding: 0,
+              fontSize: fontSizeLG,
+              borderRadius: borderRadiusLG,
+              [`input${componentCls}-input`]: {
+                height: controlHeightLG - 2 * lineWidth
+              }
+            },
+            "&-sm": {
+              padding: 0,
+              borderRadius: borderRadiusSM,
+              [`input${componentCls}-input`]: {
+                height: controlHeightSM - 2 * lineWidth,
+                padding: `0 ${inputPaddingHorizontalSM}px`
+              }
+            },
+            "&:hover": _extends$1({}, genHoverStyle(token2)),
+            "&-focused": _extends$1({}, genActiveStyle(token2)),
+            "&-disabled": _extends$1(_extends$1({}, genDisabledStyle(token2)), {
+              [`${componentCls}-input`]: {
+                cursor: "not-allowed"
+              }
+            }),
+            // ===================== Out Of Range =====================
+            "&-out-of-range": {
+              input: {
+                color: colorError
+              }
+            },
+            // Style for input-group: input with label, with button or dropdown...
+            "&-group": _extends$1(_extends$1(_extends$1({}, resetComponent(token2)), genInputGroupStyle(token2)), {
+              "&-wrapper": {
+                display: "inline-block",
+                textAlign: "start",
+                verticalAlign: "top",
+                [`${componentCls}-affix-wrapper`]: {
+                  width: "100%"
+                },
+                // Size
+                "&-lg": {
+                  [`${componentCls}-group-addon`]: {
+                    borderRadius: borderRadiusLG
+                  }
+                },
+                "&-sm": {
+                  [`${componentCls}-group-addon`]: {
+                    borderRadius: borderRadiusSM
+                  }
+                }
+              }
+            }),
+            [componentCls]: {
+              "&-input": _extends$1(_extends$1({
+                width: "100%",
+                height: controlHeight - 2 * lineWidth,
+                padding: `0 ${inputPaddingHorizontal}px`,
+                textAlign: "start",
+                backgroundColor: "transparent",
+                border: 0,
+                borderRadius,
+                outline: 0,
+                transition: `all ${motionDurationMid} linear`,
+                appearance: "textfield",
+                color: token2.colorText,
+                fontSize: "inherit",
+                verticalAlign: "top"
+              }, genPlaceholderStyle(token2.colorTextPlaceholder)), {
+                '&[type="number"]::-webkit-inner-spin-button, &[type="number"]::-webkit-outer-spin-button': {
+                  margin: 0,
+                  /* stylelint-disable-next-line property-no-vendor-prefix */
+                  webkitAppearance: "none",
+                  appearance: "none"
+                }
+              })
+            }
+          })
+        },
+        // Handler
+        {
+          [componentCls]: {
+            [`&:hover ${componentCls}-handler-wrap, &-focused ${componentCls}-handler-wrap`]: {
+              opacity: 1
+            },
+            [`${componentCls}-handler-wrap`]: {
+              position: "absolute",
+              insetBlockStart: 0,
+              insetInlineEnd: 0,
+              width: token2.handleWidth,
+              height: "100%",
+              background: colorBgContainer,
+              borderStartStartRadius: 0,
+              borderStartEndRadius: borderRadius,
+              borderEndEndRadius: borderRadius,
+              borderEndStartRadius: 0,
+              opacity: handleVisible === true ? 1 : 0,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "stretch",
+              transition: `opacity ${motionDurationMid} linear ${motionDurationMid}`,
+              // Fix input number inside Menu makes icon too large
+              // We arise the selector priority by nest selector here
+              // https://github.com/ant-design/ant-design/issues/14367
+              [`${componentCls}-handler`]: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flex: "auto",
+                height: "40%",
+                [`
+              ${componentCls}-handler-up-inner,
+              ${componentCls}-handler-down-inner
+            `]: {
+                  marginInlineEnd: 0,
+                  fontSize: token2.handleFontSize
+                }
+              }
+            },
+            [`${componentCls}-handler`]: {
+              height: "50%",
+              overflow: "hidden",
+              color: colorTextDescription,
+              fontWeight: "bold",
+              lineHeight: 0,
+              textAlign: "center",
+              cursor: "pointer",
+              borderInlineStart: `${lineWidth}px ${lineType} ${colorBorder}`,
+              transition: `all ${motionDurationMid} linear`,
+              "&:active": {
+                background: token2.colorFillAlter
+              },
+              // Hover
+              "&:hover": {
+                height: `60%`,
+                [`
+              ${componentCls}-handler-up-inner,
+              ${componentCls}-handler-down-inner
+            `]: {
+                  color: colorPrimary
+                }
+              },
+              "&-up-inner, &-down-inner": _extends$1(_extends$1({}, resetIcon()), {
+                color: colorTextDescription,
+                transition: `all ${motionDurationMid} linear`,
+                userSelect: "none"
+              })
+            },
+            [`${componentCls}-handler-up`]: {
+              borderStartEndRadius: borderRadius
+            },
+            [`${componentCls}-handler-down`]: {
+              borderBlockStart: `${lineWidth}px ${lineType} ${colorBorder}`,
+              borderEndEndRadius: borderRadius
+            },
+            // Disabled
+            "&-disabled, &-readonly": {
+              [`${componentCls}-handler-wrap`]: {
+                display: "none"
+              }
+            },
+            [`
+          ${componentCls}-handler-up-disabled,
+          ${componentCls}-handler-down-disabled
+        `]: {
+              cursor: "not-allowed"
+            },
+            [`
+          ${componentCls}-handler-up-disabled:hover &-handler-up-inner,
+          ${componentCls}-handler-down-disabled:hover &-handler-down-inner
+        `]: {
+              color: colorTextDisabled
+            }
+          }
+        },
+        // Border-less
+        {
+          [`${componentCls}-borderless`]: {
+            borderColor: "transparent",
+            boxShadow: "none",
+            [`${componentCls}-handler-down`]: {
+              borderBlockStartWidth: 0
+            }
+          }
+        }
+      ];
+    };
+    const genAffixWrapperStyles = (token2) => {
+      const {
+        componentCls,
+        inputPaddingHorizontal,
+        inputAffixPadding,
+        controlWidth,
+        borderRadiusLG,
+        borderRadiusSM
+      } = token2;
+      return {
+        [`${componentCls}-affix-wrapper`]: _extends$1(_extends$1(_extends$1({}, genBasicInputStyle(token2)), genStatusStyle(token2, `${componentCls}-affix-wrapper`)), {
+          // or number handler will cover form status
+          position: "relative",
+          display: "inline-flex",
+          width: controlWidth,
+          padding: 0,
+          paddingInlineStart: inputPaddingHorizontal,
+          "&-lg": {
+            borderRadius: borderRadiusLG
+          },
+          "&-sm": {
+            borderRadius: borderRadiusSM
+          },
+          [`&:not(${componentCls}-affix-wrapper-disabled):hover`]: _extends$1(_extends$1({}, genHoverStyle(token2)), {
+            zIndex: 1
+          }),
+          "&-focused, &:focus": {
+            zIndex: 1
+          },
+          "&-disabled": {
+            [`${componentCls}[disabled]`]: {
+              background: "transparent"
+            }
+          },
+          [`> div${componentCls}`]: {
+            width: "100%",
+            border: "none",
+            outline: "none",
+            [`&${componentCls}-focused`]: {
+              boxShadow: "none !important"
+            }
+          },
+          [`input${componentCls}-input`]: {
+            padding: 0
+          },
+          "&::before": {
+            width: 0,
+            visibility: "hidden",
+            content: '"\\a0"'
+          },
+          [`${componentCls}-handler-wrap`]: {
+            zIndex: 2
+          },
+          [componentCls]: {
+            "&-prefix, &-suffix": {
+              display: "flex",
+              flex: "none",
+              alignItems: "center",
+              pointerEvents: "none"
+            },
+            "&-prefix": {
+              marginInlineEnd: inputAffixPadding
+            },
+            "&-suffix": {
+              position: "absolute",
+              insetBlockStart: 0,
+              insetInlineEnd: 0,
+              zIndex: 1,
+              height: "100%",
+              marginInlineEnd: inputPaddingHorizontal,
+              marginInlineStart: inputAffixPadding
+            }
+          }
+        })
+      };
+    };
+    const useStyle = genComponentStyleHook("InputNumber", (token2) => {
+      const inputNumberToken = initInputToken(token2);
+      return [
+        genInputNumberStyles(inputNumberToken),
+        genAffixWrapperStyles(inputNumberToken),
+        // =====================================================
+        // ==             Space Compact                       ==
+        // =====================================================
+        genCompactItemStyle(inputNumberToken)
+      ];
+    }, (token2) => ({
+      controlWidth: 90,
+      handleWidth: token2.controlHeightSM - token2.lineWidth * 2,
+      handleFontSize: token2.fontSize / 2,
+      handleVisible: "auto"
+    }));
+    var __rest$1 = function(s2, e2) {
+      var t2 = {};
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
+      if (s2 != null && typeof Object.getOwnPropertySymbols === "function") for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+        if (e2.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2])) t2[p2[i2]] = s2[p2[i2]];
+      }
+      return t2;
+    };
+    const baseProps = inputNumberProps$1();
+    const inputNumberProps = () => _extends$1(_extends$1({}, baseProps), {
+      size: stringType(),
+      bordered: booleanType(true),
+      placeholder: String,
+      name: String,
+      id: String,
+      type: String,
+      addonBefore: PropTypes.any,
+      addonAfter: PropTypes.any,
+      prefix: PropTypes.any,
+      "onUpdate:value": baseProps.onChange,
+      valueModifiers: Object,
+      status: stringType()
+    });
+    const InputNumber = /* @__PURE__ */ defineComponent({
+      compatConfig: {
+        MODE: 3
+      },
+      name: "AInputNumber",
+      inheritAttrs: false,
+      props: inputNumberProps(),
+      // emits: ['focus', 'blur', 'change', 'input', 'update:value'],
+      slots: Object,
+      setup(props2, _ref) {
+        let {
+          emit: emit2,
+          expose,
+          attrs,
+          slots
+        } = _ref;
+        var _a;
+        const formItemContext = useInjectFormItemContext();
+        const formItemInputContext = FormItemInputContext.useInject();
+        const mergedStatus = computed(() => getMergedStatus(formItemInputContext.status, props2.status));
+        const {
+          prefixCls,
+          size: size2,
+          direction,
+          disabled
+        } = useConfigInject("input-number", props2);
+        const {
+          compactSize,
+          compactItemClassnames
+        } = useCompactItemContext(prefixCls, direction);
+        const disabledContext = useInjectDisabled();
+        const mergedDisabled = computed(() => {
+          var _a2;
+          return (_a2 = disabled.value) !== null && _a2 !== void 0 ? _a2 : disabledContext.value;
+        });
+        const [wrapSSR, hashId] = useStyle(prefixCls);
+        const mergedSize = computed(() => compactSize.value || size2.value);
+        const mergedValue = shallowRef((_a = props2.value) !== null && _a !== void 0 ? _a : props2.defaultValue);
+        const focused = shallowRef(false);
+        watch(() => props2.value, () => {
+          mergedValue.value = props2.value;
+        });
+        const inputNumberRef = shallowRef(null);
+        const focus = () => {
+          var _a2;
+          (_a2 = inputNumberRef.value) === null || _a2 === void 0 ? void 0 : _a2.focus();
+        };
+        const blur = () => {
+          var _a2;
+          (_a2 = inputNumberRef.value) === null || _a2 === void 0 ? void 0 : _a2.blur();
+        };
+        expose({
+          focus,
+          blur
+        });
+        const handleChange = (val) => {
+          if (props2.value === void 0) {
+            mergedValue.value = val;
+          }
+          emit2("update:value", val);
+          emit2("change", val);
+          formItemContext.onFieldChange();
+        };
+        const handleBlur = (e2) => {
+          focused.value = false;
+          emit2("blur", e2);
+          formItemContext.onFieldBlur();
+        };
+        const handleFocus = (e2) => {
+          focused.value = true;
+          emit2("focus", e2);
+        };
+        return () => {
+          var _a2, _b, _c, _d;
+          const {
+            hasFeedback,
+            isFormItemInput,
+            feedbackIcon
+          } = formItemInputContext;
+          const id = (_a2 = props2.id) !== null && _a2 !== void 0 ? _a2 : formItemContext.id.value;
+          const _e = _extends$1(_extends$1(_extends$1({}, attrs), props2), {
+            id,
+            disabled: mergedDisabled.value
+          }), {
+            class: className,
+            bordered,
+            readonly: readonly2,
+            style,
+            addonBefore = (_b = slots.addonBefore) === null || _b === void 0 ? void 0 : _b.call(slots),
+            addonAfter = (_c = slots.addonAfter) === null || _c === void 0 ? void 0 : _c.call(slots),
+            prefix = (_d = slots.prefix) === null || _d === void 0 ? void 0 : _d.call(slots),
+            valueModifiers = {}
+          } = _e, others = __rest$1(_e, ["class", "bordered", "readonly", "style", "addonBefore", "addonAfter", "prefix", "valueModifiers"]);
+          const preCls = prefixCls.value;
+          const inputNumberClass = classNames({
+            [`${preCls}-lg`]: mergedSize.value === "large",
+            [`${preCls}-sm`]: mergedSize.value === "small",
+            [`${preCls}-rtl`]: direction.value === "rtl",
+            [`${preCls}-readonly`]: readonly2,
+            [`${preCls}-borderless`]: !bordered,
+            [`${preCls}-in-form-item`]: isFormItemInput
+          }, getStatusClassNames(preCls, mergedStatus.value), className, compactItemClassnames.value, hashId.value);
+          let element = createVNode(VcInputNumber, _objectSpread2$1(_objectSpread2$1({}, omit(others, ["size", "defaultValue"])), {}, {
+            "ref": inputNumberRef,
+            "lazy": !!valueModifiers.lazy,
+            "value": mergedValue.value,
+            "class": inputNumberClass,
+            "prefixCls": preCls,
+            "readonly": readonly2,
+            "onChange": handleChange,
+            "onBlur": handleBlur,
+            "onFocus": handleFocus
+          }), {
+            upHandler: slots.upIcon ? () => createVNode("span", {
+              "class": `${preCls}-handler-up-inner`
+            }, [slots.upIcon()]) : () => createVNode(UpOutlined, {
+              "class": `${preCls}-handler-up-inner`
+            }, null),
+            downHandler: slots.downIcon ? () => createVNode("span", {
+              "class": `${preCls}-handler-down-inner`
+            }, [slots.downIcon()]) : () => createVNode(DownOutlined, {
+              "class": `${preCls}-handler-down-inner`
+            }, null)
+          });
+          const hasAddon2 = isValidValue(addonBefore) || isValidValue(addonAfter);
+          const hasPrefix = isValidValue(prefix);
+          if (hasPrefix || hasFeedback) {
+            const affixWrapperCls = classNames(`${preCls}-affix-wrapper`, getStatusClassNames(`${preCls}-affix-wrapper`, mergedStatus.value, hasFeedback), {
+              [`${preCls}-affix-wrapper-focused`]: focused.value,
+              [`${preCls}-affix-wrapper-disabled`]: mergedDisabled.value,
+              [`${preCls}-affix-wrapper-sm`]: mergedSize.value === "small",
+              [`${preCls}-affix-wrapper-lg`]: mergedSize.value === "large",
+              [`${preCls}-affix-wrapper-rtl`]: direction.value === "rtl",
+              [`${preCls}-affix-wrapper-readonly`]: readonly2,
+              [`${preCls}-affix-wrapper-borderless`]: !bordered,
+              // className will go to addon wrapper
+              [`${className}`]: !hasAddon2 && className
+            }, hashId.value);
+            element = createVNode("div", {
+              "class": affixWrapperCls,
+              "style": style,
+              "onClick": focus
+            }, [hasPrefix && createVNode("span", {
+              "class": `${preCls}-prefix`
+            }, [prefix]), element, hasFeedback && createVNode("span", {
+              "class": `${preCls}-suffix`
+            }, [feedbackIcon])]);
+          }
+          if (hasAddon2) {
+            const wrapperClassName = `${preCls}-group`;
+            const addonClassName = `${wrapperClassName}-addon`;
+            const addonBeforeNode = addonBefore ? createVNode("div", {
+              "class": addonClassName
+            }, [addonBefore]) : null;
+            const addonAfterNode = addonAfter ? createVNode("div", {
+              "class": addonClassName
+            }, [addonAfter]) : null;
+            const mergedWrapperClassName = classNames(`${preCls}-wrapper`, wrapperClassName, {
+              [`${wrapperClassName}-rtl`]: direction.value === "rtl"
+            }, hashId.value);
+            const mergedGroupClassName = classNames(`${preCls}-group-wrapper`, {
+              [`${preCls}-group-wrapper-sm`]: mergedSize.value === "small",
+              [`${preCls}-group-wrapper-lg`]: mergedSize.value === "large",
+              [`${preCls}-group-wrapper-rtl`]: direction.value === "rtl"
+            }, getStatusClassNames(`${prefixCls}-group-wrapper`, mergedStatus.value, hasFeedback), className, hashId.value);
+            element = createVNode("div", {
+              "class": mergedGroupClassName,
+              "style": style
+            }, [createVNode("div", {
+              "class": mergedWrapperClassName
+            }, [addonBeforeNode && createVNode(NoCompactStyle, null, {
+              default: () => [createVNode(NoFormStatus, null, {
+                default: () => [addonBeforeNode]
+              })]
+            }), element, addonAfterNode && createVNode(NoCompactStyle, null, {
+              default: () => [createVNode(NoFormStatus, null, {
+                default: () => [addonAfterNode]
+              })]
+            })])]);
+          }
+          return wrapSSR(cloneElement(element, {
+            style
+          }));
+        };
+      }
+    });
+    const InputNumber$1 = _extends$1(InputNumber, {
+      install: (app) => {
+        app.component(InputNumber.name, InputNumber);
+        return app;
+      }
+    });
+    const Pagination = {
+      // Options.jsx
+      items_per_page: "条/页",
+      jump_to: "跳至",
+      jump_to_confirm: "确定",
+      page: "页",
+      // Pagination.jsx
+      prev_page: "上一页",
+      next_page: "下一页",
+      prev_5: "向前 5 页",
+      next_5: "向后 5 页",
+      prev_3: "向前 3 页",
+      next_3: "向后 3 页"
+    };
     var __rest = function(s2, e2) {
       var t2 = {};
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2) && e2.indexOf(p2) < 0) t2[p2] = s2[p2];
@@ -38854,7 +40828,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           direction,
           getPopupContainer
         } = useConfigInject("modal", props2);
-        const [wrapSSR, hashId] = useStyle(prefixCls);
+        const [wrapSSR, hashId] = useStyle$1(prefixCls);
         warning$2(props2.visible === void 0);
         const handleCancel = (e2) => {
           emit2("update:visible", false);
@@ -39338,7 +41312,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           destroy: close
         });
         const mergedOkCancel = (_a = innerConfig.value.okCancel) !== null && _a !== void 0 ? _a : innerConfig.value.type === "confirm";
-        const [contextLocale] = useLocaleReceiver("Modal", localeValues.Modal);
+        const [contextLocale] = useLocaleReceiver("Modal", localeValues$1.Modal);
         return () => createVNode(ConfirmDialog, _objectSpread2$1(_objectSpread2$1({
           "prefixCls": prefixCls,
           "rootPrefixCls": rootPrefixCls
@@ -39527,7 +41501,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           space,
           direction: directionConfig
         } = useConfigInject("space", props2);
-        const [wrapSSR, hashId] = useStyle$c(prefixCls);
+        const [wrapSSR, hashId] = useStyle$e(prefixCls);
         const supportFlexGap = useFlexGapSupport();
         const size2 = computed(() => {
           var _a, _b, _c;
@@ -39619,6 +41593,38 @@ summary tabindex target title type usemap value width wmode wrap`;
       return app;
     };
     var DeleteOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M360 184h-8c4.4 0 8-3.6 8-8v8h304v-8c0 4.4 3.6 8 8 8h-8v72h72v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80h72v-72zm504 72H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM731.3 840H292.7l-24.2-512h487l-24.2 512z" } }] }, "name": "delete", "theme": "outlined" };
+    function _objectSpread$8(target) {
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        var source = arguments[i2] != null ? Object(arguments[i2]) : {};
+        var ownKeys2 = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+          ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys2.forEach(function(key2) {
+          _defineProperty$8(target, key2, source[key2]);
+        });
+      }
+      return target;
+    }
+    function _defineProperty$8(obj, key2, value) {
+      if (key2 in obj) {
+        Object.defineProperty(obj, key2, { value, enumerable: true, configurable: true, writable: true });
+      } else {
+        obj[key2] = value;
+      }
+      return obj;
+    }
+    var DeleteOutlined = function DeleteOutlined2(props2, context) {
+      var p2 = _objectSpread$8({}, props2, context.attrs);
+      return createVNode(Icon, _objectSpread$8({}, p2, {
+        "icon": DeleteOutlined$1
+      }), null);
+    };
+    DeleteOutlined.displayName = "DeleteOutlined";
+    DeleteOutlined.inheritAttrs = false;
+    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
     function _objectSpread$7(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -39642,15 +41648,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var DeleteOutlined = function DeleteOutlined2(props2, context) {
+    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
       var p2 = _objectSpread$7({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$7({}, p2, {
-        "icon": DeleteOutlined$1
+        "icon": ArrowDownOutlined$1
       }), null);
     };
-    DeleteOutlined.displayName = "DeleteOutlined";
-    DeleteOutlined.inheritAttrs = false;
-    var ArrowDownOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M862 465.3h-81c-4.6 0-9 2-12.1 5.5L550 723.1V160c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v563.1L255.1 470.8c-3-3.5-7.4-5.5-12.1-5.5h-81c-6.8 0-10.5 8.1-6 13.2L487.9 861a31.96 31.96 0 0048.3 0L868 478.5c4.5-5.2.8-13.2-6-13.2z" } }] }, "name": "arrow-down", "theme": "outlined" };
+    ArrowDownOutlined.displayName = "ArrowDownOutlined";
+    ArrowDownOutlined.inheritAttrs = false;
+    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
     function _objectSpread$6(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -39674,15 +41680,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowDownOutlined = function ArrowDownOutlined2(props2, context) {
+    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
       var p2 = _objectSpread$6({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$6({}, p2, {
-        "icon": ArrowDownOutlined$1
+        "icon": ArrowUpOutlined$1
       }), null);
     };
-    ArrowDownOutlined.displayName = "ArrowDownOutlined";
-    ArrowDownOutlined.inheritAttrs = false;
-    var ArrowUpOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M868 545.5L536.1 163a31.96 31.96 0 00-48.3 0L156 545.5a7.97 7.97 0 006 13.2h81c4.6 0 9-2 12.1-5.5L474 300.9V864c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V300.9l218.9 252.3c3 3.5 7.4 5.5 12.1 5.5h81c6.8 0 10.5-8 6-13.2z" } }] }, "name": "arrow-up", "theme": "outlined" };
+    ArrowUpOutlined.displayName = "ArrowUpOutlined";
+    ArrowUpOutlined.inheritAttrs = false;
+    var BellOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M816 768h-24V428c0-141.1-104.3-257.7-240-277.1V112c0-22.1-17.9-40-40-40s-40 17.9-40 40v38.9c-135.7 19.4-240 136-240 277.1v340h-24c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h216c0 61.8 50.2 112 112 112s112-50.2 112-112h216c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zM512 888c-26.5 0-48-21.5-48-48h96c0 26.5-21.5 48-48 48zM304 768V428c0-55.6 21.6-107.8 60.9-147.1S456.4 220 512 220c55.6 0 107.8 21.6 147.1 60.9S720 372.4 720 428v340H304z" } }] }, "name": "bell", "theme": "outlined" };
     function _objectSpread$5(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
         var source = arguments[i2] != null ? Object(arguments[i2]) : {};
@@ -39706,14 +41712,14 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return obj;
     }
-    var ArrowUpOutlined = function ArrowUpOutlined2(props2, context) {
+    var BellOutlined = function BellOutlined2(props2, context) {
       var p2 = _objectSpread$5({}, props2, context.attrs);
       return createVNode(Icon, _objectSpread$5({}, p2, {
-        "icon": ArrowUpOutlined$1
+        "icon": BellOutlined$1
       }), null);
     };
-    ArrowUpOutlined.displayName = "ArrowUpOutlined";
-    ArrowUpOutlined.inheritAttrs = false;
+    BellOutlined.displayName = "BellOutlined";
+    BellOutlined.inheritAttrs = false;
     var BorderOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656z" } }] }, "name": "border", "theme": "outlined" };
     function _objectSpread$4(target) {
       for (var i2 = 1; i2 < arguments.length; i2++) {
@@ -39959,7 +41965,7 @@ summary tabindex target title type usemap value width wmode wrap`;
       fill: "#333333",
       "p-id": "783"
     }, null, -1);
-    const _hoisted_16 = [
+    const _hoisted_16$1 = [
       _hoisted_2$1,
       _hoisted_3$1,
       _hoisted_4$1,
@@ -39976,9 +41982,192 @@ summary tabindex target title type usemap value width wmode wrap`;
       _hoisted_15$1
     ];
     function _sfc_render(_ctx, _cache) {
-      return openBlock(), createElementBlock("svg", _hoisted_1$1, _hoisted_16);
+      return openBlock(), createElementBlock("svg", _hoisted_1$1, _hoisted_16$1);
     }
     const IconLeek = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render]]);
+    const locale$2 = {
+      locale: "zh_CN",
+      today: "今天",
+      now: "此刻",
+      backToToday: "返回今天",
+      ok: "确定",
+      timeSelect: "选择时间",
+      dateSelect: "选择日期",
+      weekSelect: "选择周",
+      clear: "清除",
+      month: "月",
+      year: "年",
+      previousMonth: "上个月 (翻页上键)",
+      nextMonth: "下个月 (翻页下键)",
+      monthSelect: "选择月份",
+      yearSelect: "选择年份",
+      decadeSelect: "选择年代",
+      yearFormat: "YYYY年",
+      dayFormat: "D日",
+      dateFormat: "YYYY年M月D日",
+      dateTimeFormat: "YYYY年M月D日 HH时mm分ss秒",
+      previousYear: "上一年 (Control键加左方向键)",
+      nextYear: "下一年 (Control键加右方向键)",
+      previousDecade: "上一年代",
+      nextDecade: "下一年代",
+      previousCentury: "上一世纪",
+      nextCentury: "下一世纪"
+    };
+    const locale$1 = {
+      placeholder: "请选择时间",
+      rangePlaceholder: ["开始时间", "结束时间"]
+    };
+    const locale = {
+      lang: _extends$1({
+        placeholder: "请选择日期",
+        yearPlaceholder: "请选择年份",
+        quarterPlaceholder: "请选择季度",
+        monthPlaceholder: "请选择月份",
+        weekPlaceholder: "请选择周",
+        rangePlaceholder: ["开始日期", "结束日期"],
+        rangeYearPlaceholder: ["开始年份", "结束年份"],
+        rangeMonthPlaceholder: ["开始月份", "结束月份"],
+        rangeQuarterPlaceholder: ["开始季度", "结束季度"],
+        rangeWeekPlaceholder: ["开始周", "结束周"]
+      }, locale$2),
+      timePickerLocale: _extends$1({}, locale$1)
+    };
+    locale.lang.ok = "确定";
+    const typeTemplate = "${label}不是一个有效的${type}";
+    const localeValues = {
+      locale: "zh-cn",
+      Pagination,
+      DatePicker: locale,
+      TimePicker: locale$1,
+      Calendar: locale,
+      // locales for all components
+      global: {
+        placeholder: "请选择"
+      },
+      Table: {
+        filterTitle: "筛选",
+        filterConfirm: "确定",
+        filterReset: "重置",
+        filterEmptyText: "无筛选项",
+        filterCheckall: "全选",
+        filterSearchPlaceholder: "在筛选项中搜索",
+        selectAll: "全选当页",
+        selectInvert: "反选当页",
+        selectNone: "清空所有",
+        selectionAll: "全选所有",
+        sortTitle: "排序",
+        expand: "展开行",
+        collapse: "关闭行",
+        triggerDesc: "点击降序",
+        triggerAsc: "点击升序",
+        cancelSort: "取消排序"
+      },
+      Tour: {
+        Next: "下一步",
+        Previous: "上一步",
+        Finish: "结束导览"
+      },
+      Modal: {
+        okText: "确定",
+        cancelText: "取消",
+        justOkText: "知道了"
+      },
+      Popconfirm: {
+        cancelText: "取消",
+        okText: "确定"
+      },
+      Transfer: {
+        searchPlaceholder: "请输入搜索内容",
+        itemUnit: "项",
+        itemsUnit: "项",
+        remove: "删除",
+        selectCurrent: "全选当页",
+        removeCurrent: "删除当页",
+        selectAll: "全选所有",
+        removeAll: "删除全部",
+        selectInvert: "反选当页"
+      },
+      Upload: {
+        uploading: "文件上传中",
+        removeFile: "删除文件",
+        uploadError: "上传错误",
+        previewFile: "预览文件",
+        downloadFile: "下载文件"
+      },
+      Empty: {
+        description: "暂无数据"
+      },
+      Icon: {
+        icon: "图标"
+      },
+      Text: {
+        edit: "编辑",
+        copy: "复制",
+        copied: "复制成功",
+        expand: "展开"
+      },
+      PageHeader: {
+        back: "返回"
+      },
+      Form: {
+        optional: "（可选）",
+        defaultValidateMessages: {
+          default: "字段验证错误${label}",
+          required: "请输入${label}",
+          enum: "${label}必须是其中一个[${enum}]",
+          whitespace: "${label}不能为空字符",
+          date: {
+            format: "${label}日期格式无效",
+            parse: "${label}不能转换为日期",
+            invalid: "${label}是一个无效日期"
+          },
+          types: {
+            string: typeTemplate,
+            method: typeTemplate,
+            array: typeTemplate,
+            object: typeTemplate,
+            number: typeTemplate,
+            date: typeTemplate,
+            boolean: typeTemplate,
+            integer: typeTemplate,
+            float: typeTemplate,
+            regexp: typeTemplate,
+            email: typeTemplate,
+            url: typeTemplate,
+            hex: typeTemplate
+          },
+          string: {
+            len: "${label}须为${len}个字符",
+            min: "${label}最少${min}个字符",
+            max: "${label}最多${max}个字符",
+            range: "${label}须在${min}-${max}字符之间"
+          },
+          number: {
+            len: "${label}必须等于${len}",
+            min: "${label}最小值为${min}",
+            max: "${label}最大值为${max}",
+            range: "${label}须在${min}-${max}之间"
+          },
+          array: {
+            len: "须为${len}个${label}",
+            min: "最少${min}个${label}",
+            max: "最多${max}个${label}",
+            range: "${label}数量须在${min}-${max}之间"
+          },
+          pattern: {
+            mismatch: "${label}与模式不匹配${pattern}"
+          }
+        }
+      },
+      Image: {
+        preview: "预览"
+      },
+      QRCode: {
+        expired: "二维码已过期",
+        refresh: "点击刷新",
+        scanned: "已扫描"
+      }
+    };
     class LimitedSet {
       constructor(value, maxSize = 20) {
         __publicField(this, "maxSize");
@@ -40030,10 +42219,17 @@ summary tabindex target title type usemap value width wmode wrap`;
     const _hoisted_13 = { class: "leek-search-main" };
     const _hoisted_14 = { class: "leek-select-item" };
     const _hoisted_15 = { class: "leek-select-item-label" };
+    const _hoisted_16 = { class: "leek-notification-input-wrap" };
+    const _hoisted_17 = /* @__PURE__ */ createBaseVNode("span", null, "多少分钟发送通知，0 关闭通知", -1);
     const maxSelectCount = 5;
+    const FOLLOW_LIST_URL = "https://trade-api.seasunwbl.com/api/passport/follow/list";
+    const FOLLOW_LIST_CACHE_KEY = "leekFollowList";
+    const NOTIFICATION_ICON_SIZE = 64;
+    const FETCH_ITEMS_URL = "https://www.aijx3.cn/api/wblwg/basedata/getSearchData";
     const _sfc_main = /* @__PURE__ */ defineComponent({
       __name: "App",
       setup(__props) {
+        const isDev = false;
         ConfigProvider.config({
           prefixCls: "antVue"
         });
@@ -40042,7 +42238,8 @@ summary tabindex target title type usemap value width wmode wrap`;
           sandbox = {
             window: unsafeWindow,
             getValue: GM_getValue,
-            setValue: GM_setValue
+            setValue: GM_setValue,
+            notification: GM_notification
           };
         } else {
           sandbox = {
@@ -40060,16 +42257,20 @@ summary tabindex target title type usemap value width wmode wrap`;
             },
             setValue: (key2, json) => {
               sessionStorage.setItem(key2, JSON.stringify(json));
+            },
+            notification: () => {
             }
           };
         }
-        const appVersion = "1.1.5";
+        const appVersion = "1.1.8";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
           order: "price-1",
           extra: false,
-          state: 0
+          state: 0,
+          notificationMinutes: 0,
+          notificationSound: true
         };
         const setting = reactive({
           ...defaultSettings,
@@ -40140,6 +42341,9 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           (_b = (_a = sandbox.window) == null ? void 0 : _a.buyerStore) == null ? void 0 : _b.setBuyActiveTab("skin");
           setState();
+          if (canGetFollowList()) {
+            fetchFollowList();
+          }
           check();
           openRef.value = true;
         };
@@ -40151,24 +42355,185 @@ summary tabindex target title type usemap value width wmode wrap`;
             ...defaultSettings,
             ...leekCachesWithoutHistory
           });
+          setting.state = Number(setting.state) || 0;
           const savedCustomNames = sandbox.getValue("leekCustomName", {});
           Object.assign(leekCustomName, savedCustomNames);
         };
+        let followListPollTimer = null;
+        async function resizeImageToDataUrl(url, size2 = NOTIFICATION_ICON_SIZE) {
+          return new Promise((resolve2) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => {
+              try {
+                const canvas = document.createElement("canvas");
+                canvas.width = size2;
+                canvas.height = size2;
+                const ctx = canvas.getContext("2d");
+                if (!ctx) {
+                  resolve2(url);
+                  return;
+                }
+                ctx.drawImage(img, 0, 0, size2, size2);
+                resolve2(canvas.toDataURL("image/png"));
+              } catch {
+                resolve2(url);
+              }
+            };
+            img.onerror = () => resolve2(url);
+            img.src = url;
+          });
+        }
+        function canGetFollowList() {
+          var _a, _b;
+          return setting.notificationMinutes > 0 && ((_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.user);
+        }
+        function stopFollowListPoll() {
+          if (followListPollTimer) {
+            clearInterval(followListPollTimer);
+            followListPollTimer = null;
+          }
+        }
+        async function runFollowListPoll() {
+          var _a;
+          const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
+          if (!Array.isArray(list) || list.length === 0 || (setting.notificationMinutes ?? 0) <= 0) {
+            stopFollowListPoll();
+            return;
+          }
+          const now2 = Date.now();
+          const thresholdMs = (setting.notificationMinutes ?? 0) * 60 * 1e3;
+          const toNotify = [];
+          const toKeep = [];
+          for (const item of list) {
+            const date = item.date ?? 0;
+            const rt = (date - now2) / 1e3;
+            if (rt <= 0) continue;
+            if (rt * 1e3 <= thresholdMs) toNotify.push(item);
+            else toKeep.push(item);
+          }
+          if (toNotify.length > 0) {
+            const names2 = toNotify.map((i2) => `${i2.role_sect || i2.goods_name} 售价：${Math.floor(i2.goods_price / 100)}元`).join("、");
+            const text = `即将开售：${names2}`;
+            console.log("[韭菜助手]", text);
+            const rawIconUrl = ((_a = toNotify[0]) == null ? void 0 : _a.goods_icon_url) || "https://jx3.seasunwbl.com/favicon.ico";
+            const iconUrl = await resizeImageToDataUrl(rawIconUrl);
+            const focusPage = () => {
+              (typeof unsafeWindow !== "undefined" ? unsafeWindow : window).focus();
+            };
+            const silent = !(setting.notificationSound ?? true);
+            if (typeof GM_notification !== "undefined") {
+              sandbox.notification({
+                title: "韭菜助手",
+                text,
+                image: iconUrl,
+                silent,
+                onclick: focusPage
+              });
+            } else if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+              const n2 = new Notification("韭菜助手", {
+                body: text,
+                icon: iconUrl,
+                silent
+              });
+              n2.onclick = () => {
+                focusPage();
+                n2.close();
+              };
+            }
+          }
+          if (toKeep.length !== list.length) {
+            sandbox.setValue(FOLLOW_LIST_CACHE_KEY, toKeep);
+          }
+        }
+        function startFollowListPoll() {
+          if (followListPollTimer) return;
+          const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
+          if (!Array.isArray(list) || list.length === 0 || (setting.notificationMinutes ?? 0) <= 0)
+            return;
+          followListPollTimer = setInterval(runFollowListPoll, 1e3);
+        }
+        onBeforeUnmount(() => {
+          stopFollowListPoll();
+        });
+        const fetchFollowList = () => {
+          const onSuccess = (data) => {
+            var _a;
+            if ((data == null ? void 0 : data.code) !== 1 || !((_a = data.data) == null ? void 0 : _a.follow)) return;
+            const list = Object.values(data.data.follow).flatMap(
+              (item) => ((item == null ? void 0 : item.list) || []).filter((i2) => i2.state === 3)
+            );
+            sandbox.setValue(FOLLOW_LIST_CACHE_KEY, list);
+            startFollowListPoll();
+          };
+          const onFail = (msg, isLoginExpired) => {
+            var _a, _b;
+            if (isLoginExpired) {
+              (_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.setLoginModal(true);
+            } else {
+              api$1.error(msg || "未知错误");
+            }
+          };
+          if (typeof GM_xmlhttpRequest !== "undefined") {
+            GM_xmlhttpRequest({
+              method: "GET",
+              url: FOLLOW_LIST_URL,
+              withCredentials: true,
+              onload: (res) => {
+                try {
+                  const data = JSON.parse(res.responseText);
+                  if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
+                  else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
+                  else onFail(data == null ? void 0 : data.msg);
+                } catch {
+                  onFail();
+                }
+              },
+              onerror: () => onFail()
+            });
+          } else {
+            fetch(FOLLOW_LIST_URL, { credentials: "include" }).then((r2) => r2.json()).then((data) => {
+              if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
+              else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
+              else onFail(data == null ? void 0 : data.msg);
+            }).catch(() => onFail());
+          }
+        };
         const fetchItems = async () => {
-          let data;
+          if (typeof GM_xmlhttpRequest !== "undefined") {
+            return new Promise((resolve2) => {
+              GM_xmlhttpRequest({
+                method: "POST",
+                url: FETCH_ITEMS_URL,
+                onload: (res) => {
+                  try {
+                    const data = JSON.parse(res.responseText);
+                    resolve2((data == null ? void 0 : data.data) || []);
+                  } catch {
+                    console.error("Failed to parse fetchItems response");
+                    resolve2([]);
+                  }
+                },
+                onerror: () => {
+                  console.error("There has been a problem with your fetch operation");
+                  resolve2([]);
+                }
+              });
+            });
+          }
           try {
-            const response = await fetch("https://www.aijx3.cn/api/wblwg/basedata/getSearchData", {
+            const response = await fetch(FETCH_ITEMS_URL, {
               method: "POST"
             });
             if (!response.ok) {
               throw new Error("Network response was not ok " + response.statusText);
             }
-            data = await response.json();
+            const data = await response.json();
+            return (data == null ? void 0 : data.data) || [];
           } catch (error) {
             console.error("There has been a problem with your fetch operation:", error);
             return [];
           }
-          return (data == null ? void 0 : data.data) || [];
         };
         watch(
           () => setting.runMode,
@@ -40224,6 +42589,37 @@ summary tabindex target title type usemap value width wmode wrap`;
         const onUpdate = () => {
           init(true);
         };
+        const notificationConfigVisible = ref(false);
+        const notificationMinutesInput = ref(0);
+        const notificationSoundInput = ref(true);
+        const loadFollowListTestData = () => {
+          return;
+        };
+        const onNotification = () => {
+          var _a, _b, _c, _d;
+          if (!((_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.user)) {
+            (_d = (_c = sandbox.window) == null ? void 0 : _c.loginStore) == null ? void 0 : _d.setLoginModal(true);
+            return;
+          }
+          notificationMinutesInput.value = setting.notificationMinutes;
+          notificationSoundInput.value = setting.notificationSound ?? true;
+          notificationConfigVisible.value = true;
+          if (typeof Notification !== "undefined" && Notification.permission === "default") {
+            Notification.requestPermission();
+          }
+        };
+        const notificationConfigOk = () => {
+          setting.notificationMinutes = notificationMinutesInput.value;
+          setting.notificationSound = notificationSoundInput.value;
+          notificationConfigVisible.value = false;
+          api$1.success("通知配置已保存");
+          if (canGetFollowList()) {
+            fetchFollowList();
+          }
+        };
+        const notificationConfigCancel = () => {
+          notificationConfigVisible.value = false;
+        };
         watch(
           formModel,
           () => {
@@ -40254,9 +42650,10 @@ summary tabindex target title type usemap value width wmode wrap`;
           (_e = (_d = (_c = sandbox.window) == null ? void 0 : _c.buyerFilter) == null ? void 0 : _d.roleFilterStore) == null ? void 0 : _e.setCurrentAppearance(arrayValues, false);
         };
         const selectFilter = (inputValue, option) => {
-          const _inputValue = inputValue.replace(/[\[\]\s]/g, "");
+          if (!(option == null ? void 0 : option.label)) return false;
+          const _inputValue = inputValue.replace(/[[\]\s]/g, "");
           option.search = _inputValue;
-          return option.label.toLowerCase().indexOf(_inputValue.toLowerCase()) >= 0;
+          return String(option.label).toLowerCase().indexOf(_inputValue.toLowerCase()) >= 0;
         };
         const selectSelect = (value) => {
           historyTagsAdd(value);
@@ -40332,10 +42729,10 @@ summary tabindex target title type usemap value width wmode wrap`;
         const isLoading = ref(true);
         const init = async (force = false) => {
           isLoading.value = true;
-          const itemVersion = sandbox.getValue("leekItemVersion", { version: "1.00" });
+          const itemVersion = sandbox.getValue("leekItemVersion", { version: "1.00" }).version;
           let itemData = sandbox.getValue("leekItemData");
           const now2 = (/* @__PURE__ */ new Date()).getTime();
-          if (force || !itemVersion || now2 - itemVersion > 24 * 60 * 60 * 1e3 || !itemData || isEmpty(itemData)) {
+          if (force || !itemVersion || now2 - itemVersion > 24 * 60 * 60 * 1e3 || !itemData || isEmpty$1(itemData)) {
             console.log(`Item data must be updated`);
             itemData = await fetchItems();
             updateItems(now2, itemData);
@@ -40371,6 +42768,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           formInfo.push(...info);
           sandboxSelect([]);
           loadCaches();
+          startFollowListPoll();
         };
         init();
         const editCustomNameVisible = ref(false);
@@ -40410,6 +42808,7 @@ summary tabindex target title type usemap value width wmode wrap`;
         });
         return (_ctx, _cache) => {
           return openBlock(), createBlock(unref(ConfigProvider), {
+            locale: unref(localeValues),
             "prefix-cls": "antVue",
             theme: {
               token: {
@@ -40441,27 +42840,49 @@ summary tabindex target title type usemap value width wmode wrap`;
                   ])
                 ]),
                 footer: withCtx(() => [
-                  createBaseVNode("div", _hoisted_1, "Version: " + toDisplayString(unref(appVersion)), 1)
+                  createBaseVNode("div", _hoisted_1, [
+                    createBaseVNode("span", null, "Version: " + toDisplayString(unref(appVersion)), 1),
+                    createVNode(unref(Space), null, {
+                      default: withCtx(() => [
+                        createVNode(unref(Button), { onClick: onReset }, {
+                          default: withCtx(() => [
+                            createTextVNode("重置")
+                          ]),
+                          _: 1
+                        }),
+                        createVNode(unref(Button), {
+                          onClick: onUpdate,
+                          loading: isLoading.value
+                        }, {
+                          default: withCtx(() => [
+                            createTextVNode("更新外观数据")
+                          ]),
+                          _: 1
+                        }, 8, ["loading"])
+                      ]),
+                      _: 1
+                    })
+                  ])
                 ]),
                 extra: withCtx(() => [
                   createVNode(unref(Space), null, {
                     default: withCtx(() => [
-                      createVNode(unref(Button), { onClick: onReset }, {
+                      createVNode(unref(Button), { onClick: fetchFollowList }, {
                         default: withCtx(() => [
-                          createTextVNode("重置")
+                          createTextVNode("更新关注物品")
                         ]),
                         _: 1
                       }),
                       createVNode(unref(Button), {
-                        type: "primary",
-                        onClick: onUpdate,
-                        loading: isLoading.value
+                        onClick: onNotification,
+                        type: "primary"
                       }, {
                         default: withCtx(() => [
-                          createTextVNode("更新外观数据")
+                          createVNode(unref(BellOutlined)),
+                          createTextVNode(" " + toDisplayString(setting.notificationMinutes > 0 ? "关注通知(开启)" : "关注通知(关闭)"), 1)
                         ]),
                         _: 1
-                      }, 8, ["loading"])
+                      })
                     ]),
                     _: 1
                   })
@@ -40519,21 +42940,21 @@ summary tabindex target title type usemap value width wmode wrap`;
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
-                                  createVNode(unref(RadioButton), { value: "0" }, {
+                                  createVNode(unref(RadioButton), { value: 0 }, {
                                     default: withCtx(() => [
                                       createTextVNode(" 不限 "),
                                       createVNode(unref(UnorderedListOutlined))
                                     ]),
                                     _: 1
                                   }),
-                                  createVNode(unref(RadioButton), { value: "1" }, {
+                                  createVNode(unref(RadioButton), { value: 1 }, {
                                     default: withCtx(() => [
                                       createTextVNode(" 公示期 "),
                                       createVNode(unref(CalendarOutlined))
                                     ]),
                                     _: 1
                                   }),
-                                  createVNode(unref(RadioButton), { value: "2" }, {
+                                  createVNode(unref(RadioButton), { value: 2 }, {
                                     default: withCtx(() => [
                                       createTextVNode(" 在售期 "),
                                       createVNode(unref(ShoppingCartOutlined))
@@ -40736,10 +43157,66 @@ summary tabindex target title type usemap value width wmode wrap`;
                   }, null, 8, ["value"])
                 ]),
                 _: 1
+              }, 8, ["open"]),
+              createVNode(unref(Modal), {
+                open: notificationConfigVisible.value,
+                "onUpdate:open": _cache[9] || (_cache[9] = ($event) => notificationConfigVisible.value = $event),
+                title: "通知配置",
+                width: "480px",
+                onOk: notificationConfigOk,
+                onCancel: notificationConfigCancel
+              }, {
+                default: withCtx(() => [
+                  createVNode(unref(FormItem), { label: "距离开售" }, {
+                    default: withCtx(() => [
+                      createBaseVNode("div", _hoisted_16, [
+                        createVNode(unref(InputNumber$1), {
+                          value: notificationMinutesInput.value,
+                          "onUpdate:value": _cache[7] || (_cache[7] = ($event) => notificationMinutesInput.value = $event),
+                          min: 0,
+                          max: 10,
+                          precision: 0,
+                          style: { "width": "100px" }
+                        }, null, 8, ["value"]),
+                        _hoisted_17
+                      ])
+                    ]),
+                    _: 1
+                  }),
+                  createVNode(unref(FormItem), null, {
+                    default: withCtx(() => [
+                      createVNode(unref(Checkbox), {
+                        checked: notificationSoundInput.value,
+                        "onUpdate:checked": _cache[8] || (_cache[8] = ($event) => notificationSoundInput.value = $event)
+                      }, {
+                        default: withCtx(() => [
+                          createTextVNode("通知声音")
+                        ]),
+                        _: 1
+                      }, 8, ["checked"])
+                    ]),
+                    _: 1
+                  }),
+                  unref(isDev) ? (openBlock(), createBlock(unref(FormItem), { key: 0 }, {
+                    default: withCtx(() => [
+                      createVNode(unref(Button), {
+                        size: "small",
+                        onClick: loadFollowListTestData
+                      }, {
+                        default: withCtx(() => [
+                          createTextVNode("加载测试数据")
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  })) : createCommentVNode("", true)
+                ]),
+                _: 1
               }, 8, ["open"])
             ]),
             _: 1
-          });
+          }, 8, ["locale"]);
         };
       }
     });
