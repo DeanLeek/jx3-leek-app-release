@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑网3万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.9
+// @version      1.1.10
 // @author       吴彦祖
 // @description  剑网三万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -42262,7 +42262,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.9";
+        const appVersion = "1.1.10";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
@@ -42596,11 +42596,6 @@ summary tabindex target title type usemap value width wmode wrap`;
           return;
         };
         const onNotification = () => {
-          var _a, _b, _c, _d;
-          if (!((_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.user)) {
-            (_d = (_c = sandbox.window) == null ? void 0 : _c.loginStore) == null ? void 0 : _d.setLoginModal(true);
-            return;
-          }
           notificationMinutesInput.value = setting.notificationMinutes;
           notificationSoundInput.value = setting.notificationSound ?? true;
           notificationConfigVisible.value = true;
@@ -42839,6 +42834,29 @@ summary tabindex target title type usemap value width wmode wrap`;
                     [vShow, !isSingleMode()]
                   ])
                 ]),
+                extra: withCtx(() => [
+                  createVNode(unref(Space), null, {
+                    default: withCtx(() => [
+                      createVNode(unref(Button), { onClick: fetchFollowList }, {
+                        default: withCtx(() => [
+                          createTextVNode("更新关注物品")
+                        ]),
+                        _: 1
+                      }),
+                      createVNode(unref(Button), {
+                        onClick: onNotification,
+                        type: "primary"
+                      }, {
+                        default: withCtx(() => [
+                          createVNode(unref(BellOutlined)),
+                          createTextVNode(" " + toDisplayString(setting.notificationMinutes > 0 ? "关注通知(开启)" : "关注通知(关闭)"), 1)
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  })
+                ]),
                 footer: withCtx(() => [
                   createBaseVNode("div", _hoisted_1, [
                     createBaseVNode("span", null, "Version: " + toDisplayString(unref(appVersion)), 1),
@@ -42863,29 +42881,6 @@ summary tabindex target title type usemap value width wmode wrap`;
                       _: 1
                     })
                   ])
-                ]),
-                extra: withCtx(() => [
-                  createVNode(unref(Space), null, {
-                    default: withCtx(() => [
-                      createVNode(unref(Button), { onClick: fetchFollowList }, {
-                        default: withCtx(() => [
-                          createTextVNode("更新关注物品")
-                        ]),
-                        _: 1
-                      }),
-                      createVNode(unref(Button), {
-                        onClick: onNotification,
-                        type: "primary"
-                      }, {
-                        default: withCtx(() => [
-                          createVNode(unref(BellOutlined)),
-                          createTextVNode(" " + toDisplayString(setting.notificationMinutes > 0 ? "关注通知(开启)" : "关注通知(关闭)"), 1)
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })
                 ]),
                 default: withCtx(() => [
                   createBaseVNode("section", _hoisted_2, [
