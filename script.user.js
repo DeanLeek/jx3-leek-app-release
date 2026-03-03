@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑网3万宝楼韭菜助手
 // @namespace    leek
-// @version      1.1.10
+// @version      1.1.12
 // @author       吴彦祖
 // @description  剑网三万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -106,16 +106,17 @@
     GM_addElement(document.head, 'style', {
       textContent: `
       
+.leek-notification-input-wrap[data-v-e7625434] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .leek-count {
     padding: 0 3px;
     font-weight: bold;
     color: red;
     letter-spacing: 3px;
-}
-.leek-notification-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 .leek-drawer-footer {
     display: flex;
@@ -1768,7 +1769,7 @@ var require_index = __commonJS({
       }
       queueFlush();
     }
-    function flushPreFlushCbs(instance, seen, i2 = isFlushing ? flushIndex + 1 : 0) {
+    function flushPreFlushCbs(instance, seen2, i2 = isFlushing ? flushIndex + 1 : 0) {
       for (; i2 < queue.length; i2++) {
         const cb = queue[i2];
         if (cb && cb.pre) {
@@ -1781,7 +1782,7 @@ var require_index = __commonJS({
         }
       }
     }
-    function flushPostFlushCbs(seen) {
+    function flushPostFlushCbs(seen2) {
       if (pendingPostFlushCbs.length) {
         const deduped = [...new Set(pendingPostFlushCbs)].sort(
           (a2, b2) => getId(a2) - getId(b2)
@@ -1809,7 +1810,7 @@ var require_index = __commonJS({
       }
       return diff;
     };
-    function flushJobs(seen) {
+    function flushJobs(seen2) {
       isFlushPending = false;
       isFlushing = true;
       queue.sort(comparator);
@@ -1843,6 +1844,12 @@ var require_index = __commonJS({
       currentRenderingInstance = instance;
       currentScopeId = instance && instance.type.__scopeId || null;
       return prev2;
+    }
+    function pushScopeId(id) {
+      currentScopeId = id;
+    }
+    function popScopeId() {
+      currentScopeId = null;
     }
     function withCtx(fn, ctx = currentRenderingInstance, isNonScopedSlot) {
       if (!ctx) return fn;
@@ -2392,6 +2399,59 @@ var require_index = __commonJS({
         ret = [];
       }
       return ret;
+    }
+    function createSlots(slots, dynamicSlots) {
+      for (let i2 = 0; i2 < dynamicSlots.length; i2++) {
+        const slot = dynamicSlots[i2];
+        if (isArray$2(slot)) {
+          for (let j2 = 0; j2 < slot.length; j2++) {
+            slots[slot[j2].name] = slot[j2].fn;
+          }
+        } else if (slot) {
+          slots[slot.name] = slot.key ? (...args) => {
+            const res = slot.fn(...args);
+            if (res) res.key = slot.key;
+            return res;
+          } : slot.fn;
+        }
+      }
+      return slots;
+    }
+    function renderSlot(slots, name, props2 = {}, fallback, noSlotted) {
+      if (currentRenderingInstance.isCE || currentRenderingInstance.parent && isAsyncWrapper(currentRenderingInstance.parent) && currentRenderingInstance.parent.isCE) {
+        props2.name = name;
+        return createVNode("slot", props2, fallback);
+      }
+      let slot = slots[name];
+      if (slot && slot._c) {
+        slot._d = false;
+      }
+      openBlock();
+      const validSlotContent = slot && ensureValidVNode(slot(props2));
+      const rendered = createBlock(
+        Fragment,
+        {
+          key: (props2.key || // slot content array of a dynamic conditional slot may have a branch
+          // key attached in the `createSlots` helper, respect that
+          validSlotContent && validSlotContent.key || `_${name}`) + // #7256 force differentiate fallback content from actual content
+          (!validSlotContent && fallback ? "_fb" : "")
+        },
+        validSlotContent || [],
+        validSlotContent && slots._ === 1 ? 64 : -2
+      );
+      if (slot && slot._c) {
+        slot._d = true;
+      }
+      return rendered;
+    }
+    function ensureValidVNode(vnodes) {
+      return vnodes.some((child) => {
+        if (!isVNode(child)) return true;
+        if (child.type === Comment) return false;
+        if (child.type === Fragment && !ensureValidVNode(child.children))
+          return false;
+        return true;
+      }) ? vnodes : null;
     }
     const getPublicInstance = (i2) => {
       if (!i2) return null;
@@ -5253,33 +5313,33 @@ var require_index = __commonJS({
         return cur;
       };
     }
-    function traverse(value, depth = Infinity, seen) {
+    function traverse(value, depth = Infinity, seen2) {
       if (depth <= 0 || !isObject$3(value) || value["__v_skip"]) {
         return value;
       }
-      seen = seen || /* @__PURE__ */ new Set();
-      if (seen.has(value)) {
+      seen2 = seen2 || /* @__PURE__ */ new Set();
+      if (seen2.has(value)) {
         return value;
       }
-      seen.add(value);
+      seen2.add(value);
       depth--;
       if (isRef(value)) {
-        traverse(value.value, depth, seen);
+        traverse(value.value, depth, seen2);
       } else if (isArray$2(value)) {
         for (let i2 = 0; i2 < value.length; i2++) {
-          traverse(value[i2], depth, seen);
+          traverse(value[i2], depth, seen2);
         }
       } else if (isSet$1(value) || isMap$1(value)) {
         value.forEach((v2) => {
-          traverse(v2, depth, seen);
+          traverse(v2, depth, seen2);
         });
       } else if (isPlainObject$1(value)) {
         for (const key2 in value) {
-          traverse(value[key2], depth, seen);
+          traverse(value[key2], depth, seen2);
         }
         for (const key2 of Object.getOwnPropertySymbols(value)) {
           if (Object.prototype.propertyIsEnumerable.call(value, key2)) {
-            traverse(value[key2], depth, seen);
+            traverse(value[key2], depth, seen2);
           }
         }
       }
@@ -8239,7 +8299,7 @@ var require_index = __commonJS({
       if (arrStacked && othStacked) {
         return arrStacked == other && othStacked == array;
       }
-      var index2 = -1, result = true, seen = bitmask & COMPARE_UNORDERED_FLAG$3 ? new SetCache() : void 0;
+      var index2 = -1, result = true, seen2 = bitmask & COMPARE_UNORDERED_FLAG$3 ? new SetCache() : void 0;
       stack2.set(array, other);
       stack2.set(other, array);
       while (++index2 < arrLength) {
@@ -8254,10 +8314,10 @@ var require_index = __commonJS({
           result = false;
           break;
         }
-        if (seen) {
+        if (seen2) {
           if (!arraySome(other, function(othValue2, othIndex) {
-            if (!cacheHas(seen, othIndex) && (arrValue === othValue2 || equalFunc(arrValue, othValue2, bitmask, customizer, stack2))) {
-              return seen.push(othIndex);
+            if (!cacheHas(seen2, othIndex) && (arrValue === othValue2 || equalFunc(arrValue, othValue2, bitmask, customizer, stack2))) {
+              return seen2.push(othIndex);
             }
           })) {
             result = false;
@@ -8672,12 +8732,12 @@ var require_index = __commonJS({
         caches[othIndex] = length2 >= 120 && array.length >= 120 ? new SetCache(othIndex && array) : void 0;
       }
       array = arrays[0];
-      var index2 = -1, seen = caches[0];
+      var index2 = -1, seen2 = caches[0];
       outer:
         while (++index2 < length2 && result.length < maxLength) {
           var value = array[index2], computed2 = value;
           value = value !== 0 ? value : 0;
-          if (!(seen ? cacheHas(seen, computed2) : includes2(result, computed2))) {
+          if (!(seen2 ? cacheHas(seen2, computed2) : includes2(result, computed2))) {
             othIndex = othLength;
             while (--othIndex) {
               var cache = caches[othIndex];
@@ -8685,8 +8745,8 @@ var require_index = __commonJS({
                 continue outer;
               }
             }
-            if (seen) {
-              seen.push(computed2);
+            if (seen2) {
+              seen2.push(computed2);
             }
             result.push(value);
           }
@@ -41887,15 +41947,15 @@ summary tabindex target title type usemap value width wmode wrap`;
       }
       return target;
     };
-    const _sfc_main$1 = {};
-    const _hoisted_1$1 = {
+    const _sfc_main$2 = {};
+    const _hoisted_1$2 = {
       class: "icon",
       style: { "width": "1em", "height": "1em", "vertical-align": "middle", "fill": "currentColor", "overflow": "hidden" },
       viewBox: "0 0 1024 1024",
       version: "1.1",
       xmlns: "http://www.w3.org/2000/svg"
     };
-    const _hoisted_2$1 = /* @__PURE__ */ createBaseVNode("path", {
+    const _hoisted_2$2 = /* @__PURE__ */ createBaseVNode("path", {
       d: "M496 809.6c22.4 9.6 41.6 16 60.8 20.8-6.4 33.6-12.8 67.2-17.6 100.8-3.2 17.6-19.2 28.8-36.8 27.2-17.6-3.2-28.8-19.2-27.2-36.8 4.8-36.8 12.8-75.2 20.8-112z",
       fill: "#FFFFFF",
       "p-id": "770"
@@ -41965,8 +42025,8 @@ summary tabindex target title type usemap value width wmode wrap`;
       fill: "#333333",
       "p-id": "783"
     }, null, -1);
-    const _hoisted_16$1 = [
-      _hoisted_2$1,
+    const _hoisted_16 = [
+      _hoisted_2$2,
       _hoisted_3$1,
       _hoisted_4$1,
       _hoisted_5$1,
@@ -41982,9 +42042,109 @@ summary tabindex target title type usemap value width wmode wrap`;
       _hoisted_15$1
     ];
     function _sfc_render(_ctx, _cache) {
-      return openBlock(), createElementBlock("svg", _hoisted_1$1, _hoisted_16$1);
+      return openBlock(), createElementBlock("svg", _hoisted_1$2, _hoisted_16);
     }
-    const IconLeek = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render]]);
+    const IconLeek = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render]]);
+    const _withScopeId = (n2) => (pushScopeId("data-v-e7625434"), n2 = n2(), popScopeId(), n2);
+    const _hoisted_1$1 = { class: "leek-notification-input-wrap" };
+    const _hoisted_2$1 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("span", null, "多少分钟发送通知，0 关闭通知", -1));
+    const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+      __name: "NotificationConfig",
+      props: {
+        notificationMinutes: {},
+        notificationSound: { type: Boolean },
+        isDev: { type: Boolean, default: false }
+      },
+      emits: ["update:notificationMinutes", "update:notificationSound", "save"],
+      setup(__props, { emit: __emit }) {
+        const props2 = __props;
+        const emit2 = __emit;
+        const visible = ref(false);
+        const minutesInput = ref(0);
+        const soundInput = ref(true);
+        const open2 = () => {
+          minutesInput.value = props2.notificationMinutes;
+          soundInput.value = props2.notificationSound ?? true;
+          visible.value = true;
+          if (typeof Notification !== "undefined" && Notification.permission === "default") {
+            Notification.requestPermission();
+          }
+        };
+        const handleOk = () => {
+          emit2("update:notificationMinutes", minutesInput.value);
+          emit2("update:notificationSound", soundInput.value);
+          visible.value = false;
+          api$1.success("通知配置已保存");
+          emit2("save");
+        };
+        const handleCancel = () => {
+          visible.value = false;
+        };
+        return (_ctx, _cache) => {
+          return openBlock(), createElementBlock(Fragment, null, [
+            createVNode(unref(Button), {
+              type: "primary",
+              onClick: open2
+            }, {
+              default: withCtx(() => [
+                createVNode(unref(BellOutlined)),
+                createTextVNode(" " + toDisplayString(_ctx.notificationMinutes > 0 ? "关注通知(开启)" : "关注通知(关闭)"), 1)
+              ]),
+              _: 1
+            }),
+            createVNode(unref(Modal), {
+              open: visible.value,
+              "onUpdate:open": _cache[2] || (_cache[2] = ($event) => visible.value = $event),
+              title: "通知配置",
+              width: "480px",
+              onOk: handleOk,
+              onCancel: handleCancel
+            }, {
+              default: withCtx(() => [
+                createVNode(unref(FormItem), { label: "距离开售" }, {
+                  default: withCtx(() => [
+                    createBaseVNode("div", _hoisted_1$1, [
+                      createVNode(unref(InputNumber$1), {
+                        value: minutesInput.value,
+                        "onUpdate:value": _cache[0] || (_cache[0] = ($event) => minutesInput.value = $event),
+                        min: 0,
+                        max: 10,
+                        precision: 0,
+                        style: { "width": "100px" }
+                      }, null, 8, ["value"]),
+                      _hoisted_2$1
+                    ])
+                  ]),
+                  _: 1
+                }),
+                createVNode(unref(FormItem), null, {
+                  default: withCtx(() => [
+                    createVNode(unref(Checkbox), {
+                      checked: soundInput.value,
+                      "onUpdate:checked": _cache[1] || (_cache[1] = ($event) => soundInput.value = $event)
+                    }, {
+                      default: withCtx(() => [
+                        createTextVNode("通知声音")
+                      ]),
+                      _: 1
+                    }, 8, ["checked"])
+                  ]),
+                  _: 1
+                }),
+                _ctx.isDev ? (openBlock(), createBlock(unref(FormItem), { key: 0 }, {
+                  default: withCtx(() => [
+                    renderSlot(_ctx.$slots, "test-action", {}, void 0, true)
+                  ]),
+                  _: 3
+                })) : createCommentVNode("", true)
+              ]),
+              _: 3
+            }, 8, ["open"])
+          ], 64);
+        };
+      }
+    });
+    const NotificationConfig = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-e7625434"]]);
     const locale$2 = {
       locale: "zh_CN",
       today: "今天",
@@ -42204,6 +42364,232 @@ summary tabindex target title type usemap value width wmode wrap`;
         return Array.from(this.set);
       }
     }
+    const scriptRel = "modulepreload";
+    const assetsURL = function(dep) {
+      return "/" + dep;
+    };
+    const seen = {};
+    const __vitePreload = function preload(baseModule, deps, importerUrl) {
+      let promise = Promise.resolve();
+      if (deps && deps.length > 0) {
+        document.getElementsByTagName("link");
+        const cspNonceMeta = document.querySelector(
+          "meta[property=csp-nonce]"
+        );
+        const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
+        promise = Promise.all(
+          deps.map((dep) => {
+            dep = assetsURL(dep);
+            if (dep in seen) return;
+            seen[dep] = true;
+            const isCss = dep.endsWith(".css");
+            const cssSelector = isCss ? '[rel="stylesheet"]' : "";
+            if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
+              return;
+            }
+            const link = document.createElement("link");
+            link.rel = isCss ? "stylesheet" : scriptRel;
+            if (!isCss) {
+              link.as = "script";
+              link.crossOrigin = "";
+            }
+            link.href = dep;
+            if (cspNonce) {
+              link.setAttribute("nonce", cspNonce);
+            }
+            document.head.appendChild(link);
+            if (isCss) {
+              return new Promise((res, rej) => {
+                link.addEventListener("load", res);
+                link.addEventListener(
+                  "error",
+                  () => rej(new Error(`Unable to preload CSS for ${dep}`))
+                );
+              });
+            }
+          })
+        );
+      }
+      return promise.then(() => baseModule()).catch((err) => {
+        const e2 = new Event("vite:preloadError", {
+          cancelable: true
+        });
+        e2.payload = err;
+        window.dispatchEvent(e2);
+        if (!e2.defaultPrevented) {
+          throw err;
+        }
+      });
+    };
+    const FOLLOW_LIST_URL = "https://trade-api.seasunwbl.com/api/passport/follow/list";
+    const FOLLOW_LIST_CACHE_KEY = "leekFollowList";
+    const NOTIFICATION_ICON_SIZE = 64;
+    async function resizeImageToDataUrl(url, size2 = NOTIFICATION_ICON_SIZE) {
+      return new Promise((resolve2) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = size2;
+            canvas.height = size2;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              resolve2(url);
+              return;
+            }
+            ctx.drawImage(img, 0, 0, size2, size2);
+            resolve2(canvas.toDataURL("image/png"));
+          } catch {
+            resolve2(url);
+          }
+        };
+        img.onerror = () => resolve2(url);
+        img.src = url;
+      });
+    }
+    function createFollowListHelpers(sandbox, options) {
+      const { getNotificationMinutes, getNotificationSound, message } = options;
+      let pollTimer = null;
+      function canGetFollowList() {
+        var _a, _b;
+        return getNotificationMinutes() > 0 && !!((_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.user);
+      }
+      function stopFollowListPoll() {
+        if (pollTimer) {
+          clearInterval(pollTimer);
+          pollTimer = null;
+        }
+      }
+      function canRunFollowListPoll(list) {
+        return Array.isArray(list) && list.length > 0 && getNotificationMinutes() > 0;
+      }
+      async function runFollowListPoll() {
+        var _a;
+        const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
+        if (!canRunFollowListPoll(list)) {
+          stopFollowListPoll();
+          return;
+        }
+        const now2 = Date.now();
+        const thresholdMs = getNotificationMinutes() * 60 * 1e3;
+        const toNotify = [];
+        const toKeep = [];
+        for (const item of list) {
+          const date = item.date ?? 0;
+          const rt = (date - now2) / 1e3;
+          if (rt <= 0) continue;
+          if (rt * 1e3 <= thresholdMs) toNotify.push(item);
+          else toKeep.push(item);
+        }
+        if (toNotify.length > 0) {
+          if (toKeep.length !== list.length) {
+            sandbox.setValue(FOLLOW_LIST_CACHE_KEY, toKeep);
+          }
+          const names2 = toNotify.map((i2) => `${i2.role_sect || i2.goods_name} ${Math.floor(i2.goods_price / 100)} 元`).join("、");
+          const text = names2;
+          console.log("[韭菜助手]", text);
+          const rawIconUrl = ((_a = toNotify[0]) == null ? void 0 : _a.goods_icon_url) || "https://jx3.seasunwbl.com/favicon.ico";
+          const iconUrl = await resizeImageToDataUrl(rawIconUrl);
+          const focusPage = () => {
+            (typeof unsafeWindow !== "undefined" ? unsafeWindow : window).focus();
+          };
+          const silent = !(getNotificationSound() ?? true);
+          if (typeof GM_notification !== "undefined") {
+            sandbox.notification({
+              title: "即将开售",
+              text,
+              image: iconUrl,
+              silent,
+              onclick: focusPage
+            });
+          } else if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+            const n2 = new Notification("即将开售", {
+              body: text,
+              icon: iconUrl,
+              silent
+            });
+            n2.onclick = () => {
+              focusPage();
+              n2.close();
+            };
+          }
+        } else if (toKeep.length !== list.length) {
+          sandbox.setValue(FOLLOW_LIST_CACHE_KEY, toKeep);
+        }
+      }
+      function startFollowListPoll() {
+        if (pollTimer) return;
+        const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
+        if (!canRunFollowListPoll(list)) return;
+        pollTimer = setInterval(runFollowListPoll, 1e3);
+      }
+      function fetchFollowList() {
+        const onSuccess = (data) => {
+          var _a;
+          if ((data == null ? void 0 : data.code) !== 1 || !((_a = data.data) == null ? void 0 : _a.follow)) return;
+          const list = Object.values(data.data.follow).flatMap(
+            (item) => ((item == null ? void 0 : item.list) || []).filter((i2) => i2.state === 3)
+          );
+          sandbox.setValue(FOLLOW_LIST_CACHE_KEY, list);
+          startFollowListPoll();
+        };
+        const onFail = (msg, isLoginExpired) => {
+          var _a, _b;
+          if (isLoginExpired) {
+            (_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.setLoginModal(true);
+          } else {
+            message.error(msg || "未知错误");
+          }
+        };
+        if (typeof GM_xmlhttpRequest !== "undefined") {
+          GM_xmlhttpRequest({
+            method: "GET",
+            url: FOLLOW_LIST_URL,
+            withCredentials: true,
+            onload: (res) => {
+              try {
+                const data = JSON.parse(res.responseText);
+                if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
+                else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
+                else onFail(data == null ? void 0 : data.msg);
+              } catch {
+                onFail();
+              }
+            },
+            onerror: () => onFail()
+          });
+        } else {
+          fetch(FOLLOW_LIST_URL, { credentials: "include" }).then((r2) => r2.json()).then((data) => {
+            if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
+            else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
+            else onFail(data == null ? void 0 : data.msg);
+          }).catch(() => onFail());
+        }
+      }
+      function loadFollowListTestData(isDev, setNotificationMinutes) {
+        if (!isDev) return;
+        __vitePreload(async () => {
+          const { getFollowListTestData } = await import("./test-follow-list.js");
+          return { getFollowListTestData };
+        }, true ? [] : void 0).then(({ getFollowListTestData }) => {
+          const list = getFollowListTestData();
+          sandbox.setValue(FOLLOW_LIST_CACHE_KEY, list);
+          if (getNotificationMinutes() <= 0) {
+            setNotificationMinutes(5);
+          }
+          startFollowListPoll();
+          message.success("已加载测试数据，触发通知");
+        });
+      }
+      return {
+        fetchFollowList,
+        startFollowListPoll,
+        stopFollowListPoll,
+        canGetFollowList,
+        loadFollowListTestData
+      };
+    }
     const _hoisted_1 = { class: "leek-drawer-footer" };
     const _hoisted_2 = { class: "leek-search" };
     const _hoisted_3 = { class: "leek-search-sticky" };
@@ -42219,12 +42605,7 @@ summary tabindex target title type usemap value width wmode wrap`;
     const _hoisted_13 = { class: "leek-search-main" };
     const _hoisted_14 = { class: "leek-select-item" };
     const _hoisted_15 = { class: "leek-select-item-label" };
-    const _hoisted_16 = { class: "leek-notification-input-wrap" };
-    const _hoisted_17 = /* @__PURE__ */ createBaseVNode("span", null, "多少分钟发送通知，0 关闭通知", -1);
     const maxSelectCount = 5;
-    const FOLLOW_LIST_URL = "https://trade-api.seasunwbl.com/api/passport/follow/list";
-    const FOLLOW_LIST_CACHE_KEY = "leekFollowList";
-    const NOTIFICATION_ICON_SIZE = 64;
     const FETCH_ITEMS_URL = "https://www.aijx3.cn/api/wblwg/basedata/getSearchData";
     const _sfc_main = /* @__PURE__ */ defineComponent({
       __name: "App",
@@ -42262,7 +42643,7 @@ summary tabindex target title type usemap value width wmode wrap`;
             }
           };
         }
-        const appVersion = "1.1.10";
+        const appVersion = "1.1.12";
         const defaultSettings = {
           runMode: "single",
           showMode: "always",
@@ -42341,8 +42722,8 @@ summary tabindex target title type usemap value width wmode wrap`;
           var _a, _b;
           (_b = (_a = sandbox.window) == null ? void 0 : _a.buyerStore) == null ? void 0 : _b.setBuyActiveTab("skin");
           setState();
-          if (canGetFollowList()) {
-            fetchFollowList();
+          if (followList.canGetFollowList()) {
+            followList.fetchFollowList();
           }
           check();
           openRef.value = true;
@@ -42359,146 +42740,14 @@ summary tabindex target title type usemap value width wmode wrap`;
           const savedCustomNames = sandbox.getValue("leekCustomName", {});
           Object.assign(leekCustomName, savedCustomNames);
         };
-        let followListPollTimer = null;
-        async function resizeImageToDataUrl(url, size2 = NOTIFICATION_ICON_SIZE) {
-          return new Promise((resolve2) => {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => {
-              try {
-                const canvas = document.createElement("canvas");
-                canvas.width = size2;
-                canvas.height = size2;
-                const ctx = canvas.getContext("2d");
-                if (!ctx) {
-                  resolve2(url);
-                  return;
-                }
-                ctx.drawImage(img, 0, 0, size2, size2);
-                resolve2(canvas.toDataURL("image/png"));
-              } catch {
-                resolve2(url);
-              }
-            };
-            img.onerror = () => resolve2(url);
-            img.src = url;
-          });
-        }
-        function canGetFollowList() {
-          var _a, _b;
-          return setting.notificationMinutes > 0 && ((_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.user);
-        }
-        function stopFollowListPoll() {
-          if (followListPollTimer) {
-            clearInterval(followListPollTimer);
-            followListPollTimer = null;
-          }
-        }
-        async function runFollowListPoll() {
-          var _a;
-          const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
-          if (!Array.isArray(list) || list.length === 0 || (setting.notificationMinutes ?? 0) <= 0) {
-            stopFollowListPoll();
-            return;
-          }
-          const now2 = Date.now();
-          const thresholdMs = (setting.notificationMinutes ?? 0) * 60 * 1e3;
-          const toNotify = [];
-          const toKeep = [];
-          for (const item of list) {
-            const date = item.date ?? 0;
-            const rt = (date - now2) / 1e3;
-            if (rt <= 0) continue;
-            if (rt * 1e3 <= thresholdMs) toNotify.push(item);
-            else toKeep.push(item);
-          }
-          if (toNotify.length > 0) {
-            const names2 = toNotify.map((i2) => `${i2.role_sect || i2.goods_name} ${Math.floor(i2.goods_price / 100)} 元`).join("、");
-            const text = `${names2}`;
-            console.log("[韭菜助手]", text);
-            const rawIconUrl = ((_a = toNotify[0]) == null ? void 0 : _a.goods_icon_url) || "https://jx3.seasunwbl.com/favicon.ico";
-            const iconUrl = await resizeImageToDataUrl(rawIconUrl);
-            const focusPage = () => {
-              (typeof unsafeWindow !== "undefined" ? unsafeWindow : window).focus();
-            };
-            const silent = !(setting.notificationSound ?? true);
-            if (typeof GM_notification !== "undefined") {
-              sandbox.notification({
-                title: "即将开售",
-                text,
-                image: iconUrl,
-                silent,
-                onclick: focusPage
-              });
-            } else if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-              const n2 = new Notification("即将开售", {
-                body: text,
-                icon: iconUrl,
-                silent
-              });
-              n2.onclick = () => {
-                focusPage();
-                n2.close();
-              };
-            }
-          }
-          if (toKeep.length !== list.length) {
-            sandbox.setValue(FOLLOW_LIST_CACHE_KEY, toKeep);
-          }
-        }
-        function startFollowListPoll() {
-          if (followListPollTimer) return;
-          const list = sandbox.getValue(FOLLOW_LIST_CACHE_KEY, []);
-          if (!Array.isArray(list) || list.length === 0 || (setting.notificationMinutes ?? 0) <= 0)
-            return;
-          followListPollTimer = setInterval(runFollowListPoll, 1e3);
-        }
-        onBeforeUnmount(() => {
-          stopFollowListPoll();
+        const followList = createFollowListHelpers(sandbox, {
+          getNotificationMinutes: () => setting.notificationMinutes,
+          getNotificationSound: () => setting.notificationSound ?? true,
+          message: api$1
         });
-        const fetchFollowList = () => {
-          const onSuccess = (data) => {
-            var _a;
-            if ((data == null ? void 0 : data.code) !== 1 || !((_a = data.data) == null ? void 0 : _a.follow)) return;
-            const list = Object.values(data.data.follow).flatMap(
-              (item) => ((item == null ? void 0 : item.list) || []).filter((i2) => i2.state === 3)
-            );
-            sandbox.setValue(FOLLOW_LIST_CACHE_KEY, list);
-            startFollowListPoll();
-          };
-          const onFail = (msg, isLoginExpired) => {
-            var _a, _b;
-            if (isLoginExpired) {
-              (_b = (_a = sandbox.window) == null ? void 0 : _a.loginStore) == null ? void 0 : _b.setLoginModal(true);
-            } else {
-              api$1.error(msg || "未知错误");
-            }
-          };
-          if (typeof GM_xmlhttpRequest !== "undefined") {
-            GM_xmlhttpRequest({
-              method: "GET",
-              url: FOLLOW_LIST_URL,
-              withCredentials: true,
-              onload: (res) => {
-                try {
-                  const data = JSON.parse(res.responseText);
-                  if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
-                  else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
-                  else onFail(data == null ? void 0 : data.msg);
-                } catch {
-                  onFail();
-                }
-              },
-              onerror: () => onFail()
-            });
-          } else {
-            fetch(FOLLOW_LIST_URL, { credentials: "include" }).then((r2) => r2.json()).then((data) => {
-              if ((data == null ? void 0 : data.code) === 1) onSuccess(data);
-              else if ((data == null ? void 0 : data.code) === -3) onFail(data == null ? void 0 : data.msg, true);
-              else onFail(data == null ? void 0 : data.msg);
-            }).catch(() => onFail());
-          }
-        };
+        onBeforeUnmount(() => {
+          followList.stopFollowListPoll();
+        });
         const fetchItems = async () => {
           if (typeof GM_xmlhttpRequest !== "undefined") {
             return new Promise((resolve2) => {
@@ -42589,31 +42838,13 @@ summary tabindex target title type usemap value width wmode wrap`;
         const onUpdate = () => {
           init(true);
         };
-        const notificationConfigVisible = ref(false);
-        const notificationMinutesInput = ref(0);
-        const notificationSoundInput = ref(true);
         const loadFollowListTestData = () => {
-          return;
+          followList.loadFollowListTestData(isDev, (v2) => setting.notificationMinutes = v2);
         };
-        const onNotification = () => {
-          notificationMinutesInput.value = setting.notificationMinutes;
-          notificationSoundInput.value = setting.notificationSound ?? true;
-          notificationConfigVisible.value = true;
-          if (typeof Notification !== "undefined" && Notification.permission === "default") {
-            Notification.requestPermission();
+        const onNotificationSave = () => {
+          if (followList.canGetFollowList()) {
+            followList.fetchFollowList();
           }
-        };
-        const notificationConfigOk = () => {
-          setting.notificationMinutes = notificationMinutesInput.value;
-          setting.notificationSound = notificationSoundInput.value;
-          notificationConfigVisible.value = false;
-          api$1.success("通知配置已保存");
-          if (canGetFollowList()) {
-            fetchFollowList();
-          }
-        };
-        const notificationConfigCancel = () => {
-          notificationConfigVisible.value = false;
         };
         watch(
           formModel,
@@ -42763,7 +42994,7 @@ summary tabindex target title type usemap value width wmode wrap`;
           formInfo.push(...info);
           sandboxSelect([]);
           loadCaches();
-          startFollowListPoll();
+          followList.startFollowListPoll();
         };
         init();
         const editCustomNameVisible = ref(false);
@@ -42837,22 +43068,38 @@ summary tabindex target title type usemap value width wmode wrap`;
                 extra: withCtx(() => [
                   createVNode(unref(Space), null, {
                     default: withCtx(() => [
-                      createVNode(unref(Button), { onClick: fetchFollowList }, {
+                      createVNode(unref(Button), {
+                        onClick: unref(followList).fetchFollowList
+                      }, {
                         default: withCtx(() => [
                           createTextVNode("更新关注物品")
                         ]),
                         _: 1
-                      }),
-                      createVNode(unref(Button), {
-                        onClick: onNotification,
-                        type: "primary"
-                      }, {
-                        default: withCtx(() => [
-                          createVNode(unref(BellOutlined)),
-                          createTextVNode(" " + toDisplayString(setting.notificationMinutes > 0 ? "关注通知(开启)" : "关注通知(关闭)"), 1)
-                        ]),
-                        _: 1
-                      })
+                      }, 8, ["onClick"]),
+                      createVNode(NotificationConfig, {
+                        "notification-minutes": setting.notificationMinutes,
+                        "notification-sound": setting.notificationSound,
+                        "is-dev": unref(isDev),
+                        "onUpdate:notificationMinutes": _cache[0] || (_cache[0] = (v2) => setting.notificationMinutes = v2),
+                        "onUpdate:notificationSound": _cache[1] || (_cache[1] = (v2) => setting.notificationSound = v2),
+                        onSave: onNotificationSave
+                      }, createSlots({ _: 2 }, [
+                        unref(isDev) ? {
+                          name: "test-action",
+                          fn: withCtx(() => [
+                            createVNode(unref(Button), {
+                              size: "small",
+                              onClick: loadFollowListTestData
+                            }, {
+                              default: withCtx(() => [
+                                createTextVNode("加载测试数据")
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          key: "0"
+                        } : void 0
+                      ]), 1032, ["notification-minutes", "notification-sound", "is-dev"])
                     ]),
                     _: 1
                   })
@@ -42899,7 +43146,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             default: withCtx(() => [
                               createVNode(unref(RadioGroup), {
                                 value: setting.showMode,
-                                "onUpdate:value": _cache[0] || (_cache[0] = ($event) => setting.showMode = $event),
+                                "onUpdate:value": _cache[2] || (_cache[2] = ($event) => setting.showMode = $event),
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
@@ -42931,7 +43178,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             default: withCtx(() => [
                               createVNode(unref(RadioGroup), {
                                 value: setting.state,
-                                "onUpdate:value": _cache[1] || (_cache[1] = ($event) => setting.state = $event),
+                                "onUpdate:value": _cache[3] || (_cache[3] = ($event) => setting.state = $event),
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
@@ -42970,7 +43217,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                             default: withCtx(() => [
                               createVNode(unref(RadioGroup), {
                                 value: setting.order,
-                                "onUpdate:value": _cache[2] || (_cache[2] = ($event) => setting.order = $event),
+                                "onUpdate:value": _cache[4] || (_cache[4] = ($event) => setting.order = $event),
                                 "button-style": "solid"
                               }, {
                                 default: withCtx(() => [
@@ -43017,7 +43264,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                               createVNode(unref(Select), {
                                 class: "leek-search-select",
                                 "popup-class-name": "leek-search-select-popup",
-                                onChange: _cache[3] || (_cache[3] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
+                                onChange: _cache[5] || (_cache[5] = (value, options) => onChange(selectedItemsInfo.value.label)(value, options)),
                                 onSelect: selectSelect,
                                 options: selectedItemsInfoOptionsWithCustomLabels.value,
                                 mode: isSingleMode() ? void 0 : "multiple",
@@ -43025,7 +43272,7 @@ summary tabindex target title type usemap value width wmode wrap`;
                                 "allow-clear": "",
                                 "filter-option": selectFilter,
                                 value: setting.selectedItems,
-                                "onUpdate:value": _cache[4] || (_cache[4] = ($event) => setting.selectedItems = $event),
+                                "onUpdate:value": _cache[6] || (_cache[6] = ($event) => setting.selectedItems = $event),
                                 "max-tag-count": 10,
                                 "get-popup-container": getPopupContainer
                               }, {
@@ -43138,7 +43385,7 @@ summary tabindex target title type usemap value width wmode wrap`;
               }, 8, ["open", "mask"]),
               createVNode(unref(Modal), {
                 open: editCustomNameVisible.value,
-                "onUpdate:open": _cache[6] || (_cache[6] = ($event) => editCustomNameVisible.value = $event),
+                "onUpdate:open": _cache[8] || (_cache[8] = ($event) => editCustomNameVisible.value = $event),
                 title: "修改自定义名称",
                 onOk: editCustomNameOk,
                 onCancel: editCustomNameCancel
@@ -43146,66 +43393,10 @@ summary tabindex target title type usemap value width wmode wrap`;
                 default: withCtx(() => [
                   createVNode(unref(Input), {
                     value: editCustomNameInput.value,
-                    "onUpdate:value": _cache[5] || (_cache[5] = ($event) => editCustomNameInput.value = $event),
+                    "onUpdate:value": _cache[7] || (_cache[7] = ($event) => editCustomNameInput.value = $event),
                     placeholder: "请输入自定义名称",
                     onPressEnter: editCustomNameOk
                   }, null, 8, ["value"])
-                ]),
-                _: 1
-              }, 8, ["open"]),
-              createVNode(unref(Modal), {
-                open: notificationConfigVisible.value,
-                "onUpdate:open": _cache[9] || (_cache[9] = ($event) => notificationConfigVisible.value = $event),
-                title: "通知配置",
-                width: "480px",
-                onOk: notificationConfigOk,
-                onCancel: notificationConfigCancel
-              }, {
-                default: withCtx(() => [
-                  createVNode(unref(FormItem), { label: "距离开售" }, {
-                    default: withCtx(() => [
-                      createBaseVNode("div", _hoisted_16, [
-                        createVNode(unref(InputNumber$1), {
-                          value: notificationMinutesInput.value,
-                          "onUpdate:value": _cache[7] || (_cache[7] = ($event) => notificationMinutesInput.value = $event),
-                          min: 0,
-                          max: 10,
-                          precision: 0,
-                          style: { "width": "100px" }
-                        }, null, 8, ["value"]),
-                        _hoisted_17
-                      ])
-                    ]),
-                    _: 1
-                  }),
-                  createVNode(unref(FormItem), null, {
-                    default: withCtx(() => [
-                      createVNode(unref(Checkbox), {
-                        checked: notificationSoundInput.value,
-                        "onUpdate:checked": _cache[8] || (_cache[8] = ($event) => notificationSoundInput.value = $event)
-                      }, {
-                        default: withCtx(() => [
-                          createTextVNode("通知声音")
-                        ]),
-                        _: 1
-                      }, 8, ["checked"])
-                    ]),
-                    _: 1
-                  }),
-                  unref(isDev) ? (openBlock(), createBlock(unref(FormItem), { key: 0 }, {
-                    default: withCtx(() => [
-                      createVNode(unref(Button), {
-                        size: "small",
-                        onClick: loadFollowListTestData
-                      }, {
-                        default: withCtx(() => [
-                          createTextVNode("加载测试数据")
-                        ]),
-                        _: 1
-                      })
-                    ]),
-                    _: 1
-                  })) : createCommentVNode("", true)
                 ]),
                 _: 1
               }, 8, ["open"])
