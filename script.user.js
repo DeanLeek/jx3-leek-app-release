@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑网3万宝楼韭菜助手
 // @namespace    leek
-// @version      2.0.0
+// @version      2.0.1
 // @author       吴彦祖
 // @description  剑网三万宝楼物品搜索优化，方便查找物品
 // @license MIT
@@ -54,6 +54,12 @@
         {
           pattern: /(\w+)\.run\(/,
           inject: '(window.buyerFilter=$1).run(',
+        },
+        {
+          pattern:
+            /(\w+)\.default\.get\((\w+),\["data","name"\]\),(\w+)\.default\.createElement/,
+          inject:
+            '(window.leekAppearanceNameChildren||function(n){return n})($1.default.get($2,["data","name"]),$3.default),$3.default.createElement',
         },
       ];
 
@@ -250,6 +256,15 @@
   display: none;
 }
 
+.leek-appearance-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.25;
+}
+.leek-appearance-nick {
+  color: #149ea8;
+}
 .leek-btn-start {
   position: fixed;
   top: 200px;
@@ -55581,6 +55596,20 @@ function useRoleFilterOptions(sandbox) {
 	};
 }
 //#endregion
+//#region src/utils/appearance-display-name.ts
+var CLOTHES_SUFFIX = "·衣";
+function resolveAppearanceItem(officialName, dataMap) {
+	return dataMap[officialName] || dataMap[`${officialName}${CLOTHES_SUFFIX}`] || (officialName.endsWith(CLOTHES_SUFFIX) ? dataMap[officialName.slice(0, -2)] : void 0);
+}
+function lookupAppearanceNick(officialName, dataMap, customNames) {
+	if (!officialName) return null;
+	const item = resolveAppearanceItem(officialName, dataMap);
+	if (!item) return null;
+	const nick = customNames[item.showName] || item.name;
+	if (!nick || nick === officialName) return null;
+	return nick;
+}
+//#endregion
 //#region src/utils/wbl-category.ts
 function toWblCategory(item) {
 	const text = `${item.searchDescType || ""}${item.typeName || ""}${item.showName || ""}`;
@@ -55633,7 +55662,7 @@ var LeekHost_default = /* @__PURE__ */ defineComponent({
 		const sandbox = createSandbox();
 		const wblSearch = useWblSearch(sandbox);
 		const { sectOptions, shapeOptions, load: loadFilterOptions } = useRoleFilterOptions(sandbox);
-		const appVersion = "2.0.0";
+		const appVersion = "2.0.1";
 		const setting = /* @__PURE__ */ reactive({
 			showMode: "always",
 			notificationMinutes: 0,
@@ -55660,9 +55689,17 @@ var LeekHost_default = /* @__PURE__ */ defineComponent({
 			getNotificationSound: () => setting.notificationSound ?? true,
 			message
 		});
+		const appearanceNameChildren = (officialName, react) => {
+			const name = typeof officialName === "string" ? officialName : "";
+			const nick = lookupAppearanceNick(name, dataMap, leekCustomName);
+			if (!nick || !react?.createElement) return officialName;
+			return react.createElement("span", { className: "leek-appearance-names" }, name, react.createElement("span", { className: "leek-appearance-nick" }, nick));
+		};
+		sandbox.window.leekAppearanceNameChildren = appearanceNameChildren;
 		onBeforeUnmount(() => {
 			followList.stopFollowListPoll();
 			document.documentElement.classList.remove(DRAWER_OPEN_CLASS);
+			delete sandbox.window.leekAppearanceNameChildren;
 		});
 		const toRoleKeys = (names) => names.map((name) => {
 			const item = dataMap[name];
